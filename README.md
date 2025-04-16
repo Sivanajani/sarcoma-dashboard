@@ -2,8 +2,9 @@
 
 **Bachelor-Thesis @ FHNW – Medizininformatik**  
 **Thema:** Datenqualitätsmanagement in der Sarkomversorgung  
-**Start:**   
-**Ort:** Kantonsspital Luzern (KSL) und FHNW (Muttenz) 
+**Start:** 05.05.2025   
+**Ende:**  18.08.2025  
+**Ort:** Kantonsspital Luzern (KSL) und FHNW (Muttenz)   
 **Betreuung:** Dr. Abdullah Kahraman  
 **Auftraggeber:** Dr. Bruno Fuchs und Dr. Philip Heesen    
 
