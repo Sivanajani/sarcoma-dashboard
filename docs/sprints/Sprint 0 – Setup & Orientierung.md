@@ -15,7 +15,7 @@
 - Projektstruktur in `docs/`, `src/`, `images/` etc. angelegt
 - `README.md` mit Projektbeschreibung und Zielsetzung verfasst
 - Meeting am 11.04. mit Dr. Bruno Fuchs & Dr. Philip Heesen durchgeführt
-- Protokoll unter [docs/protokoll/2025-04-11-treffen-luks.md](/docs/Protokoll/01_Protokoll%20–%20Kick-off-Meeting) dokumentiert
+- Protokoll unter [docs/protokoll/2025-04-11-treffen-luks.md](/docs/Protokoll/01_Protokoll%20–%20Kick-off-Meeting.md) dokumentiert
 
 ---
 
