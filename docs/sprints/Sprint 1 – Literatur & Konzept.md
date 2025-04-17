@@ -1,5 +1,5 @@
 # Sprint 1 – Literatur & Konzept
-**Zeitraum:** 14.04.2025 – 25.04.2025
+**Zeitraum:** 05.05.2025 – 16.05.2025
 
 ## Sprint-Ziele
 - [ ] Literatur zur Datenqualitätssicherung sammeln und auswerten
@@ -11,7 +11,6 @@
 
 ## Erreichte Ergebnisse (laufend)
 - Erste Version des [Konzeptschreiben.md](/docs/Konzeptschreiben.md) erstellt und Inhalt vorbereitet
-- Projektstruktur in [README.md](/README.md) aktualisiert
 - Visualisierung des Sprint-Plans als [docs/images/sprint.JPG](/docs/images/sprint.JPG) integriert.
 
 ---
