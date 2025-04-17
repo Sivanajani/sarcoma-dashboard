@@ -55,58 +55,58 @@ Langfristig kann das Dashboard als Standard-Tool für Qualitätssicherung im SSN
 
 ## 6. Zeitplan und Ressourcen
 
-Start der Bachelorarbeit: **?**  
-Betreuer: **Dr. Abdullah Kahraman**  
+Start der Bachelorarbeit: **05.05.2025**  
+Betreuer: **Dr. Abdullah Kahraman und Dr. Philip Heesen (LUKS)**  
 Auftraggeber: **Dr. Bruno Fuchs und Dr. Philip Heesen (LUKS)**
 
 Die Arbeit wird über einen Zeitraum von 15 Wochen durchgeführt. 
 
-### Geplanter Zeitplan (Auszug):
+## Geplanter Zeitplan (Auszug):
 
-## Visueller Sprint-Zeitplan
+### Visueller Sprint-Zeitplan
 
 ![Sprint-Zeitplan](./images/sprint.JPG)
 
-## Sprint-Zeitplan – Bachelorarbeit SSN Dashboard
+### Sprint-Zeitplan – Bachelorarbeit SSN Dashboard
 
-| AUFGABENNAME                                        | FUNKTIONSTYP                   | STARTDATUM  | ENDDATUM    | DAUER (Tage) | STATUS         |
-|-----------------------------------------------------|--------------------------------|-------------|-------------|--------------|----------------|
-| **SPRINT 0**                                        | Setup & Orientierung           | 07.04.2025  | 11.04.2025  | 5            | Abgeschlossen  |
-| Kick-off-Meeting                                    |                                | 11.04.2025  | 11.04.2025  | 1            | Abgeschlossen  |
-| GitLab einrichten                                   |                                | 09.04.2025  | 09.04.2025  | 1            | Abgeschlossen  |
-| Protokolle & Notizen dokumentieren                  |                                | 11.04.2025  | 11.04.2025  | 1            | Abgeschlossen  |
-| **SPRINT 1**                                        | Literatur & Konzept            | 14.04.2025  | 25.04.2025  | 12           | In Bearbeitung |
-| Erstellung „Konzeptschreiben.md“                    |                                | 14.04.2025  | 25.04.2025  | 12           | In Bearbeitung |
-| Literaturrecherche zur Datenqualitätssicherung      |                                | 16.04.2025  | 21.04.2025  | 6            |                |
-| Austausch mit Betreuenden bzgl. Outlier/Red Flags   |                                | 21.04.2025  | 25.04.2025  | 5            |                |
-| Entscheidung: Welche Tools & Frameworks?            |                                | 21.04.2025  | 25.04.2025  | 5            |                |
-| **SPRINT 2**                                        | Tool-Setup & Architektur       | 28.04.2025  | 09.05.2025  | 12           |                |
-| Technologiewahl finalisieren                        |                                | 28.04.2025  | 29.04.2025  | 2            |                |
-| Erste DQ-Kriterien definieren                       |                                | 29.04.2025  | 01.05.2025  | 3            |                |
-| Architektur-Skizze (Datenbank + Frontend)           |                                | 01.05.2025  | 09.05.2025  | 9            |                |
-| **SPRINT 3**                                        | Prototyp Backend / DQ-Checks   | 12.05.2025  | 23.05.2025  | 12           |                |
-| SQL- oder Python-Skripte zur DQ-Analyse             |                                | 12.05.2025  | 16.05.2025  | 5            |                |
-| Testen an Beispieldaten                             |                                | 19.05.2025  | 20.05.2025  | 2            |                |
-| Vollständigkeit, einfache Regeln                    |                                | 21.05.2025  | 22.05.2025  | 2            |                |
-| Alerts diskutieren                                  |                                | 23.05.2025  | 23.05.2025  | 1            |                |
-| **SPRINT 4**                                        | Frontend / Dashboard-Prototyp  | 26.05.2025  | 06.06.2025  | 12           |                |
-| Dashboard-Ansicht (Mockup → Code)                   |                                | 26.05.2025  | 28.05.2025  | 3            |                |
-| Visualisierung von DQ-Metriken                      |                                | 29.05.2025  | 02.06.2025  | 5            |                |
-| Anzeige: Vollständigkeit, Red Flags, Outlier        |                                | 03.06.2025  | 06.06.2025  | 4            |                |
-| **SPRINT 5**                                        | Evaluation & Optimierung       | 09.06.2025  | 20.06.2025  | 12           |                |
-| Usability-Test                                      |                                | 09.06.2025  | 09.06.2025  | 1            |                |
-| Verbesserung UX/UI                                  |                                | 09.06.2025  | 11.06.2025  | 3            |                |
-| Validierung mit Testdaten                           |                                | 11.06.2025  | 13.06.2025  | 3            |                |
-| Export-Optionen (Bilder, Tabellen)                  |                                | 16.06.2025  | 18.06.2025  | 3            |                |
-| **SPRINT 6**                                        | Dokumentation & Vorbereitung   | 23.06.2025  | 04.07.2025  | 12           |                |
-| Dokumentation technischer Umsetzung                 |                                | 23.06.2025  | 25.06.2025  | 3            |                |
-| Testfälle & Ergebnisse beschreiben                  |                                | 26.06.2025  | 26.06.2025  | 1            |                |
-| Schreiben Hauptteil Thesis                          |                                | 26.06.2025  | 04.07.2025  | 9            |                |
-| **SPRINT 7**                                        | Abgabe & Abschluss             | 07.07.2025  | 21.07.2025  | 15           |                |
-| Slides / Poster vorbereiten                         |                                | 20.07.2025  | 21.07.2025  | 2            |                |
-| Letzter Review, Layout, Formatierung                |                                | 07.07.2025  | 21.07.2025  | 15           |                |
-| Lessons Learned / Nachbereitungs-Treffen            |                                | 14.07.2025  | 21.07.2025  | 8            |                |
-| Backup & Archivierung                               |                                | 14.07.2025  | 21.07.2025  | 8            |                |
+| AUFGABENNAME                                        | FUNKTIONSTYP                   | STARTDATUM  | ENDDATUM    | DAUER (Tage) |
+|-----------------------------------------------------|--------------------------------|-------------|-------------|--------------|
+| **SPRINT 0**                                        | **Setup & Orientierung**           | **07.04.2025**  | **18.04.2025**  | **12**            |
+| Kick-off-Meeting                                    |                                | 11.04.2025  | 11.04.2025  | 1            |
+| GitLab einrichten                                   |                                | 15.04.2025  | 15.04.2025  | 1            |
+| Protokolle & Notizen dokumentieren                  |                                | 11.04.2025  | 16.04.2025  | 6            |
+| **SPRINT 1**                                        | **Literatur & Konzept**            | **05.05.2025**  | **16.05.2025**  | **12**           |
+| Erstellung „Konzeptschreiben.md“                    |                                | 05.05.2025  | 12.05.2025  | 8           |
+| Literaturrecherche zur Datenqualitätssicherung      |                                | 05.05.2025  | 09.05.2025  | 5            |
+| Austausch mit Betreuenden bzgl. Outlier/Red Flags   |                                | 12.05.2025  | 14.05.2025  | 3            |
+| Entscheidung: Welche Tools & Frameworks?            |                                | 15.05.2025  | 16.05.2025  | 2            |
+| **SPRINT 2**                                        | **Tool-Setup & Architektur**       | **19.05.2025**  | **30.05.2025**  | **12**           |
+| Technologiewahl finalisieren                        |                                | 19.05.2025  | 19.05.2025  | 1            |
+| Erste DQ-Kriterien definieren                       |                                | 21.05.2025  | 23.05.2025  | 3            |
+| Architektur-Skizze (Datenbank + Frontend)           |                                | 23.05.2025  | 30.05.2025  | 9            |
+| **SPRINT 3**                                        | **Prototyp Backend / DQ-Checks**   | **02.06.2025**  | **13.06.2025**  | **12**           |                |
+| SQL- oder Python-Skripte zur DQ-Analyse             |                                | 02.06.2025  | 06.06.2025  | 5            |
+| Testen an Beispieldaten                             |                                | 09.06.2025  | 10.06.2025  | 2            |
+| Vollständigkeit, einfache Regeln                    |                                | 11.06.2025  | 12.06.2025  | 2            |
+| Alerts diskutieren                                  |                                | 13.06.2025  | 13.06.2025  | 1            |
+| **SPRINT 4**                                        | **Frontend / Dashboard-Prototyp**  | **16.06.2025**  | **27.06.2025**  | **12**          |
+| Dashboard-Ansicht (Mockup → Code)                   |                                | 16.06.2025  | 18.06.2025  | 3            |                
+| Visualisierung von DQ-Metriken                      |                                | 19.06.2025  | 24.06.2025  | 6            |                
+| Anzeige: Vollständigkeit, Red Flags, Outlier        |                                | 25.06.2025  | 27.06.2025  | 3            |                
+| **SPRINT 5**                                        | **Evaluation & Optimierung**       | **30.06.2025**  | **11.07.2025**  | **12**          |
+| Usability-Test                                      |                                | 30.06.2025  | 30.06.2025  | 1            |      
+| Verbesserung UX/UI                                  |                                | 30.06.2025  | 02.07.2025  | 3            |      
+| Validierung mit Testdaten                           |                                | 02.07.2025  | 07.07.2025  | 6            |      
+| Export-Optionen (Bilder, Tabellen)                  |                                | 08.07.2025  | 11.07.2025  | 4            |      
+| **SPRINT 6**                                        | **Dokumentation & Vorbereitung**   | **14.07.2025**  | **25.07.2025**  | **12**          |
+| Dokumentation technischer Umsetzung                 |                                | 14.07.2025  | 16.07.2025  | 3            |       
+| Testfälle & Ergebnisse beschreiben                  |                                | 17.07.2025  | 18.07.2025  | 2                            |
+| Schreiben Hauptteil Thesis                          |                                | 19.07.2025  | 25.07.2025  | 7                            |
+| **SPRINT 7**                     | **Abgabe & Abschluss**             | **28.07.2025**  | **08.08.2025**  | **12**                           |
+| Slides / Poster vorbereiten                         |                                | 07.08.2025  | 08.08.2025  | 2                            |
+| Letzter Review, Layout, Formatierung                |                                | 28.07.2025  | 08.08.2025  | 12           |                
+| Lessons Learned / Nachbereitungs-Treffen            |                                | 05.08.2025  | 08.08.2025  | 4            |                
+| Backup & Archivierung                               |                                | 05.08.2025  | 08.08.2025  | 4            |                
 
 
 ## 7. Erfolgskriterien
