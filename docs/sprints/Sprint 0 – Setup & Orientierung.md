@@ -1,5 +1,5 @@
 # Sprint 0 – Setup & Orientierung
-**Zeitraum:** 07.04.2025 – 11.04.2025
+**Zeitraum:** 07.04.2025 – 18.04.2025
 
 ## Sprint-Ziele
 - [x] GitLab-Projekt initialisieren und Struktur definieren
@@ -35,5 +35,5 @@
 - Literaturrecherche starten
 - Konzeptschreiben vorbereiten
 
-**Sprint abgeschlossen am:** 11.04.2025  
+**Sprint abgeschlossen am:** 15.04.2025  
 **Bearbeitet von:** Sivanajani Sivakumar
