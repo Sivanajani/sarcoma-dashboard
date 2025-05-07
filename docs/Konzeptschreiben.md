@@ -1,73 +1,90 @@
-# Konzeptschreiben: Datenqualitäts-Dashboard für das Schweizer Sarkom Netzwerk (SSN)
+# Konzeptschreiben: Datenqualitäts-Dashboard für PROM-Daten von Sarkom-Patient:innen  
 
-## 1. Einleitung und Zusammenfassung
+## 1. Einleitung
 
-Das Schweizer Sarkom Netzwerk (SSN) speichert klinische Daten über Sarkompatienten in einer zentralen Datenbank. Sarkome sind seltene bösartige Tumore, die aus dem Knochen oder Weichgewebe hervorgehen. Im Rahmen der Bachelorarbeit an der FHNW soll ein Dashboard entwickelt werden, das die Datenqualität dieser Daten in Echtzeit analysiert.
+Am Kantonsspital Luzern (LUKS) werden im Rahmen der Sarkomversorgung regelmässig patientenberichtete Ergebnisdaten  mittels strukturierter Fragebögen (PROMs) erhoben. Diese Daten spielen eine zentrale Rolle bei der Beurteilung von Gesundheitszustand, Therapieerfolg und Versorgungsqualität. Damit daraus verlässliche Erkenntnisse abgeleitet werden können, ist eine kontinuierliche Überwachung der Datenqualität erforderlich. Fehlende oder unplausible Angaben können wissenschaftliche Auswertungen verzerren, wenn sie nicht erkannt und berücksichtigt werden.
 
-Datenqualität ist in der klinischen Forschung essenziell, um valide Ergebnisse zu erzielen und die Patientensicherheit zu gewährleisten. Fehlende oder unplausible Werte können zu falschen Schlussfolgerungen führen, insbesondere bei der Bewertung neuer Therapien oder in der Versorgungsqualität. Das geplante Dashboard soll unter anderem die Vollständigkeit der Einträge überwachen, "Outlier" erkennen und bei Bedarf automatisierte Benachrichtigungen (Alerts) generieren.
+Im Rahmen dieser Bachelorarbeit soll ein webbasiertes Dashboard zur Überwachung und Visualisierung der Datenqualität entwickelt werden. Es fokussiert sich auf die Erkennung unvollständiger oder auffälliger Einträge, die Identifikation sogenannter „Red Flags“ sowie die Bereitstellung automatisierter Benachrichtigungen.
+
+Im Rahmen dieser Bachelorarbeit soll ein webbasiertes Dashboard zur Überwachung und Visualisierung der Datenqualität entwickelt werden, inspiriert durch praxiserprobte Ansätze wie dem RA PRO Dashboard von Schmajuk et al. (2024), das erfolgreich die Integration von Patient-Reported Outcomes in die klinische Praxis unterstützt hat (Schmajuk et al., 2024).
+
+### 1.1 Fragestellung
+Wie kann ein webbasiertes Dashboard die Vollständigkeit und Qualität von PROM-Daten bei Sarkom-Patient:innen am Kantonsspital Luzern in Echtzeit überwachen und nutzerfreundlich visualisieren, um wissenschaftliche Auswertungen zu unterstützen und Red Flags frühzeitig zu erkennen?
 
 ## 2. Ziele und Zielgruppen
 
-Ziel der Arbeit ist die Konzeption und prototypische Umsetzung eines Dashboards zur Echtzeitüberwachung der Datenqualität in der SSN-Datenbank. Dabei sollen folgende Teilziele verfolgt werden:
+Ziel dieser Arbeit ist die Konzeption und prototypische Umsetzung eines Dashboards zur Echtzeitüberwachung der Datenqualität von PROM-Daten. Dabei werden folgende Teilziele verfolgt:
 
-- Durchführung einer Literaturrecherche zu Best Practices der Datenqualitätssicherung
-- Entwicklung eines Datenqualitätskonzepts (DQ-Konzept) für klinische Daten
-- Identifikation geeigneter Technologien und Visualisierungstools
-- Aufbau eines Dashboards (Prototyp) zur Visualisierung der Datenqualität
-- Implementierung einfacher Regelwerke (z. B. Vollständigkeitsprüfung, Outlier Detection)
-- Definition und Simulation von Alert-Mechanismen
+- [Literaturrecherche zu Best Practices im Bereich der Datenqualitätssicherung](Literaturrecherche%20Datenqualitätssicherung.md)  
+- [Entwicklung eines modularen Datenqualitätskonzepts (DQ-Konzept) für klinische Daten](Datenqualitätskonzept.md)
+- [Auswahl geeigneter Technologien und Visualisierungstools](Technologien%20und%20Visualisierungstools.md)
+- Aufbau eines Dashboards (Prototyp) zur Darstellung relevanter Metriken
+- Umsetzung einfacher Prüfregeln (z. B. Vollständigkeit, Ausreissererkennung)
+- Definition und Simulation von Benachrichtigungsmechanismen
 
-Zielgruppen des Dashboards sind v. a. klinisch tätige Ärzt:innen, die Datenmanagerin sowie Forschende, die mit den SSN-Daten arbeiten. Das System soll langfristig helfen, die Qualität der Erhebung und Dokumentation zu sichern und datenbasierte Entscheidungen zu unterstützen.
+Die Zielgruppe umfasst klinisch tätige Ärzt:innen, Datenmanager:innen und Forschende am LUKS. Das System ist für den internen Gebrauch bestimmt und wird nicht von Patient:innen verwendet.
 
 ## 3. Beschreibung des Konzepts
 
-Das geplante Dashboard wird auf die künftig produktive Datenbankstruktur von SSN aufbauen (PostgreSQL oder ähnlich). Die Datenbank wird aktuell von der Firma Renuo implementiert und voraussichtlich in zwei Wochen bereitgestellt.
+Das Dashboard basiert auf der internen PostgreSQL-Datenbank des LUKS, in der PROM-Daten pseudonymisiert gespeichert und regelmässig aktualisiert werden. Die Datenbank befindet sich derzeit im Aufbau durch die Firma Renuo (Stand 08.05.2025). 
 
-Im Rahmen des Projekts soll zuerst ein modulares DQ-Konzept erstellt werden. Dieses beinhaltet:
-- Kriterien für Vollständigkeit, Konsistenz, Plausibilität
-- Definition typischer Red Flags und Datenqualitätsmetriken
-- Ableitung von Visualisierungskonzepten für ein nutzerfreundliches Dashboard
+Folgende konzeptionelle Komponenten sind vorgesehen:
 
-Technologisch wird eine offene Auswahlmöglichkeit gelassen. Denkbare Technologien sind Python (Dash), R Shiny oder webbasierte Frontends. Hosting ist via shinyapps.io oder Google Cloud möglich. Eine Exportfunktion für Abbildungen oder Metriken (z. B. für Publikationen) ist erwünscht.
+- Ein Kriterienkatalog zur Beurteilung der Datenqualität (z. B. Vollständigkeit, Konsistenz, Eindeutigkeit, Plausibilität)  
+- Definition typischer Red Flags (z.B. fehlende Einträge, unrealistische Werte)    
+- Entwicklung eines Visualisierungskonzepts für eine nutzerfreundliche Darstellung
 
-Funktional soll das Dashboard z. B. anzeigen:
-- Welche Felder bei welchen Patienten fehlen
-- Wie hoch der Vollständigkeitsgrad eines Fragebogens ist
-- Ob ein Fall bestimmte Red Flags (z. B. keine Bildgebung) aufweist
+Die Auswahl und Strukturierung dieser Dimensionen orientiert sich an etablierten Konzepten der Datenqualitätsforschung, insbesondere an den Arbeiten von Pipino et al. (2002), die Vollständigkeit, Konsistenz, Genauigkeit und Plausibilität als zentrale Dimensionen operationalisiert haben (Pipino, Lee & Wang, 2002).
+
+Die technische Umsetzung erfolgt in einem flexiblen Webstack, basierend auf React (Frontend) und FastAPI (Backend). Ein Hosting über Google Cloud ist möglich.
+
+Beispielhafte Funktionen des Dashboards:
+- Übersicht über fehlende Fragebogeneinträge pro Patient:in  
+- Aggregierte Auswertungen zur Vollständigkeit je Fragebogen  
+- Ob ein Fall bestimmte Red Flags aufweist (z. B. fehlende Bildgebung)  
+
+Die Auswahl geeigneter Technologien sowie ein Überblick zu deren Funktionen und Einsatz im geplanten Dashboard sind im separaten Dokument [Technologien und Visualisierungstools](Technologien%20und%20Visualisierungstools.md) beschrieben.
+
+### 3.1 Vergleichbare Ansätze
+Ein vergleichbares Vorhaben wurde von Schmajuk et al. (2024) realisiert. In ihrer Arbeit wurde ein sogenanntes EHR-Sidecar-Dashboard („RA PRO Dashboard“) entwickelt, das patientenberichtete Outcome-Daten bei rheumatoider Arthritis systematisch erfasst, überwacht und in die klinische Entscheidungsunterstützung integriert. Der Entwicklungsprozess erfolgte schrittweise, von der Definition relevanter Metriken über die Backend-Integration bis zur nutzerfreundlichen Visualisierung im Klinikalltag.
+
+Besonders relevant für die vorliegende Arbeit sind die folgenden Aspekte:
+
+- Die klare Trennung zwischen PROM-Logik und klinischem System („Sidecar“-Architektur)   
+- Die kontinuierliche Datenqualitätssicherung (z.B. Erkennung fehlender Werte)  
+- Die Visualisierung individueller und aggregierter Trends zur Entscheidungsunterstützung
+
+Obwohl sich das RA PRO Dashboard auf eine andere Patient:innengruppe bezieht, liefert es wertvolle Impulse für den strukturierten Aufbau eines datenqualitätsorientierten Dashboards in der Sarkomversorgung.
 
 ## 4. Nutzen und Vorteile
 
-Ein Datenqualitäts-Dashboard ermöglicht:
-- Frühzeitige Identifikation von Fehlern oder Lücken in der Dokumentation
-- Direkte Kommunikation an Datenverantwortliche (z. B. via Alerts)
-- Steigerung der Validität klinischer Studien
-- Unterstützung bei der Versorgungsqualität und wissenschaftlichen Auswertung
+Ein Dashboard zur Datenqualitätsüberwachung ermöglicht:
 
-Langfristig kann das Dashboard als Standard-Tool für Qualitätssicherung im SSN etabliert werden.
+- Frühzeitige Erkennung von Lücken und Auffälligkeiten in PROM-Daten    
+- Direkte Rückmeldung an die verantwortliche Datenmanager:innen (z. B. durch Alerts)  
 
 ## 5. Risiken und Herausforderungen
 
-- Zugriff auf produktive Datenbank muss abgestimmt werden (Datenschutz, Sicherheit)
-- Definition medizinisch sinnvoller Outlier-Logiken benötigt Fachexpertise
-- Visualisierungen müssen für Ärzt:innen und Forschende verständlich sein
-- Unsicherheit bei Datenstruktur, da DB sich noch im Aufbau befindet
-- Mögliche technische Lernkurve bei Toolauswahl
+- Verzögerungen im Datenbankaufbau: Die produktive Datenbank ist aktuell noch im Aufbau.    
+- Die Definition sinnvoller Prüfregeln (z.B. für Ausreisser) erfordert medizinische Fachexpertise.   
+- Visualisierungen müssen sowohl für medizinisches als auch wissenschaftliches Personal verständlich sein.     
+- Abhängig von der Toolauswahl kann es eine technische Einarbeitungsphase geben, insbesondere bei der Anbindung an bestehende Systeme oder der Konfiguration des Datenzugriffs.  
+
 
 ## 6. Zeitplan und Ressourcen
 
 Start der Bachelorarbeit: **05.05.2025**  
 Betreuer: **Dr. Abdullah Kahraman und Dr. Philip Heesen (LUKS)**  
-Auftraggeber: **Dr. Bruno Fuchs und Dr. Philip Heesen (LUKS)**
+Auftraggeber: **Dr. Bruno Fuchs und Dr. Philip Heesen**
+Experte: **Dr. Fabian Arnold**
 
-Die Arbeit wird über einen Zeitraum von 15 Wochen durchgeführt. 
-
-## Geplanter Zeitplan (Auszug):
+Die Arbeit ist auf 15 Wochen angelegt und orientiert sich an einem iterativen, agilen Vorgehen in Sprints. Der Zeitplan kann bei Bedarf agil angepasst werden, z.B. bei Verzögerungen im Datenbankaufbau oder Technologieentscheidungen.
 
 ### Visueller Sprint-Zeitplan
 
 ![Sprint-Zeitplan](./images/sprint.JPG)
 
-### Sprint-Zeitplan – Bachelorarbeit SSN Dashboard
+### Sprint-Zeitplan – Bachelorarbeit Datenqualitätsmanagement in der Sarkomversorgung @KSL    
 
 | AUFGABENNAME                                        | FUNKTIONSTYP                   | STARTDATUM  | ENDDATUM    | DAUER (Tage) |
 |-----------------------------------------------------|--------------------------------|-------------|-------------|--------------|
@@ -111,14 +128,19 @@ Die Arbeit wird über einen Zeitraum von 15 Wochen durchgeführt.
 
 ## 7. Erfolgskriterien
 
-- Vollständigkeit und Nachvollziehbarkeit des Konzepts
-- Funktionierender Prototyp mit echten Beispieldaten
-- Positives Feedback von Nutzenden 
-- Identifikation relevanter Metriken zur Qualitätssicherung
+- Vollständige, nachvollziehbare Dokumentation der Anforderungen und Konzepte  
+- Entwicklung eines funktionierenden Dashboard-Prototyps mit echten oder simulierten Daten  
+- Validierung durch Feedback von Betreuenden und potenzielle Nutzer:innen  
 
 ## 8. Schlussfolgerung und Ausblick
 
-Die Entwicklung des Dashboards ist ein entscheidender Schritt zur Verbesserung der Datenqualität im SSN. Es bietet nicht nur einen Mehrwert für Forschung und klinische Versorgung, sondern unterstützt auch die Einhaltung regulatorischer Standards. Zukünftig kann das System um automatisierte Analysen, benutzerdefinierte Filter oder maschinelles Lernen zur intelligenten Datenqualitätsüberwachung erweitert werden.
+Mit der Entwicklung des Dashboards leistet die Arbeit einen Beitrag zur Sicherung der Datenqualität von PROM-Daten bei Sarkom-Patient:innen. In Zukunft könnten weitere Funktionalitäten, etwa KI-basierte Anomalieerkennung, integriert werden.
 
+
+## 9. Referenzen
+
+[1] Pipino, L.L., Lee, Y.W., & Wang, R.Y. (April 2002). *Data Quality Assessment*. Communications of the ACM, 45(4), 211–218.
+
+[2] Schmajuk, G., Nasrallah, C., Berrean, B. et al. (2024). A step-by-step roadmap for the development and deployment of an electronic health record sidecar application that tracks patient outcomes: The RA PRO dashboard. Digital Health, 10, 1–15. https://doi.org/10.1177/20552076241288739.
 ---
 Sivanajani Sivakumar
