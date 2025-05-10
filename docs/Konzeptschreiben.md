@@ -27,6 +27,8 @@ Wie kann ein webbasiertes Dashboard die Vollständigkeit und Qualität von PROM-
    3.4.1 [Visueller Sprint Zeitplan](#341-visueller-sprint-zeitplan)   
    3.4.2 [Tabellarischer Zeitplan](#342-tabellarischer-zeitplan)  
    3.5 [Erfolgskriterien](#35-erfolgskriterien)
+4. [Schlussfolgerung und Ausblick](#4-schlussfolgerung-und-ausblick)
+5. [Referenzen](#5-referenzen)
 
 
 ## 1. Einleitung
@@ -177,7 +179,7 @@ Langfristig bietet das Dashboard das Potenzial, als generisches Instrument für 
 
 
 
-## 9. Referenzen
+## 5. Referenzen
 
 [1] Azeroual, O., 2022. Untersuchungen zur Datenqualität und Nutzerakzeptanz von For-schungsinformationssystemen: Framework zur Überwachung und Verbesserung der Qualität von Forschungsinformationen, Research. Springer Vieweg, Wiesba-den.  
 
