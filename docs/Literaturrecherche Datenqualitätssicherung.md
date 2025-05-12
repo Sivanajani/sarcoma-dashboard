@@ -242,12 +242,12 @@ Die Sicherstellung der Datenqualität erfolgt nicht ausschliesslich durch nachtr
 In der Praxis werden zwei Ansätze unterschieden:
 - **Manuelle Prüfungen**: Diese erfolgen durch medizinisches Fachpersonal – etwa im Rahmen von Stichproben, Validierungsreviews oder Nachdokumentationen. Sie eignen sich vor allem für komplexe Einzelfälle mit Kontextbezug, sind jedoch ressourcenintensiv und schwer skalierbar.  
 - **Automatisierte Prüfungen**: Hierbei werden Daten mithilfe vordefinierter Regeln oder statistischer Verfahren automatisch überprüft – entweder direkt bei der Eingabe, periodisch im Hintergrund oder visuell im Dashboard. Sie bieten Konsistenz, Schnelligkeit und Skalierbarkeit, erfordern aber eine sorgfältige Regeldefinition und technische Implementierung.
-
-**Fazit:** Für das PROM-Dashboard am LUKS steht die automatisierte Prüfung im Vordergrund, idealerweise ergänzt durch gezielte manuelle Validierung bei auffälligen Fällen oder Indikatoren.
+Ergänzt durch gezielte manuelle Validierung bei auffälligen Fällen oder Indikatoren.
 
 ### 4.2 Validierungsregeln und Plausibilitätsprüfungen
 
-Ein zentrales Instrument der Datenqualitätsprüfung sind regelbasierte Validierungen, die typischerweise in folgenden Bereichen eingesetzt werden:
+Ein zentrales Instrument der Datenqualitätsprüfung sind regelbasierte Validierungen, die typischerwe
+**Fazit:** Für das PROM-Dashboard am LUKS steht die automatisierte Prüfung im Vordergrund, idealerweise eise in folgenden Bereichen eingesetzt werden:
 - **Feldvalidierungen**: Prüfung auf erlaubte Wertebereiche, zulässige Datentypen oder Pflichtfeldbefüllung.
 - **Logikregeln:** z.B. „Therapiebeginn darf nicht vor Diagnosedatum liegen“ oder „Wenn Geschlecht = männlich, dann Schwangerschaft = nein“.  
 - **Kontextsensitive Regeln:** Berücksichtigung patientenspezifischer Angaben oder Studienprotokolle (z.B. altersabhängige Wertebereiche).
