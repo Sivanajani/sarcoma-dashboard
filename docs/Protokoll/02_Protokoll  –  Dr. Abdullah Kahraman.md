@@ -7,6 +7,7 @@
 - Dr. Abdullah Kahraman   
 - Vincent Perret  
 - Sivanajani Sivakumar  
+
 **Art des Treffens:** Organisatorisches Kick-off  
 
 ---
