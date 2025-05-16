@@ -10,11 +10,11 @@ Fachhochschule Nordwestschweiz FHNW
 Hochschule für Life Sciences HLS  
 
 ## Zusammenfassung
-Im Rahmen dieser Bachelorarbeit wird ein webbasiertes Dashboard zur Überwachung der Datenqualität von patientenberichteten Ergebnisdaten (PROMs) bei Sarkom-Patient:innen am Kantonsspital Luzern (LUKS) konzipiert und prototypisch umgesetzt. PROM-Daten sind wichtig für die Beurteilung von Gesundheitszustand, Therapieerfolg und Versor-gungsqualität. Um deren wissenschaftliche Verwertbarkeit sicherzustellen, bedarf es einer kontinuierlichen Qualitätsüberwachung.
+Im Rahmen dieser Bachelorarbeit wird ein webbasiertes Dashboard zur Überwachung der Datenqualität von Ergebnisdaten bei Sarkom-Patient:innen am Kantonsspital Luzern (LUKS) konzipiert und prototypisch umgesetzt. Dabei werden sowohl patientenberichtete Ergebnisdaten (PROMs) als auch klinisch erhobene Ergebnisdaten (CROMs) berücksich-tigt. Beide Datentypen sind essenziell für die Beurteilung von Gesundheitszustand, The-rapieerfolg und Versorgungsqualität.
 Das geplante Dashboard basiert auf einer mehrdimensionalen Bewertung der Datenquali-tät, wie sie in der Literatur u. a. von Azeroual (2022) und Pipino et al. (2002) beschrieben wird. Es soll unvollständige, inkonsistente oder unplausible Einträge automatisiert identifi-zieren und sogenannte Red Flags visuell aufbereiten. Zusätzlich werden Benachrichti-gungsmechanismen (z.B. Alerts) integriert.
 Die Umsetzung erfolgt in einem modularen Technologiestack (PostgreSQL, FastAPI, React) mit Fokus auf Nutzerfreundlichkeit und klinische Relevanz. Der Zeitplan der Arbeit folgt einem agilen Vorgehen mit sieben Sprints. Vergleichbare Projekte, wie das „RA PRO Dashboard“ von Schmajuk et al. (2024), dienen als methodische Orientierung.
 Die zentrale Fragestellung lautet:
-Wie kann ein webbasiertes Dashboard die Vollständigkeit und Qualität von PROM-Daten bei Sarkom-Patient:innen am Kantonsspital Luzern in Echtzeit überwachen und nutzer-freundlich visualisieren?
+Wie kann ein webbasiertes Dashboard die Vollständigkeit und Qualität von PROM- und CROM-Daten bei Sarkom-Patient:innen am Kantonsspital Luzern in Echtzeit überwachen und nutzerfreundlich visualisieren?
 
 ## Inhaltsverzeichnis
 1. [Einleitung](#1-einleitung)  
@@ -33,17 +33,16 @@ Wie kann ein webbasiertes Dashboard die Vollständigkeit und Qualität von PROM-
 
 ## 1. Einleitung
 
-Am Kantonsspital Luzern (LUKS) werden im Rahmen der Sarkomversorgung regelmässig Ergebnisdaten mittels strukturierter Fragebögen (PROMs) erhoben. Diese Daten spielen eine zentrale Rolle bei der Beurteilung von Gesundheitszustand, Therapieerfolg und Ver-sorgungsqualität. Damit daraus verlässliche Erkenntnisse abgeleitet werden können, ist eine kontinuierliche Überwachung der Datenqualität erforderlich. Fehlende oder unplau-sible Angaben können wissenschaftliche Auswertungen verzerren, wenn sie nicht erkannt und berücksichtigt werden.  
+Am Kantonsspital Luzern (LUKS) werden im Rahmen der Sarkomversorgung regelmässig Ergebnisdaten erhoben. Diese umfassen sowohl patientenberichtete Outcome-Daten (PROMs), die direkt von den Patient:innen über strukturierte Fragebögen erfasst werden, als auch klinisch erhobene Outcome-Daten (CROMs), die von Ärzt:innen und medizini-schem Personal dokumentiert werden. 
+Beide Datentypen spielen eine zentrale Rolle bei der Beurteilung von Gesundheitszu-stand, Therapieerfolg und Versorgungsqualität. Damit daraus verlässliche Erkenntnisse abgeleitet werden können, ist eine kontinuierliche Überwachung der Datenqualität erfor-derlich. Fehlende oder unplausible Angaben können wissenschaftliche Auswertungen verzerren, wenn sie nicht erkannt und berücksichtigt werden.
+Für die Bewertung der Datenqualität hat sich in der Forschung ein mehrdimensionaler Ansatz etabliert. Dieser wird unter anderem von Azeroual (2022) beschrieben der Dimen-sionen wie Vollständigkeit, Korrektheit, Konsistenz und Plausibilität als zentrale Indikato-ren zur strukturierten Bewertung klinischer Daten hervorhebt. Solche Dimensionen ermög-lichen eine systematische und vergleichbare Beurteilung der Datenqualität – sowohl aus technischer als auch aus inhaltlicher Perspektive.
+Im Rahmen dieser Bachelorarbeit soll ein webbasiertes Dashboard zur Überwachung und Visualisierung der Datenqualität entwickelt werden. Es fokussiert sich auf die Erkennung unvollständiger oder auffälliger Einträge, die Identifikation sogenannter „Red Flags“ sowie die Bereitstellung automatisierter Benachrichtigungen.
+Die zentrale Fragestellung lautet: Wie kann ein webbasiertes Dashboard die Vollständig-keit und Qualität von PROM- und CROM-Daten bei Sarkom-Patient:innen am Kantonsspi-tal Luzern in Echtzeit überwachen und nutzerfreundlich visualisieren?
 
-Für die Bewertung der Datenqualität hat sich in der Forschung ein mehrdimensionaler Ansatz etabliert. Dieser wird unter anderem von Azeroual (2022) beschrieben der Dimen-sionen wie Vollständigkeit, Korrektheit, Konsistenz und Plausibilität als zentrale Indikato-ren zur strukturierten Bewertung klinischer Daten hervorhebt. Solche Dimensionen ermög-lichen eine systematische und vergleichbare Beurteilung der Datenqualität – sowohl aus technischer als auch aus inhaltlicher Perspektive.  
-
-Im Rahmen dieser Bachelorarbeit soll ein webbasiertes Dashboard zur Überwachung und Visualisierung der Datenqualität entwickelt werden. Es fokussiert sich auf die Erkennung unvollständiger oder auffälliger Einträge, die Identifikation sogenannter „Red Flags“ sowie die Bereitstellung automatisierter Benachrichtigungen.  
-
-Die zentrale Fragestellung lautet: Wie kann ein webbasiertes Dashboard die Vollständig-keit und Qualität von PROM-Daten bei Sarkom-Patient:innen am Kantonsspital Luzern in Echtzeit überwachen und nutzerfreundlich visualisieren?  
 
 ## 2. Ziele und Zielgruppen
 
-Ziel dieser Arbeit ist die Konzeption und prototypische Umsetzung eines Dashboards zur Echtzeitüberwachung der Datenqualität von PROM-Daten. Dabei werden folgende Teilziele verfolgt: 
+Ziel dieser Arbeit ist die Konzeption und prototypische Umsetzung eines Dashboards zur Echtzeitüberwachung der Datenqualität von PROMs und CROMs. Dabei werden folgende Teilziele verfolgt: 
 
 - [Literaturrecherche zu Best Practices im Bereich der Datenqualitätssicherung](Literaturrecherche%20Datenqualitätssicherung.md)  
 - [Entwicklung eines modularen Datenqualitätskonzepts (DQ-Konzept) für klinische Daten](Datenqualitätskonzept.md)
@@ -56,21 +55,18 @@ Die Zielgruppe umfasst klinisch tätige Ärzt:innen, Datenmanager:innen und Fors
 
 ## 3. Beschreibung des Konzepts
 
-Das Dashboard basiert auf der internen PostgreSQL-Datenbank des LUKS, in der PROM-Daten pseudonymisiert gespeichert und regelmässig aktualisiert werden. Die Datenbank befindet sich derzeit im Aufbau durch die Firma Renuo (Stand 08.05.2025).
-
+Das Dashboard basiert auf der internen PostgreSQL-Datenbank des LUKS, in der PROMs und CROMs pseudonymisiert gespeichert und regelmässig aktualisiert werden. Die Datenbank befindet sich derzeit im Aufbau durch die Firma Renuo und wird in der Kalenderwoche 19 fertig sein (Stand 16.05.2025).
 Folgende konzeptionelle Komponenten sind vorgesehen:
-
-- Ein Kriterienkatalog zur Beurteilung der Datenqualität (z.B. Vollständigkeit, Konsistenz, Eindeutigkeit, Plausibilität)  
-- Definition typischer Red Flags (z.B. fehlende Einträge, unrealistische Werte)    
+- Ein Kriterienkatalog zur Beurteilung der Datenqualität (z.B. Vollständigkeit, Konsis-tenz, Eindeutigkeit, Plausibilität)  
+- Definition typischer Red Flags (z.B. fehlende Einträge, unrealistische Werte)  
 - Entwicklung eines Visualisierungskonzepts für eine nutzerfreundliche Darstellung  
 
 Die Auswahl und Strukturierung dieser Dimensionen orientiert sich an Konzepten der Da-tenqualitätsforschung, wie an den Arbeiten von Pipino et al. (2002), die Vollständigkeit, Konsistenz, Genauigkeit und Plausibilität als zentrale Dimensionen operationalisiert ha-ben (Pipino et al., 2002).
-
-Die technische Umsetzung erfolgt in einem flexiblen Webstack, basierend auf React (Frontend) und FastAPI (Backend). Ein Hosting über Google Cloud ist möglich. Beispielhafte Funktionen des Dashboards: 
-
-- Übersicht über fehlende Fragebogeneinträge pro Patient:in  
-- Aggregierte Auswertungen zur Vollständigkeit je Fragebogen  
-- Ob ein Fall bestimmte Red Flags aufweist (z.B. fehlende Bildgebung)  
+Die technische Umsetzung erfolgt in einem flexiblen Webstack, basierend auf React (Frontend) und FastAPI (Backend). Ein Hosting über Google Cloud ist möglich. Beispiel-hafte Funktionen des Dashboards: 
+- Übersicht über fehlende Fragebogeneinträge (PROMs) und fehlende klinische Be-funde (CROMs)  
+- Aggregierte Auswertungen zur Vollständigkeit je Datentyp  
+- Identifikation von Fällen mit Red Flags, z. B. fehlender Bildgebung (CROM) oder unplausible Selbsteinschätzungen (PROM)    
+ 
 
 Die Auswahl geeigneter Technologien sowie ein Überblick zu deren Funktionen und Einsatz im geplanten Dashboard sind im separaten Dokument [Technologien und Visualisierungstools](Technologien%20und%20Visualisierungstools.md) beschrieben.
 
@@ -89,12 +85,12 @@ Obwohl sich das RA PRO Dashboard auf eine andere Patient:innengruppe bezieht, li
 
 Ein Dashboard zur Datenqualitätsüberwachung ermöglicht:
 
-- Frühzeitige Erkennung von Lücken und Auffälligkeiten in PROM-Daten    
+- Frühzeitige Erkennung von Lücken und Auffälligkeiten in PROM- und CROM-Daten       
 - Direkte Rückmeldung an die verantwortliche Datenmanager:innen (z. B. durch Alerts)  
 
 ### 3.3 Risiken und Herausforderungen
 
-- Verzögerungen im Datenbankaufbau: Die produktive Datenbank ist aktuell noch im Aufbau (Stand 08.05.2025).  
+- Verzögerungen im Datenbankaufbau: Die produktive Datenbank ist aktuell noch im Aufbau (Stand 16.05.2025).  
 - Die Definition sinnvoller Prüfregeln (z.B. für Ausreisser) erfordert medizinische Fachexpertise.  
 - Visualisierungen müssen sowohl für medizinisches als auch wissenschaftliches Personal verständlich sein.  
 - Abhängig von der Toolauswahl kann es eine technische Einarbeitungsphase geben, insbesondere bei der Anbindung an bestehende Systeme oder der Konfiguration des Datenzugriffs.
