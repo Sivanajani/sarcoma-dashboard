@@ -51,7 +51,7 @@ Dr. Abdullah Kahraman, Dr. Bruno Fuchs, Dr. Philip Heesen
 
 ## 1. Einleitung
 
-In der Sarkomversorgung spielen strukturierte, qualitativ hochwertige PROM-Daten (Patient Reported Outcome Measures) eine entscheidende Rolle für die Bewertung des Behandlungserfolgs und die patientenzentrierte Versorgung. Die regelmässig durch Patient:innen ausgefüllten Fragebögen liefern wichtige Informationen zum Gesundheitszustand, Wohlbefinden und Therapieverlauf. Um wissenschaftlich belastbare Aussagen und eine sichere klinische Anwendung zu ermöglichen, ist eine kontinuierliche Überwachung der Datenqualität notwendig. Ziel dieses Projekts ist die Entwicklung eines webbasierten Dashboards zur Echtzeitanalyse und Bewertung der Datenqualität von PROM-Daten in der Sarkomversorgung am Kantonsspital Luzern.
+In der Sarkomversorgung spielen strukturierte, qualitativ hochwertige Ergebnisdaten eine entscheidende Rolle für die Bewertung des Behandlungserfolgs und die patientenzentrierte Versorgung. Dabei werden sowohl Patient Reported Outcome Measures (PROMs) als auch Clinician Reported Outcome Measures (CROMs) erhoben. PROM-Daten stammen direkt von den Patient:innen (z.B. über Fragebögen), während CROM-Daten durch medizinisches Fachpersonal im Rahmen der klinischen Dokumentation erfasst werden. Beide Datentypen liefern wertvolle Informationen zum Gesundheitszustand, Therapieverlauf und zur Versorgungsqualität. Ziel dieses Projekts ist die Entwicklung eines webbasierten Dashboards zur Echtzeitanalyse und Bewertung der Datenqualität von PROM- und CROM-Daten in der Sarkomversorgung am Kantonsspital Luzern.
 
 
 ### 1.1 Zweck des Dokuments
@@ -60,13 +60,13 @@ Dieses Dokument definiert die funktionalen und nicht-funktionalen Anforderungen 
 
 
 ### 1.2 Softwareprodukt Umfang
-Das vorliegende Softwareprodukt ist ein webbasiertes Dashboard zur Überwachung und Analyse der Datenqualität von Patient Reported Outcome Measures (PROM) in der Sarkomversorgung am Kantonsspital Luzern.
-Es ermöglicht Ärzt:innen, Datenmanager:innen und Forschenden, die Qualität der von Patient:innen ausgefüllten PROM-Daten strukturiert zu überwachen, kritische Schwachstellen zu erkennen und gezielt zu adressieren. Das Softwareprodukt umfasst:
+Das vorliegende Softwareprodukt ist ein webbasiertes Dashboard zur Überwachung und Analyse der Datenqualität von PROM- und CROM-Daten in der Sarkomversorgung am Kantonsspital Luzern. Es ermöglicht Ärzt:innen, Datenmanager:innen und Forschenden, die Qualität der erhobenen Ergebnisdaten strukturiert zu überwachen, kritische Schwachstellen zu erkennen und gezielt zu adressieren.
 
-- Eine Web-Applikation zur Anzeige, Überwachung und Bewertung von Datenqualitätsmetriken (z.B. Vollständigkeit, Konsistenz, Korrektheit) der PROM-Daten.  
+Das Softwareprodukt umfasst:
+- Eine Web-Applikation zur Anzeige, Überwachung und Bewertung von Datenqualitätsmetriken (z.B. Vollständigkeit, Konsistenz, Korrektheit) der PROM- und CROM-Daten.    
 - Ein Backend mit FastAPI, das regelbasierte Prüfungen der PROM-Daten durchführt und Metriken bereitstellt.  
 - Ein Alert- und Benachrichtigungssystem, das bei Regelverletzungen automatisiert relevante Akteure informiert.  
-- Eine Integration mit einer bestehenden PostgreSQL-Datenbank, in der die PROM-Daten gespeichert werden.  
+- Eine Integration mit der bestehenden PostgreSQL-Datenbank, in der PROMs und CROMs gespeichert werden.  
 
 
 
@@ -132,15 +132,15 @@ Es beschreibt die Zielsetzung des Projekts, die relevanten Nutzergruppen sowie d
 
 ## 2. Gesamtbeschreibung
 
-Die entwickelte Web-Applikation dient der Überwachung und Bewertung der Datenqualität von PROM-Daten in der Sarkomversorgung am Kantonsspital Luzern. Sie ermöglicht Ärzt:innen, Datenmanager:innen und Forschenden den schnellen Zugriff auf Qualitätsmetriken, um Vollständigkeit, Korrektheit und Konsistenz der von Patient:innen ausgefüllten Fragebögen zu prüfen. Durch eine intuitive Benutzeroberfläche werden Auffälligkeiten, Red Flags und Schwachstellen sichtbar gemacht, um eine gezielte Nachverfolgung und Qualitätssicherung zu unterstützen.
+Die entwickelte Web-Applikation dient der Überwachung und Bewertung der Datenqualität von PROMs und CROMs in der Sarkomversorgung am Kantonsspital Luzern. Sie ermöglicht es, Qualitätsmetriken wie Vollständigkeit, Korrektheit und Konsistenz strukturiert auszuwerten. Durch eine intuitive Benutzeroberfläche werden Auffälligkeiten, Red Flags und Schwachstellen sichtbar gemacht, um eine gezielte Nachverfolgung und Qualitätssicherung zu unterstützen.
 
 ### 2.1 Produktübersicht
 
-Die Applikation wird als eigenständige, webbasierte Lösung zur Überwachung der Datenqualität von PROM-Daten in der Sarkomversorgung am Kantonsspital Luzern entwickelt. Sie ergänzt bestehende Datenerfassungssysteme durch eine spezialisierte Plattform, die Qualitätsmetriken wie Vollständigkeit, Korrektheit, Konsistenz, Plausibilität, Eindeutigkeit und Aktualität automatisiert berechnet und visualisiert. Durch die Anbindung an eine bestehende PostgreSQL-Datenbank werden PROM-Daten regelbasiert geprüft und Auffälligkeiten über ein Alert-System angezeigt. Die Anwendung fokussiert auf Benutzerfreundlichkeit, Nachvollziehbarkeit und Sicherheit und ermöglicht es, Schwachstellen in der Datenqualität frühzeitig zu erkennen und Massnahmen einzuleiten. Das System nutzt eine modulare Architektur mit FastAPI, React und Keycloak (OpenID Connect) zur sicheren Authentifizierung und ermöglicht eine skalierbare Bereitstellung auf der Google Cloud Platform (GCP).
+Die Applikation wird als eigenständige, webbasierte Lösung zur Überwachung der Datenqualität von PROM- und CROM-Daten entwickelt. Sie ergänzt bestehende Datenerfassungssysteme durch eine spezialisierte Plattform, die Qualitätsmetriken automatisiert berechnet und visualisiert. Durch die Anbindung an eine bestehende PostgreSQL-Datenbank werden PROM- und Crom-Daten regelbasiert geprüft und Auffälligkeiten über ein Alert-System angezeigt. Die Anwendung fokussiert auf Benutzerfreundlichkeit, Nachvollziehbarkeit und Sicherheit und ermöglicht es, Schwachstellen in der Datenqualität frühzeitig zu erkennen und Massnahmen einzuleiten. Das System nutzt eine modulare Architektur mit FastAPI, React und Keycloak (OpenID Connect) zur sicheren Authentifizierung und ermöglicht eine skalierbare Bereitstellung auf der Google Cloud Platform (GCP).
 
 ### 2.2 Produktfunktionen
 
-Die Web-Applikation bietet folgende Kernfunktionen zur Überwachung der Datenqualität von PROM-Daten in der Sarkomversorgung:
+Die Web-Applikation bietet folgende Kernfunktionen zur Überwachung der Datenqualität von PROM- und CROM-Daten in der Sarkomversorgung:
 
 - **Qualitätsmetriken-Anzeige:** Automatisierte Berechnung und Visualisierung von Qualitätsmetriken (z. B. Vollständigkeit, Korrektheit, Plausibilität).  
 - **Alert-System:** Benachrichtigung bei Regelverletzungen, kritischen Schwellenwertüberschreitungen und Red Flags.  
@@ -196,7 +196,7 @@ Dieses Kapitel beschreibt die technischen und organisatorischen Einschränkungen
 | **Annahme: Regelpflege**                     | Prüfregeln zur Datenqualitätsbewertung werden initial definiert und bei Bedarf von autorisierten Personen angepasst.             |
 | **Abhängigkeit: Infrastruktur**              | Die Applikation erfordert eine stabile Internetverbindung und den Zugriff auf die gesicherte Cloud-Umgebung (GCP).               |
 | **Abhängigkeit: Benutzerverwaltung**         | Die Authentifizierung erfolgt über Keycloak (OIDC).                                                                              |
-| **Einschränkung: Datenumfang**               | Das System beschränkt sich ausschliesslich auf PROM-Daten in der Sarkomversorgung am Kantonsspital Luzern.                       |
+| **Einschränkung: Datenumfang**               | Das System beschränkt sich auf PROM- und CROM-Daten in der Sarkomversorgung am Kantonsspital Luzern.                          |
 | **Einschränkung: Funktionaler Umfang (MVP)** | Berichtsexport, fortgeschrittene Datenanalysen sowie Integration in klinische Systeme sind nicht Bestandteil der ersten Version. |
 
 
@@ -319,7 +319,7 @@ Das System ist ausschliesslich für die Überwachung der Datenqualität von PROM
 
 ## 3.6. Bewertungskriterien und Metriken
 
-Die Qualität der PROM-Daten wird anhand definierter Datenqualitätsmetriken überwacht. Diese Metriken basieren auf dem modularen Datenqualitätskonzept des Projekts und dienen der Identifikation von Schwachstellen, der Überwachung von Trends sowie der Unterstützung bei datenbasierten Entscheidungen. Folgende Kernmetriken werden berücksichtigt:
+Die Qualität der PROM- und CROM-Daten wird anhand definierter Datenqualitätsmetriken überwacht. Diese Metriken basieren auf dem modularen Datenqualitätskonzept des Projekts und dienen der Identifikation von Schwachstellen, der Überwachung von Trends sowie der Unterstützung bei datenbasierten Entscheidungen. Folgende Kernmetriken werden berücksichtigt:
 
 - **Anteil fehlender Werte:** Prozentsatz der fehlenden Einträge pro Datenfeld, Patient:in oder Zeitraum.  
 - **Anteil konsistenter/plausibler Werte:** Prozentsatz der Werte, die konsistent (z. B. keine widersprüchlichen Einträge) und plausibel (z. B. innerhalb definierter Grenzwerte) sind.  
