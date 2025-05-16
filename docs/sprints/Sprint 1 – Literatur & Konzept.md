@@ -2,36 +2,42 @@
 **Zeitraum:** 05.05.2025 – 16.05.2025
 
 ## Sprint-Ziele
-- [ ] Literatur zur Datenqualitätssicherung sammeln und auswerten
-- [ ] Tool-Übersicht & Best Practices recherchieren
-- [ ] Konzeptschreiben in Markdown strukturieren und formulieren
-- [ ] Austausch mit Betreuenden bzgl. Outlier-Definition und Alerts
+- [x] Literatur zur Datenqualitätssicherung sammeln und auswerten
+- [x] Tool-Übersicht & Best Practices recherchieren
+- [x] SRS in Markdown strukturieren und formulieren
+- [x] Konzeptschreiben in Markdown strukturieren und formulieren
 
 ---
 
-## Erreichte Ergebnisse (laufend)
-- Erste Version des [Konzeptschreiben.md](/docs/Konzeptschreiben.md) erstellt und Inhalt vorbereitet
-- Visualisierung des Sprint-Plans als [docs/images/sprint.JPG](/docs/images/sprint.JPG) integriert.
+## Erreichte Ergebnisse
+
+* Erste Version des [Konzeptschreiben.md](/docs/Konzeptschreiben.md) erstellt und inhaltlich vorbereitet
+* SRS-Dokument strukturiert und fertiggestellt (vorläufige Version)
+* Visualisierung des Sprint-Plans als [Sprint-Übersicht](/docs/images/sprint.JPG) integriert
+* Dokumentation der Anforderungen & Use Cases gemäss IEEE SRS Standard
 
 ---
-
 ## Herausforderungen
-- Literatur muss priorisiert und kritisch verglichen werden
-- Tool-Entscheidungen (Python Dash, R Shiny, etc.) stehen noch aus
+
+* Priorisierung und kritische Bewertung der gesammelten Literatur war aufwendig
+* Entscheidung über das geeignete Dashboard-Framework (Dash, Shiny, Streamlit) noch offen
+* Abstimmung zur Definition von Outlier-Handling & Alerts verzögert (Abhängigkeit von Betreuenden)
 
 ---
+## Offene Punkte (für Sprint 2)
 
-## Offene Punkte
-- Entscheidung über Dashboard-Framework (z.B. Dash vs. Shiny)
-- Definition der wichtigsten DQ-Kriterien (z.B. Minimum Data Set, Required Fields)
+* Entscheidung über das zu verwendende Dashboard-Framework
+* Finalisierung des modularen Datenqualitätskonzepts (inkl. Mindestdatensatz & Pflichtfeldern)
+* Definition von Alerts & Outlier-Kriterien in Abstimmung mit Betreuenden
 
 ---
 
 ## Nächste Schritte
-- Toolvergleich abschliessen
-- DQ-Konzept finalisieren
-- Erste Architektur-Skizze vorbereiten (für Sprint 2)
 
-**Sprint abgeschlossen am:** *ausstehend*  
+* Abschluss der Tool-Evaluation inkl. Empfehlung für das Dashboard-Framework
+* Ausarbeitung des finalen DQ-Konzepts (Dokumentation & Visualisierung)
+
+---
+
+**Sprint abgeschlossen am:** *16.05.2025*  
 **Bearbeitet von:** Sivanajani Sivakumar
-
