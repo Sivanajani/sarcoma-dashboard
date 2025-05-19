@@ -1,0 +1,52 @@
+# === Logs ===
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === Runtime ===
+node_modules/
+dist/
+dist-ssr/
+*.local
+.cache/
+*.tsbuildinfo
+
+# === Vite-related ===
+.vite/
+.vitepress/
+
+# === System files ===
+.DS_Store
+Thumbs.db
+
+# === IDEs / Editors ===
+.vscode/
+!.vscode/extensions.json   
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# === Environment ===
+.env.local
+.env.*.local
+.env                 
+.env.development
+.env.production
+
+# === Tests / Coverage ===
+coverage/
+*.lcov
+
+# === Others ===
+*.log
+*.tgz
+*.lock
+*.bak
+*.tmp
