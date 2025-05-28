@@ -1,0 +1,17 @@
+{
+  "sidebar": {
+    "title": "PROMage",
+    "dashboard": "Dashboard",
+    "forms": "Fragebögen",
+    "patients": "Patient:innen",
+    "redflags": "Red Flags",
+    "settings": "Einstellungen"
+  },
+  "header": {
+    "search": "Suche nach Patient:innen oder Items...",
+    "user": "Sivanajani"
+  },
+  "dashboard": {
+    "title": "Datenqualitäts-Dashboard"
+  }
+}
