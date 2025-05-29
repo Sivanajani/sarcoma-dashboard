@@ -15,27 +15,74 @@
   padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
+  position: relative;
+  transition: width 0.3s ease;
 }
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 1.5rem 0.5rem;
+}
+
+.sidebar.collapsed h2,
+.sidebar.collapsed nav a {
+  justify-content: center;
+}
+.sidebar.collapsed nav a span {
+  display: none;
+}
+
 
 .sidebar h2 {
   font-size: 1.6rem;
   margin-bottom: 2rem;
   color: #4da6ff;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.collapsed-title {
+  opacity: 0;
+  transform: scaleY(0);
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .sidebar nav a {
   color: white;
   text-decoration: none;
   margin-bottom: 1rem;
-  display: block;
+  display: flex;
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   transition: background-color 0.2s;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .sidebar nav a:hover {
   background-color: #4da6ff;
 }
+
+.sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  right: -15px;
+  background-color: #ffffff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
 
 /* === MAIN CONTENT === */
 .main-content {
