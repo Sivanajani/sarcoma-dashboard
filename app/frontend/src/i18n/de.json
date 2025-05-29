@@ -8,10 +8,18 @@
     "settings": "Einstellungen"
   },
   "header": {
-    "search": "Suche nach Patient:innen oder Items...",
-    "user": "Sivanajani"
+    "search": "Suche nach Patient:innen...",
+    "user": "Sivanajani",
+    "menu": {
+      "userLabel": "Angemeldet als",
+      "logout": "Abmelden",
+      "logoutSuccess": "Du wurdest erfolgreich abgemeldet."
+    }
   },
   "dashboard": {
     "title": "Datenqualitäts-Dashboard"
+  },
+  "lang": {
+    "de": "DE"
   }
 }
