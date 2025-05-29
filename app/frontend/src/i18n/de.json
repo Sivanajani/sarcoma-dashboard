@@ -18,6 +18,7 @@
   },
   "dashboard": {
     "title": "Datenqualitäts-Dashboard",
+    "overview-title": "Übersicht",
     "kpi": {
       "total": "Gesamtanzahl",
       "complete": "≥90 % vollständig",

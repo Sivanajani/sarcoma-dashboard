@@ -47,3 +47,16 @@
   color: #888;
   margin-top: 0.5rem;
 }
+
+.kpi-container {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.overview-title {
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 1rem;
+  padding-left: 0.25rem;
+}

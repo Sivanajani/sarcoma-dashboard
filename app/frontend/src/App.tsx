@@ -13,7 +13,9 @@ function App() {
       <div className="main-content">
         <Header />
         <main className="dashboard-main">
-          <h1>{t('dashboard.title')}</h1>
+          <div className="dashboard-header">
+            <h1>{t('dashboard.title')}</h1>
+          </div>
           <Overview />
         </main>
       </div>

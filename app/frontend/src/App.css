@@ -68,6 +68,85 @@
   align-items: center;
 }
 
+/* === MODERN HEADER === */
+.modern-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-left .dashboard-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #213547;
+  margin: 0;
+}
+
+.header-center input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  min-width: 300px;
+  background-color: #f7f7f7;
+  color: #000;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #f4f1ed;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.user-profile:hover {
+  background-color: #e9e4df;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #af9090;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.user-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #212121;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: #4da6ff;
+  margin-top: -2px;
+}
+
+
 /* === DASHBOARD MAIN === */
 .dashboard-layout {
   display: flex;
@@ -85,6 +164,24 @@
   font-size: 2rem;
   font-weight: bold;
   color: #213547;
+}
+
+.dashboard-header {
+  padding: 0 0 1rem 0;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #213547;
+  margin: 0;
+}
+
+.dashboard-header .overview-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #666;
+  margin-top: 0.25rem;
 }
 
 /* === BUTTONS (optional) === */

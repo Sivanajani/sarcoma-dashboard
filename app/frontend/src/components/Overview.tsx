@@ -4,7 +4,6 @@ import GroupIcon from '@mui/icons-material/Group';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import InsightsIcon from '@mui/icons-material/Insights';
-import './Overview.css';
 import { useTranslation } from 'react-i18next';
 
 const Overview = () => {
@@ -35,38 +34,41 @@ const Overview = () => {
 
   return (
     <section className="overview">
-      <KpiCard
-        icon={<GroupIcon />}
-        label={t('dashboard.kpi.total')}
-        value={totalPatients}
-        tooltip={t('dashboard.kpi.tooltip.total')}
-        color="#007bff"
-         onClick={() => console.log('Total patients clicked')}
-      />
-      <KpiCard
-        icon={<CheckCircleIcon />}
-        label={t('dashboard.kpi.complete')}
-        value={highCompleteness}
-        tooltip={t('dashboard.kpi.tooltip.complete')}
-        color="#28a745"
-        onClick={() => console.log('≥90 % clicked')}
-      />
-      <KpiCard
-        icon={<ReportProblemIcon />}
-        label={t('dashboard.kpi.flags')}
-        value={redFlags}
-        tooltip={t('dashboard.kpi.tooltip.flags')}
-        color="#dc3545"
-        onClick={() => console.log('Red Flags clicked')}
-      />
-      <KpiCard
-        icon={<InsightsIcon />}
-        label={t('dashboard.kpi.avg')}
-        value={`${avgCompleteness}%`}
-        tooltip={t('dashboard.kpi.tooltip.avg')}
-        color="#ffc107"
-        onClick={() => console.log('Ø Vollständigkeit clicked')}
-      />
+        <h2 className="overview-title">{t('dashboard.overview-title')}</h2>
+        <div className="kpi-container">
+            <KpiCard
+            icon={<GroupIcon />}
+            label={t('dashboard.kpi.total')}
+            value={totalPatients}
+            tooltip={t('dashboard.kpi.tooltip.total')}
+            color="#007bff"
+            onClick={() => console.log('Total patients clicked')}
+            />
+            <KpiCard
+            icon={<CheckCircleIcon />}
+            label={t('dashboard.kpi.complete')}
+            value={highCompleteness}
+            tooltip={t('dashboard.kpi.tooltip.complete')}
+            color="#28a745"
+            onClick={() => console.log('≥90 % clicked')}
+            />
+            <KpiCard
+            icon={<ReportProblemIcon />}
+            label={t('dashboard.kpi.flags')}
+            value={redFlags}
+            tooltip={t('dashboard.kpi.tooltip.flags')}
+            color="#dc3545"
+            onClick={() => console.log('Red Flags clicked')}
+            />
+            <KpiCard
+            icon={<InsightsIcon />}
+            label={t('dashboard.kpi.avg')}
+            value={`${avgCompleteness}%`}
+            tooltip={t('dashboard.kpi.tooltip.avg')}
+            color="#ffc107"
+            onClick={() => console.log('Ø Vollständigkeit clicked')}
+            />
+        </div>
     </section>
   );
 };
