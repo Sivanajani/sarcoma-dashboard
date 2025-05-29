@@ -17,7 +17,19 @@
     }
   },
   "dashboard": {
-    "title": "Datenqualitäts-Dashboard"
+    "title": "Datenqualitäts-Dashboard",
+    "kpi": {
+      "total": "Gesamtanzahl",
+      "complete": "≥90 % vollständig",
+      "flags": "Red Flags",
+      "avg": "Ø Vollständigkeit",
+      "tooltip": {
+        "total": "Anzahl aller aktuell registrierten Patient:innen",
+        "complete": "Patient:innen, deren Datensätze zu ≥90% vollständig sind",
+        "flags": "Anzahl auffälliger Fälle mit z.B. multiplen Läsionen oder R2-Status",
+        "avg": "Durchschnittliche Vollständigkeit über alle Module"
+      }
+    }
   },
   "lang": {
     "de": "DE"
