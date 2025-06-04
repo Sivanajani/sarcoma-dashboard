@@ -1,9 +1,3 @@
-Sehr klug! ✅ Eine präzise Rücksprache mit der Person, die die Datenbank entworfen hat, ist extrem wertvoll – gerade bei Mehrfacheinträgen, Regeln und Sensitivität.
-
-Hier ist eine Liste **gezielter, professionell formulierter Fragen**, die du stellen kannst:
-
----
-
 ## 🧾 📬 Fragen zur Datenbankstruktur (für Rücksprache mit dem/der DB-Verantwortlichen)
 
 ### 🔹 1. **Mehrfacheinträge pro Patient\:in**
@@ -67,12 +61,3 @@ Hier ist eine Liste **gezielter, professionell formulierter Fragen**, die du ste
 > *„Ist das SarcomaBoard der zentrale Einstiegspunkt für den klinischen Ablauf? Werden dort Entscheidungen protokolliert, die später verpflichtend umgesetzt werden sollten (z. B. Entscheidung für Operation)?“*
 
 ✅ Ziel: SarcomaBoard als zentrale Steuerstelle verstehen
-
----
-
-## 📩 Formatvorschlag:
-
-Wenn du magst, kannst du die Fragen auch als **kurzes E-Mail-Template oder als Protokoll** formulieren – sag einfach Bescheid.
-
-Wenn du die Antworten hast, können wir dein Mock-Modell **final und korrekt** aufbauen.
-Willst du eine PDF oder Markdown-Version dieser Fragen?
