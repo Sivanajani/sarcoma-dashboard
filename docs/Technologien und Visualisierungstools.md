@@ -17,13 +17,13 @@ Die eingesetzten Technologien müssen folgenden Anforderungen gerecht werden:
 | **Erweiterbarkeit**       | Modularer Aufbau, einfache Integration neuer Prüfregeln und Visualisierungen          |
 | **Visualisierung**        | Darstellung komplexer Metriken in verständlicher Form (z. B. Trends, Heatmaps)        |
 | **Performance**           | Verarbeitung auch grösserer Datenmengen in akzeptabler Zeit                          |
-| **Integration**           | Kompatibilität mit der zentralen SSN-Datenbank (PostgreSQL, lesender Zugriff)        |
+| **Integration**           | Kompatibilität mit der zentralen Datenbank (PostgreSQL)        |
 
 ---
 
 ## 3. Datenquelle
 
-Die zentrale **PostgreSQL-Datenbank** wird durch das IT-Team des Schweizer Sarkom Netzwerks (SSN) bereitgestellt und gepflegt.  
+Die zentrale **PostgreSQL-Datenbank** wird bereitgestellt.  
 
 **Vorteile von PostgreSQL:**
 - Unterstützung komplexer Abfragen und Views
@@ -34,9 +34,8 @@ Die zentrale **PostgreSQL-Datenbank** wird durch das IT-Team des Schweizer Sarko
 
 ## 4. Auswahl: Backend-Technologie
 
-| Technologie | Begründung für Auswahl |
-|-------------|------------------------|
-| **FastAPI (Python)** |  
+**Technologie:** FastAPI (Python)  
+**Begründung für Auswahl:**
 - Modernes, schnelles API-Framework  
 - Unterstützung von Swagger UI (automatische API-Doku)  
 - Native Integration mit Pandas, NumPy für Datenanalysen  
@@ -49,15 +48,14 @@ Abgelehnt: weniger performant & moderner als FastAPI
 
 ## 5. Auswahl: Frontend-Technologie
 
-| Technologie | Begründung für Auswahl |
-|-------------|------------------------|
-| **React (JavaScript)** |  
+**Technologie:** React (JavaScript)
+**Begründung für Auswahl:**
+
 - Weit verbreitetes Framework für interaktive Web-UIs  
 - Einfache Anbindung von Visualisierungsbibliotheken (z. B. Chart.js, Recharts, D3.js)  
 - Unterstützung von Filterfunktionen, Alert-Anzeigen und responsivem Design  
 
 **Zusätzlich geplant:**  
-- **Tailwind CSS** für modernes Styling  
 - **i18n** (z. B. mit i18next) für Mehrsprachigkeit
 
 **Alternativen geprüft:**  
