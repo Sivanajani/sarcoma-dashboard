@@ -40,6 +40,10 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+.sidebar.collapsed nav {
+  margin-top: 5rem;
+}
+
 .collapsed-title {
   opacity: 0;
   transform: scaleY(0);
@@ -229,6 +233,13 @@
   font-weight: 500;
   color: #666;
   margin-top: 0.25rem;
+}
+
+.overview-title {
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 1rem;
+  padding-left: 0.25rem;
 }
 
 /* === BUTTONS (optional) === */

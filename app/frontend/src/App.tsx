@@ -2,6 +2,7 @@ import './App.css';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Overview from './components/Overview'; 
+import PatientQualityTable from './components/PatientQualityTable';
 import { useTranslation } from 'react-i18next';
 
 function App() {
@@ -16,7 +17,13 @@ function App() {
           <div className="dashboard-header">
             <h1>{t('dashboard.title')}</h1>
           </div>
+
+          {/* Übersichtskarten */}
           <Overview />
+
+          {/* Patient Quality Tabelle */}
+          <PatientQualityTable />
+
         </main>
       </div>
     </div>

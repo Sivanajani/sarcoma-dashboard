@@ -1,0 +1,53 @@
+.patient-quality-table {
+  margin-top: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.patient-quality-table h2 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #213547;
+  padding-left: 0.25rem;
+}
+
+.patient-quality-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.patient-quality-table th,
+.patient-quality-table td {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+  color: #212121;
+}
+
+.patient-quality-table th {
+  color: #555;
+  font-weight: 600;
+}
+
+.patient-quality-table tbody tr:hover {
+  background-color: #f4f1ed;
+}
+
+.value {
+  font-weight: 500;
+}
+
+.value.green {
+  color: #28a745; /* Bootstrap grün */
+}
+
+.value.yellow {
+  color: #ffc107; /* Bootstrap gelb */
+}
+
+.value.red {
+  color: #dc3545; /* Bootstrap rot */
+}
