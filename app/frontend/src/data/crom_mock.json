@@ -1,0 +1,82 @@
+[
+  {
+    "pid": "12586",
+    "institution": 3,
+    "year_of_birth": 1953,
+    "gender": 1,
+    "date_first_patientcontact": "2023-04-23",
+    "whoops": 0
+  },
+  {
+    "pid": "941190",
+    "institution": 3,
+    "year_of_birth": 1953,
+    "gender": 1,
+    "date_first_patientcontact": "2023-04-23",
+    "whoops": 0
+  },
+  {
+    "pid": "12586",
+    "institution": 3,
+    "year_of_birth": 1953,
+    "gender": 1,
+    "date_first_patientcontact": "2023-04-23",
+    "whoops": 0
+  },
+  {
+    "pid": "70008",
+    "institution": 3,
+    "year_of_birth": 1985,
+    "gender": 2,
+    "date_first_patientcontact": "2023-04-07",
+    "whoops": 1
+  },
+  {
+    "pid": "156590",
+    "institution": 4,
+    "year_of_birth": 1959,
+    "gender": 2,
+    "date_first_patientcontact": "2019-12-02",
+    "whoops": 0
+  },
+  {
+    "pid": "211100",
+    "institution": 3,
+    "year_of_birth": 1935,
+    "gender": 2,
+    "date_first_patientcontact": "2017-01-06",
+    "whoops": 0
+  },
+  {
+    "pid": "215635",
+    "institution": 4,
+    "year_of_birth": 1955,
+    "gender": 2,
+    "date_first_patientcontact": "2019-10-12",
+    "whoops": 0
+  },
+  {
+    "pid": "216208",
+    "institution": 3,
+    "year_of_birth": 1954,
+    "gender": 1,
+    "date_first_patientcontact": "2022-08-09",
+    "whoops": 0
+  },
+  {
+    "pid": "226826",
+    "institution": 3,
+    "year_of_birth": 1939,
+    "gender": 1,
+    "date_first_patientcontact": "2020-09-22",
+    "whoops": 0
+  },
+  {
+    "pid": "242120",
+    "institution": 3,
+    "year_of_birth": 1942,
+    "gender": 1,
+    "date_first_patientcontact": "2020-06-07",
+    "whoops": 1
+  }
+]

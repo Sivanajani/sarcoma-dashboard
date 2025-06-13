@@ -1,0 +1,92 @@
+[
+  {
+    "pid": "941190",
+    "date": "2024-11-29",
+    "utility": 1.0,
+    "vas": 84,
+    "belastung": 84,
+    "funktion": 89,
+    "schmerz_allgemein": 90
+  },
+  {
+    "pid": "8627181",
+    "date": "2025-02-19",
+    "utility": 1.0,
+    "vas": 88,
+    "belastung": 78,
+    "funktion": 80,
+    "schmerz_allgemein": 79
+  },
+  {
+    "pid": "8623163",
+    "date": "2024-10-30",
+    "utility": 1.0,
+    "vas": 79,
+    "belastung": 86,
+    "funktion": 89,
+    "schmerz_allgemein": 88
+  },
+  {
+    "pid": "8617116",
+    "date": "2024-11-29",
+    "utility": 1.0,
+    "vas": 100,
+    "belastung": 100,
+    "funktion": 100,
+    "schmerz_allgemein": 100
+  },
+  {
+    "pid": "8617116",
+    "date": "2023-11-17",
+    "utility": 1.0,
+    "vas": 100,
+    "belastung": 100,
+    "funktion": 100,
+    "schmerz_allgemein": 100
+  },
+  {
+    "pid": "8614143",
+    "date": "2024-12-11",
+    "utility": 0.545,
+    "vas": 38,
+    "belastung": 43,
+    "funktion": 11,
+    "schmerz_allgemein": 89
+  },
+  {
+    "pid": "8614143",
+    "date": "2024-06-26",
+    "utility": 0.852,
+    "vas": 79,
+    "belastung": 63,
+    "funktion": 50,
+    "schmerz_allgemein": 84
+  },
+  {
+    "pid": "8614143",
+    "date": "2023-10-25",
+    "utility": 0.72,
+    "vas": 70,
+    "belastung": 50,
+    "funktion": 39,
+    "schmerz_allgemein": 60
+  },
+  {
+    "pid": "8613078",
+    "date": "2025-02-28",
+    "utility": 1.0,
+    "vas": 90,
+    "belastung": 94,
+    "funktion": 89,
+    "schmerz_allgemein": 94
+  },
+  {
+    "pid": "8591078",
+    "date": "2024-09-25",
+    "utility": 1.0,
+    "vas": 80,
+    "belastung": 83,
+    "funktion": 85,
+    "schmerz_allgemein": 80
+  }
+]
