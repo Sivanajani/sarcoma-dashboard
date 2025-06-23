@@ -4,9 +4,9 @@ services:
     container_name: postgres-container
     restart: always
     environment:
-      POSTGRES_USER: sivanajani
-      POSTGRES_PASSWORD: geheim
-      POSTGRES_DB: ssn_datenqualitaet
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://sivanajani:geheim@db:5432/ssn_datenqualitaet
+      - DATABASE_URL=${DATABASE_URL}
     ports:
       - "8000:8000"
 
