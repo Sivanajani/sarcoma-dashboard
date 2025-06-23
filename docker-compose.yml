@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres-container
+    restart: always
+    environment:
+      POSTGRES_USER: sivanajani
+      POSTGRES_PASSWORD: geheim
+      POSTGRES_DB: ssn_datenqualitaet
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  frontend:
+    build:
+      context: ./app/frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
