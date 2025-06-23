@@ -8,7 +8,7 @@
     "settings": "Einstellungen"
   },
   "header": {
-    "search": "Suche nach Patient:innen...",
+    "search": "Suche nach...",
     "user": "Sivanajani",
     "menu": {
       "userLabel": "Angemeldet als",
@@ -37,6 +37,7 @@
   },
   "patientTable": {
   "title": "Patientenübersicht - Datenqualität",
+  "search": "Suche nach Patient:in...",
   "headers": {
     "id": "Patient ID",
     "completeness": "Vollst.",

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';
+import { TextField, InputAdornment, IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 type PatientQuality = {
-  patient_id: string;
+  patient_id: string | number;
   completeness?: number;
   correctness?: number;
   consistency?: number;
@@ -22,6 +24,7 @@ const getColorClass = (value?: number): string => {
 const PatientQualityTable: React.FC = () => {
   const { t } = useTranslation();
   const [patients, setPatients] = useState<PatientQuality[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`)
@@ -43,9 +46,54 @@ const PatientQualityTable: React.FC = () => {
       });
   }, []);
 
+  const filteredPatients = patients.filter((p) =>
+    p.patient_id.toString().startsWith(searchTerm)
+  );
+
   return (
     <div className="patient-quality-table">
       <h2 className="overview-title">{t('patientTable.title')}</h2>
+
+      <TextField
+        placeholder={t('patientTable.search')}
+        variant="outlined"
+        size="small"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          marginBottom: '1rem',
+          minWidth: '300px',
+          backgroundColor: '#f4f1ed',
+          borderRadius: '9999px',
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '9999px',
+            paddingRight: '4px',
+            color: '#000',
+            '& fieldset': {
+              border: 'none',
+            },
+            '&:hover fieldset': {
+              border: 'none',
+            },
+            '&.Mui-focused fieldset': {
+              border: 'none',
+            },
+          },
+          '& input': {
+            color: '#000',
+          },
+        }}
+      />
+
       <table>
         <thead>
           <tr>
@@ -59,7 +107,7 @@ const PatientQualityTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {patients.map((p) => (
+          {filteredPatients.map((p) => (
             <tr key={p.patient_id}>
               <td>{p.patient_id}</td>
               <td className={`value ${getColorClass(p.completeness)}`}>
