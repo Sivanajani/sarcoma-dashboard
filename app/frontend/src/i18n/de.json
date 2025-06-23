@@ -34,5 +34,17 @@
   },
   "lang": {
     "de": "DE"
+  },
+  "patientTable": {
+  "title": "Patientenübersicht - Datenqualität",
+  "headers": {
+    "id": "Patient ID",
+    "completeness": "Vollst.",
+    "correctness": "Korr.",
+    "consistency": "Konsist.",
+    "timeliness": "Aktualität",
+    "uniqueness": "Eindeutigkeit",
+    "plausibility": "Plausib."
   }
+}
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './PatientQualityTable.css';
+import { useTranslation } from 'react-i18next';
 
 type PatientQuality = {
   patient_id: string;
@@ -11,7 +12,6 @@ type PatientQuality = {
   plausibility?: number;
 };
 
-// Funktion für Ampelfarben
 const getColorClass = (value?: number): string => {
   if (value === undefined) return '';
   if (value >= 90) return 'green';
@@ -20,6 +20,7 @@ const getColorClass = (value?: number): string => {
 };
 
 const PatientQualityTable: React.FC = () => {
+  const { t } = useTranslation();
   const [patients, setPatients] = useState<PatientQuality[]>([]);
 
   useEffect(() => {
@@ -44,17 +45,17 @@ const PatientQualityTable: React.FC = () => {
 
   return (
     <div className="patient-quality-table">
-      <h2 className="overview-title">Patient Overview – Data Quality</h2>
+      <h2 className="overview-title">{t('patientTable.title')}</h2>
       <table>
         <thead>
           <tr>
-            <th>Patient ID</th>
-            <th>Vollst.</th>
-            <th>Korr.</th>
-            <th>Konsist.</th>
-            <th>Aktualität</th>
-            <th>Eindeutigkeit</th>
-            <th>Plausib.</th>
+            <th>{t('patientTable.headers.id')}</th>
+            <th>{t('patientTable.headers.completeness')}</th>
+            <th>{t('patientTable.headers.correctness')}</th>
+            <th>{t('patientTable.headers.consistency')}</th>
+            <th>{t('patientTable.headers.timeliness')}</th>
+            <th>{t('patientTable.headers.uniqueness')}</th>
+            <th>{t('patientTable.headers.plausibility')}</th>
           </tr>
         </thead>
         <tbody>
