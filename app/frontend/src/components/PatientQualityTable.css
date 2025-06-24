@@ -51,3 +51,13 @@
 .value.red {
   color: #dc3545; /* Bootstrap rot */
 }
+
+.patient-link {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 600;
+}
+
+.patient-link:hover {
+  text-decoration: underline;
+}

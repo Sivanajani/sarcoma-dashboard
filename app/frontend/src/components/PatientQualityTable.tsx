@@ -3,6 +3,7 @@ import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom';
 
 type PatientQuality = {
   patient_id: string | number;
@@ -109,7 +110,11 @@ const PatientQualityTable: React.FC = () => {
         <tbody>
           {filteredPatients.map((p) => (
             <tr key={p.patient_id}>
-              <td>{p.patient_id}</td>
+              <td>
+                <Link to={`/patients/${p.patient_id}`} className="patient-link">
+                  {p.patient_id}
+                </Link>
+              </td>
               <td className={`value ${getColorClass(p.completeness)}`}>
                 {p.completeness !== undefined ? `${p.completeness}%` : '–'}
               </td>

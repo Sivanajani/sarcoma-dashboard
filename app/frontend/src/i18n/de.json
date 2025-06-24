@@ -47,5 +47,12 @@
     "uniqueness": "Eindeutigkeit",
     "plausibility": "Plausib."
   }
+},
+"patientDetail": {
+  "title": "Patient {{id}} – Detailansicht",
+  "noModules": "Keine Module vorhanden.",
+  "completeness": "Vollständigkeit",
+  "of": "von",
+  "fields": "Feldern"
 }
 }
