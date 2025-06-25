@@ -39,6 +39,27 @@ def get_patient_count():
         count = result.scalar()
     return {"patient_count": count}
 
+# external_code abrufen
+@app.get("/api/patients/{id}")
+def get_patient_by_id(id: int):
+    try:
+        with engine.connect() as conn:
+            result = conn.execute(
+                text("SELECT id, external_code FROM croms_patients WHERE id = :id"),
+                {"id": id}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient not found")
+
+            return {
+                "id": result["id"],
+                "patient_id": result["external_code"]
+            }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # JSON-Liste mit allen patient_id
 @app.get("/api/patients")
@@ -48,14 +69,15 @@ def get_patients():
             result = conn.execute(text("SELECT id, external_code FROM croms_patients"))
             patients = [
                 {
-                    "id": row["id"],                    # Interne ID (für Navigation)
-                    "patient_id": row["external_code"]  # Externe ID (für Anzeige)
+                    "id": row["id"],
+                    "patient_id": row["external_code"]
                 }
-                for row in result
+                for row in result.mappings()  # <- hier ist der Fix
             ]
         return patients
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 # unterschiedlichen Spaltennamen berücksichtigt    

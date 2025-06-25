@@ -10,8 +10,12 @@ const PatientDetailView: React.FC = () => {
   const [modules, setModules] = useState<QualityMetrics[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [patientInfo, setPatientInfo] = useState<{ id: number; patient_id: string } | null>(null);
 
   useEffect(() => {
+    if (!patientId) return;
+
+    // Lade die Module
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/modules`)
       .then((res) => res.json())
       .then((data) => {
@@ -29,9 +33,18 @@ const PatientDetailView: React.FC = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Fehler beim Laden:', err);
+        console.error('Fehler beim Laden der Module:', err);
         setError('Fehler beim Laden der Patientendaten.');
         setLoading(false);
+      });
+
+    // Lade patient_id (external_code)
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}`)
+      .then((res) => res.json())
+      .then((data) => setPatientInfo(data))
+      .catch((err) => {
+        console.error('Fehler beim Laden der Patient-Info:', err);
+        setPatientInfo(null);
       });
   }, [patientId]);
 
@@ -40,7 +53,10 @@ const PatientDetailView: React.FC = () => {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <h1 className="overview-title">{t('patientDetail.title', { id: patientId })}</h1>
+      <h1 className="overview-title">
+        {t('patientDetail.title', { id: `${patientInfo?.id}` })} / Patient: {patientInfo?.patient_id}
+      </h1>
+
       {modules.length === 0 ? (
         <p>{t('patientDetail.noModules')}</p>
       ) : (
