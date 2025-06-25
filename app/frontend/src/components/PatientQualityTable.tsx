@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
 
 type PatientQuality = {
+  id: number; //internal_ID
   patient_id: string | number;
   completeness?: number;
   correctness?: number;
@@ -31,7 +32,8 @@ const PatientQualityTable: React.FC = () => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`)
       .then((res) => res.json())
       .then((data) => {
-        const initializedPatients: PatientQuality[] = data.map((p: { patient_id: string }) => ({
+        const initializedPatients: PatientQuality[] = data.map((p: any) => ({
+          id: p.id,
           patient_id: p.patient_id,
           completeness: undefined,
           correctness: undefined,
@@ -111,7 +113,7 @@ const PatientQualityTable: React.FC = () => {
           {filteredPatients.map((p) => (
             <tr key={p.patient_id}>
               <td>
-                <Link to={`/patients/${p.patient_id}`} className="patient-link">
+                <Link to={`/patients/${p.id}`} className="patient-link">
                   {p.patient_id}
                 </Link>
               </td>

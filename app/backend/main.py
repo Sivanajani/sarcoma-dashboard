@@ -45,12 +45,18 @@ def get_patient_count():
 def get_patients():
     try:
         with engine.connect() as conn:
-            result = conn.execute(text("SELECT id FROM croms_patients"))
-            patients = [{"patient_id": row[0]} for row in result]
+            result = conn.execute(text("SELECT id, external_code FROM croms_patients"))
+            patients = [
+                {
+                    "id": row["id"],                    # Interne ID (für Navigation)
+                    "patient_id": row["external_code"]  # Externe ID (für Anzeige)
+                }
+                for row in result
+            ]
         return patients
     except Exception as e:
-        print("Fehler beim Abrufen der Patienten:", e)
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # unterschiedlichen Spaltennamen berücksichtigt    
 @app.get("/api/patients/{patient_id}/modules")
@@ -135,3 +141,27 @@ def get_all_table_columns():
             return table_columns
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/debug/field-values/{table}/{column}")
+def get_distinct_field_values(table: str, column: str):
+    try:
+        with engine.connect() as conn:
+            result = conn.execute(
+                text(f"SELECT DISTINCT {column} FROM {table}")
+            )
+            values = [row[0] for row in result]
+        return {"table": table, "column": column, "values": values}
+    except Exception as e:
+        print(f"Fehler beim Abrufen von Werten für {table}.{column}:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/debug/column-values")
+def get_column_values(table: str, column: str):
+    with engine.connect() as conn:
+        result = conn.execute(text(f"""
+            SELECT DISTINCT {column}
+            FROM {table}
+            WHERE {column} IS NOT NULL
+        """))
+        values = [row[0] for row in result]
+    return {"table": table, "column": column, "values": values}
