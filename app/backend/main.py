@@ -92,8 +92,8 @@ def get_patient_modules(patient_id: int):
         "systemic_therapy": ("croms_systemic_therapies", "patient_id"),
         "pathology": ("croms_pathologies", "patient_id"),
         "sarcoma_board": ("croms_sarcoma_boards", "patient_id"),
-        # Hyperthermia hat KEIN patient_id → explizit behandeln
-        "hyperthermia": (None, None)
+        "hyperthermia": ("croms_hyperthermia_therapies", "patient_id"),
+        "patient": ("croms_patients", "id"),
     }
 
     modules = {}
@@ -187,3 +187,39 @@ def get_column_values(table: str, column: str):
         """))
         values = [row[0] for row in result]
     return {"table": table, "column": column, "values": values}
+
+
+from sqlalchemy import create_engine
+
+# Lokale PostgreSQL (CROMs)
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine_pg = create_engine(DATABASE_URL)
+
+# Externe MySQL (PROMs)
+PROM_DB_URL = os.getenv("PROM_DB_URL")
+engine_mysql = create_engine(PROM_DB_URL)
+
+from sqlalchemy.exc import SQLAlchemyError
+
+@app.get("/api/prom-tables")
+def get_prom_tables():
+    try:
+        with engine_mysql.connect() as conn:
+            result = conn.execute(text("SHOW TABLES"))
+            tables = [row[0] for row in result]
+        return {"prom_tables": tables}
+    except SQLAlchemyError as e:
+        print(f"Fehler bei der Verbindung zur PROMs-Datenbank: {e}")
+        raise HTTPException(status_code=500, detail="Fehler beim Abrufen der Tabellen")
+    
+
+@app.get("/api/proms/{table}")
+def get_prom_table_data(table: str):
+    try:
+        with engine_mysql.connect() as conn:
+            result = conn.execute(text(f"SELECT * FROM `{table}` LIMIT 100"))
+            rows = [dict(row._mapping) for row in result]
+        return {"table": table, "rows": rows}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

@@ -1,0 +1,58 @@
+.module-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.module-card {
+  flex: 1 1 200px;
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.module-card h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.module-card p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.module-card .highlight {
+  font-weight: bold;
+  color: #111;
+}
+
+.completeness-green {
+  color: rgb(13, 82, 13);
+  font-weight: bold;
+}
+
+.completeness-yellow {
+  color: rgb(240, 161, 16);
+  font-weight: bold;
+}
+
+.completeness-red {
+  color: red;
+  font-weight: bold;
+}
+

@@ -53,6 +53,10 @@
   "noModules": "Keine Module vorhanden.",
   "completeness": "Vollständigkeit",
   "of": "von",
-  "fields": "Feldern"
+  "fields": "Feldern",
+  "loading": "Lade Patientendaten...",
+  "error": "Fehler beim Laden der Patientendaten.",
+  "patientLabel": "Patient: {{pid}}"
 }
+
 }
