@@ -31,8 +31,7 @@ const completenessRules: Record<string, CompletenessRule[]> = {
     { key: 'patient_history', required: true },
     { key: 'diagnosis_ecog', required: true },
     { key: 'last_contact_date', required: true },
-    { key: 'last_status', required: true }
-    // 'death_reason' ist **absichtlich nicht required**
+    { key: 'last_status', required: true },
   ],
 
   // tumor selber nicht im Dump vorhanden, wahrscheinlich verschmolzen mit diagnosis
@@ -69,8 +68,6 @@ const completenessRules: Record<string, CompletenessRule[]> = {
     { key: 'decision_palliative_care_comment', required: true },
     { key: 'summary', required: true },
     { key: 'fast_track', required: true }
-    // further_details intentionally not required
-    // { key: 'presenting_physician', required: true }
   ],
 
   croms_radiology_exams: [
@@ -91,7 +88,6 @@ const completenessRules: Record<string, CompletenessRule[]> = {
 
   croms_pathologies: [
     { key: 'data_entry_type', required: true },
-    //{ key: 'responsible_pathologist', required: true }, ist nicht im db-dump
     { key: 'biopsy_resection_date', required: true },
     { key: 'registrate_date', required: true },
     { key: 'first_report_date', required: true },
@@ -149,7 +145,6 @@ const completenessRules: Record<string, CompletenessRule[]> = {
     { key: 'was_tumor_located_with_pre_existing_lymph_edema', required: true },
     { key: 'comments', required: true },
     { key: 'hyperthermia_status', required: true },
-    //{ key: 'oncologist', required: true } nicht im dump
   ],
 
   croms_systemic_therapies: [
@@ -161,24 +156,10 @@ const completenessRules: Record<string, CompletenessRule[]> = {
     { key: 'institution_name', required: true },
     { key: 'cycle_start_date', required: true },
     { key: 'cycle_end_date', required: true },
-    //{ key: 'discontinuation_reason', required: true },
     { key: 'was_rct_concomittant', required: true },
     { key: 'comments', required: true },
     { key: 'clinical_trial_inclusion', required: true },
     { key: 'hyperthermia_status', required: true },
-    // alles nicht im DUMP: NACHFRAGEN!!
-    //{ key: 'oncologist', required: true },
-    //{ key: 'drug_type', required: true },
-    //{ key: 'drug_dose', required: true },
-    //{ key: 'drug_dose_unit', required: true },
-    //{ key: 'drug_frequency', required: true },
-    //{ key: 'drug_frequency_unit', required: true },
-    //{ key: 'drug_route', required: true },
-    //{ key: 'drug_administration_day', required: true },
-    //{ key: 'toxicity_name', required: true },
-    //{ key: 'toxicity_grade', required: true },
-    //{ key: 'toxicity_date', required: true },
-
   ],
 
   croms_hyperthermia_therapies: [
@@ -209,13 +190,29 @@ export const calculateQualityMetrics = (
   let total = 0;
   const warnings: string[] = [];
 
+  const validKeys = new Set(rules.map((rule) => rule.key));
+
   for (const rule of rules) {
     const isRelevant = rule.required || (rule.conditional && rule.conditional(fullPatientData ?? {}));
     if (!isRelevant) continue;
 
     total += 1;
+
+    if (!(rule.key in moduleData)) {
+    warnings.push(`Expected field "${rule.key}" is completely missing in moduleData`);
+    continue; 
+  }
+
+    if (!validKeys.has(rule.key)) continue;
+
     const value = moduleData[rule.key];
-    const isFilled = value !== null && value !== undefined && value !== '' && !(Array.isArray(value) && value.length === 0);
+    const isFilled =
+    typeof value === 'boolean'
+    ? true
+    : Array.isArray(value)
+    ? value.length > 0
+    : value !== null && value !== undefined && String(value).trim() !== '';
+
     
     if (isFilled) {
       filled += 1;

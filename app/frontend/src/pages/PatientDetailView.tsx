@@ -73,9 +73,10 @@ const PatientDetailView: React.FC = () => {
           {modules.map((mod) => (
             <div key={mod.name} className="module-card">
               <h4>{mod.name}</h4>
-              <p className={getCompletenessClass(mod.completeness)}>
+              <p className={`highlight ${getCompletenessClass(mod.completeness)}`}>
                 {t('patientDetail.completeness')}: {mod.completeness}%
               </p>
+
 
               <p>
                 {mod.fieldsFilled} {t('patientDetail.of')} {mod.fieldsTotal}{' '}

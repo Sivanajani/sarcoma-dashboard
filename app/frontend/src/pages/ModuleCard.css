@@ -38,12 +38,20 @@
 
 .module-card .highlight {
   font-weight: bold;
-  color: #111;
+  /*color: #111;*/
 }
 
-.completeness-green {
+.module-card .highlight.completeness-green {
   color: rgb(13, 82, 13);
-  font-weight: bold;
+}
+
+.module-card .highlight.completeness-yellow {
+  color: rgb(240, 161, 16);
+}
+
+.module-card .highlight.completeness-red {
+  color: red;
+
 }
 
 .completeness-yellow {
