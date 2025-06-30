@@ -1,8 +1,12 @@
 from fastapi import FastAPI
-from sqlalchemy import create_engine, text
 from fastapi.middleware.cors import CORSMiddleware
-import os
+from db.engine import engine_pg, engine_mysql
+from sqlalchemy import text
 from fastapi import HTTPException
+from sqlalchemy.exc import SQLAlchemyError
+import os
+from routes.crom_completeness import router as crom_completeness_router
+
 
 app = FastAPI()
 
@@ -15,14 +19,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Datenbankverbindung
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432/postgres")
-engine = create_engine(DATABASE_URL)
-
 # Tabellen anzeigen
 @app.get("/api/tables")
 def list_tables():
-    with engine.connect() as conn:
+    with engine_pg.connect() as conn:
         result = conn.execute(text("""
             SELECT tablename 
             FROM pg_catalog.pg_tables 
@@ -34,38 +34,16 @@ def list_tables():
 # Patientenzahl abrufen
 @app.get("/api/patient-count")
 def get_patient_count():
-    with engine.connect() as connection:
+    with engine_pg.connect() as connection:
         result = connection.execute(text("SELECT COUNT(*) FROM croms_patients")) 
         count = result.scalar()
     return {"patient_count": count}
-
-# external_code abrufen
-@app.get("/api/patients/{id}")
-def get_patient_by_id(id: int):
-    try:
-        with engine.connect() as conn:
-            result = conn.execute(
-                text("SELECT id, external_code FROM croms_patients WHERE id = :id"),
-                {"id": id}
-            ).mappings().fetchone()
-
-            if not result:
-                raise HTTPException(status_code=404, detail="Patient not found")
-
-            return {
-                "id": result["id"],
-                "patient_id": result["external_code"]
-            }
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 
 # JSON-Liste mit allen patient_id
 @app.get("/api/patients")
 def get_patients():
     try:
-        with engine.connect() as conn:
+        with engine_pg.connect() as conn:
             result = conn.execute(text("SELECT id, external_code FROM croms_patients"))
             patients = [
                 {
@@ -99,7 +77,7 @@ def get_patient_modules(patient_id: int):
     modules = {}
 
     try:
-        with engine.connect() as conn:
+        with engine_pg.connect() as conn:
             for module_name, (table_name, patient_column) in module_queries.items():
                 if not table_name or not patient_column:
                     modules[module_name] = "Nicht verknüpft (z. B. fehlende patient_id)"
@@ -127,7 +105,7 @@ def get_patient_modules(patient_id: int):
 @app.get("/api/patients-debug")
 def get_patients_debug():
     try:
-        with engine.connect() as conn:
+        with engine_pg.connect() as conn:
             result = conn.execute(text("SELECT * FROM croms_patients LIMIT 1"))
             columns = list(result.keys()) 
         return {"columns": columns}
@@ -138,7 +116,7 @@ def get_patients_debug():
 @app.get("/api/debug/table-columns")
 def get_all_table_columns():
     try:
-        with engine.connect() as conn:
+        with engine_pg.connect() as conn:
             result = conn.execute(text("""
                 SELECT tablename 
                 FROM pg_catalog.pg_tables 
@@ -167,7 +145,7 @@ def get_all_table_columns():
 @app.get("/api/debug/field-values/{table}/{column}")
 def get_distinct_field_values(table: str, column: str):
     try:
-        with engine.connect() as conn:
+        with engine_pg.connect() as conn:
             result = conn.execute(
                 text(f"SELECT DISTINCT {column} FROM {table}")
             )
@@ -179,7 +157,7 @@ def get_distinct_field_values(table: str, column: str):
 
 @app.get("/api/debug/column-values")
 def get_column_values(table: str, column: str):
-    with engine.connect() as conn:
+    with engine_pg.connect() as conn:
         result = conn.execute(text(f"""
             SELECT DISTINCT {column}
             FROM {table}
@@ -189,17 +167,6 @@ def get_column_values(table: str, column: str):
     return {"table": table, "column": column, "values": values}
 
 
-from sqlalchemy import create_engine
-
-# Lokale PostgreSQL (CROMs)
-DATABASE_URL = os.getenv("DATABASE_URL")
-engine_pg = create_engine(DATABASE_URL)
-
-# Externe MySQL (PROMs)
-PROM_DB_URL = os.getenv("PROM_DB_URL")
-engine_mysql = create_engine(PROM_DB_URL)
-
-from sqlalchemy.exc import SQLAlchemyError
 
 @app.get("/api/prom-tables")
 def get_prom_tables():
@@ -222,4 +189,29 @@ def get_prom_table_data(table: str):
         return {"table": table, "rows": rows}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+app.include_router(crom_completeness_router)
+
+# external_code abrufen
+@app.get("/api/patients/{id}")
+def get_patient_by_id(id: int):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id, external_code FROM croms_patients WHERE id = :id"),
+                {"id": id}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient not found")
+
+            return {
+                "id": result["id"],
+                "patient_id": result["external_code"]
+            }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 

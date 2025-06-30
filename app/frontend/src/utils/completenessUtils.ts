@@ -194,6 +194,9 @@ export const calculateQualityMetrics = (
 
   for (const rule of rules) {
     const isRelevant = rule.required || (rule.conditional && rule.conditional(fullPatientData ?? {}));
+    
+    console.log(`💬 [${moduleName}] Prüfe Feld "${rule.key}" → isRelevant: ${isRelevant}, Wert:`, moduleData[rule.key]);
+
     if (!isRelevant) continue;
 
     total += 1;

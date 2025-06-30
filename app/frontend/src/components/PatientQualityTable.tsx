@@ -6,7 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
 
 type PatientQuality = {
-  id: number; //internal_ID
+  id: number; // internal_ID
   patient_id: string | number;
   completeness?: number;
   correctness?: number;
@@ -29,24 +29,50 @@ const PatientQualityTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`)
-      .then((res) => res.json())
-      .then((data) => {
-        const initializedPatients: PatientQuality[] = data.map((p: any) => ({
-          id: p.id,
-          patient_id: p.patient_id,
-          completeness: undefined,
-          correctness: undefined,
-          consistency: undefined,
-          timeliness: undefined,
-          uniqueness: undefined,
-          plausibility: undefined,
-        }));
-        setPatients(initializedPatients);
-      })
-      .catch((err) => {
+    const fetchPatients = async () => {
+      try {
+        const [baseRes, overviewRes] = await Promise.all([
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`)
+        ]);
+
+        const baseData = await baseRes.json();
+        const overviewData = await overviewRes.json();
+
+        const combined: PatientQuality[] = baseData.map((p: any) => {
+          const quality = overviewData.find((q: any) => q.patient_id === p.id);
+          return {
+            id: p.id,
+            patient_id: p.patient_id,
+            completeness: quality?.average_completeness !== undefined
+            ? Math.round(quality.average_completeness * 100)
+            : undefined,
+            correctness: quality?.correctness !== undefined
+            ? Math.round(quality.correctness * 100)
+            : undefined,
+            consistency: quality?.consistency !== undefined
+            ? Math.round(quality.consistency * 100)
+            : undefined,
+            timeliness: quality?.timeliness !== undefined
+            ? Math.round(quality.timeliness * 100)
+            : undefined,
+            uniqueness: quality?.uniqueness !== undefined
+            ? Math.round(quality.uniqueness * 100)
+            : undefined,
+            plausibility: quality?.plausibility !== undefined
+            ? Math.round(quality.plausibility * 100)
+            : undefined,
+          };
+        });
+
+
+        setPatients(combined);
+      } catch (err) {
         console.error('Fehler beim Laden der Patienten:', err);
-      });
+      }
+    };
+
+    fetchPatients();
   }, []);
 
   const filteredPatients = patients.filter((p) =>
