@@ -2,11 +2,11 @@ from fastapi import APIRouter, HTTPException
 from db.engine import engine_pg
 from sqlalchemy import text
 
-router = APIRouter()
-
 # Regeln importieren (optional auch aus zentraler Datei auslagern)
 from .crom_completeness import get_available_modules  
 from utils.croms_completeness_rules import completeness_rules
+
+router = APIRouter()
 
 @router.get("/api/patients/{patient_id}/module-metrics")
 def get_patient_module_metrics(patient_id: int):

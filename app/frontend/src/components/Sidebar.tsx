@@ -8,19 +8,22 @@ import PeopleIcon from '@mui/icons-material/People';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip';
+import { Link, useLocation } from 'react-router-dom';
+
 
 const Sidebar = () => {
   const { t } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const location = useLocation();
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
   const menuItems = [
-    { icon: <DashboardIcon fontSize="small" />, label: t('sidebar.dashboard') },
-    { icon: <AssignmentIcon fontSize="small" />, label: t('sidebar.forms') },
-    { icon: <PeopleIcon fontSize="small" />, label: t('sidebar.patients') },
-    { icon: <ReportProblemIcon fontSize="small" />, label: t('sidebar.redflags') },
-    { icon: <SettingsIcon fontSize="small" />, label: t('sidebar.settings') },
+    { icon: <DashboardIcon fontSize="small" />, label: t('sidebar.dashboard'), path: '/' },
+    { icon: <AssignmentIcon fontSize="small" />, label: t('sidebar.forms'), path: '/forms' },
+    { icon: <PeopleIcon fontSize="small" />, label: t('sidebar.patients'), path: '/patients' },
+    { icon: <ReportProblemIcon fontSize="small" />, label: t('sidebar.redflags'), path: '/redflags' },
+    { icon: <SettingsIcon fontSize="small" />, label: t('sidebar.settings'), path: '/settings' },
   ];
 
   return (
@@ -32,20 +35,25 @@ const Sidebar = () => {
       {!isCollapsed && <h2>{t('sidebar.title')}</h2>}
 
       <nav>
-        {menuItems.map((item, index) => (
+        {menuItems.map((item, index) => {
+          const isActive = location.pathname.startsWith(item.path);
+          
+          return (
           <Tooltip
-            key={index}
-            title={isCollapsed ? item.label : ''}
-            placement="right"
-            arrow
+           key={index}
+           title={isCollapsed ? item.label : ''}
+           placement="right"
+           arrow
           >
-            <a href="#">
+            <Link to={item.path} className={isActive ? 'active' : ''}>
               {item.icon}
               {!isCollapsed && <span>{item.label}</span>}
-            </a>
+            </Link>
           </Tooltip>
-        ))}
-      </nav>
+    );
+  })}
+</nav>
+
     </aside>
   );
 };

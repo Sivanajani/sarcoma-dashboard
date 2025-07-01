@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import Tooltip from '@mui/material/Tooltip';
+
 
 type PatientQuality = {
   id: number; // internal_ID
@@ -14,6 +18,7 @@ type PatientQuality = {
   timeliness?: number;
   uniqueness?: number;
   plausibility?: number;
+  flag?: 'red' | 'yellow';
 };
 
 const getColorClass = (value?: number): string => {
@@ -62,6 +67,7 @@ const PatientQualityTable: React.FC = () => {
             plausibility: quality?.plausibility !== undefined
             ? Math.round(quality.plausibility * 100)
             : undefined,
+            flag: quality?.flag ?? undefined,
           };
         });
 
@@ -76,7 +82,7 @@ const PatientQualityTable: React.FC = () => {
   }, []);
 
   const filteredPatients = patients.filter((p) =>
-    p.patient_id.toString().startsWith(searchTerm)
+    p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -126,6 +132,7 @@ const PatientQualityTable: React.FC = () => {
       <table>
         <thead>
           <tr>
+            <th></th> {/* Flag-Spalte */}
             <th>{t('patientTable.headers.id')}</th>
             <th>{t('patientTable.headers.completeness')}</th>
             <th>{t('patientTable.headers.correctness')}</th>
@@ -138,6 +145,19 @@ const PatientQualityTable: React.FC = () => {
         <tbody>
           {filteredPatients.map((p) => (
             <tr key={p.patient_id}>
+              <td className="flag-cell">
+                {p.flag === 'red' && (
+                  <Tooltip title={t('patientTable.tooltips.redFlag')}>
+                    <ReportProblemIcon color="error" />
+                  </Tooltip>
+                )}
+                {p.flag === 'yellow' && (
+                  <Tooltip title={t('patientTable.tooltips.yellowFlag')}>
+                    <WarningAmberIcon color="warning" />
+                  </Tooltip>
+                )}
+              </td>
+
               <td>
                 <Link to={`/patients/${p.id}`} className="patient-link">
                   {p.patient_id}

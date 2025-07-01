@@ -46,6 +46,10 @@
     "timeliness": "Aktualität",
     "uniqueness": "Eindeutigkeit",
     "plausibility": "Plausib."
+  },
+  "tooltips": {
+    "redFlag": "Kritisch unvollständiges Modul",
+    "yellowFlag": "Auffälliges Modul – sollte geprüft werden"
   }
 },
 "patientDetail": {
