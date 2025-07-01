@@ -5,8 +5,8 @@ from sqlalchemy import text
 from fastapi import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 import os
-from routes.crom_completeness import router as crom_completeness_router
-from routes.crom_module_metrics import router as crom_module_metrics_router
+from routes.crom_avg_completeness import router as crom_completeness_router
+from routes.crom_completness_module import router as crom_module_metrics_router
 
 
 app = FastAPI()
