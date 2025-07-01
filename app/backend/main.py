@@ -6,6 +6,7 @@ from fastapi import HTTPException
 from sqlalchemy.exc import SQLAlchemyError
 import os
 from routes.crom_completeness import router as crom_completeness_router
+from routes.crom_module_metrics import router as crom_module_metrics_router
 
 
 app = FastAPI()
@@ -18,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(crom_module_metrics_router)
 
 # Tabellen anzeigen
 @app.get("/api/tables")

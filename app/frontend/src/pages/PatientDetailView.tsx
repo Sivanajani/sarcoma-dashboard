@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { QualityMetrics } from '../utils/completenessUtils';
-import { calculateQualityMetrics } from '../utils/completenessUtils';
 import '../pages/ModuleCard.css';
+import type { QualityMetrics } from '../types/metrics';
+
 
 const PatientDetailView: React.FC = () => {
   const { t } = useTranslation();
@@ -23,23 +23,14 @@ const PatientDetailView: React.FC = () => {
   useEffect(() => {
     if (!patientId) return;
 
-    // Lade Module
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/modules`)
-      .then((res) => res.json())
-      .then((data) => {
-        const modData = data.modules;
-        const processed: QualityMetrics[] = [];
+    // Lade vorberechnete Modul-Metriken aus dem Backend
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/module-metrics`)
+    .then((res) => res.json())
+    .then((data) => {
+      setModules(data); // direkt nutzbar, da das Backend schon name, completeness etc. liefert
+      setLoading(false);
+    })
 
-        for (const [modName, modValue] of Object.entries(modData)) {
-          if (typeof modValue === 'object' && modValue !== null) {
-            const result = calculateQualityMetrics(modName, modValue);
-            processed.push(result);
-          }
-        }
-
-        setModules(processed);
-        setLoading(false);
-      })
       .catch((err) => {
         console.error('Fehler beim Laden der Module:', err);
         setError(t('patientDetail.error'));
