@@ -12,19 +12,19 @@ Das Modul *RadiologyExam* enthält Daten zu radiologischen Untersuchungen (z. 
 
 | Feld                         | Typ       | Pflichtfeld?            | Abhängigkeit                                                                     |
 | ---------------------------- | --------- | ----------------------- | -------------------------------------------------------------------------------- |
-| `exam_date`                  | `date`    |  Ja                    | —                                                                                |
-| `exam_type`                  | `enum`    |  Ja                    | —                                                                                |
-| `imaging_timing`             | `enum`    |  Ja                    | —                                                                                |
-| `imaging_type`               | `enum`    |  Ja                    | —                                                                                |
-| `largest_lesion_size_in_mm`  | `int`     |  Ja                    | —                                                                                |
-| `medium_lesion_size_in_mm`   | `int`     |  Ja                    | —                                                                                |
-| `smallest_lesion_size_in_mm` | `int`     |  Ja                    | —                                                                                |
-| `location_of_lesion`         | `enum`    |  Ja                    | —                                                                                |
-| `recist_response`            | `enum`    |  Bedingt erforderlich | Nur wenn *SystemicTherapy* vorhanden ist **und** `therapy_type = "Chemotherapy"` |
-| `choi_response`              | `enum`    |  Bedingt erforderlich | Nur wenn *SystemicTherapy* vorhanden ist                                         |
-| `irecist_response`           | `enum`    |  Bedingt erforderlich | Nur wenn *SystemicTherapy* mit `therapy_type = "Chemotherapy"`                   |
-| `pet_response`               | `enum`    |  Ja                    | —                                                                                |
-| `metastasis_presence`        | `boolean` |  Ja                    | —                                                                                |
+| `exam_date`                  | `date`    |  Ja                     | —                                                                                |
+| `exam_type`                  | `enum`    |  Ja                     | —                                                                                |
+| `imaging_timing`             | `enum`    |  Ja                     | —                                                                                |
+| `imaging_type`               | `enum`    |  Ja                     | —                                                                                |
+| `largest_lesion_size_in_mm`  | `int`     |  Ja                     | —                                                                                |
+| `medium_lesion_size_in_mm`   | `int`     |  Ja                     | —                                                                                |
+| `smallest_lesion_size_in_mm` | `int`     |  Ja                     | —                                                                                |
+| `location_of_lesion`         | `enum`    |  Ja                     | —                                                                                |
+| `recist_response`            | `enum`    |  Bedingt erforderlich   | Nur wenn *SystemicTherapy* vorhanden ist                                         |
+| `choi_response`              | `enum`    |  Bedingt erforderlich   | Nur wenn *SystemicTherapy* vorhanden ist                                         |
+| `irecist_response`           | `enum`    |  Bedingt erforderlich   | Nur wenn *SystemicTherapy* vorhanden ist                                         |
+| `pet_response`               | `enum`    |  Ja                     | —                                                                                |
+| `metastasis_presence`        | `boolean` |  Ja                     | —                                                                                |
 
 
 - Wird das Modul *RadiologyExam* ohne zugehörige *SystematicTherapy* ausgefüllt, werden `recist_response`, `choi_response` und `irecist_response` nicht bewertet.
@@ -33,12 +33,12 @@ Das Modul *RadiologyExam* enthält Daten zu radiologischen Untersuchungen (z. 
 **Beispielberechnung**
 
 - Fall A – ohne SystematicTherapy:  
-  → 11 von 11 Pflichtfeldern befüllt  
+  → 10 von 10 Pflichtfeldern befüllt  
   → Vollständigkeit = **100 %**
 
 - Fall B – mit SystematicTherapy (Chemo):  
-  → 14 erwartete Felder, 12 befüllt  
-  → Vollständigkeit = **(12 / 14) × 100 ≈ 85.7%**
+  → 13 erwartete Felder, 11 befüllt  
+  → Vollständigkeit = **(11 / 13) × 100 ≈ 85.7%**
 
 ---
 
@@ -73,12 +73,10 @@ Das Modul *Pathology* erfasst zentrale pathologische Befunde wie Grading, WHO-Di
 | `dna_result`                           | `enum` |  Bedingt erforderlich | Nur wenn `dna_performed_status = Ja`  |
 
 
-- Wenn `*_performed_status = Nein`, darf `*_result` nicht ausgefüllt sein.
-
 **Beispielberechnung**
 
-- Fall A: Alle Pflichtfelder und gültige Kombinationen → 18 von 18 → **100 %**
-- Fall B: `fish_result` ausgefüllt, obwohl `fish_performed_status = Nein` → **Fehler + ggf. Red Flag**
+- Fall A: Alle Pflichtfelder → 18 von 18 → **100 %**
+- Fall B: `fish_result` nicht ausgefüllt, obwohl `fish_performed_status = Ja` → 18 von 19
 
 ---
 
@@ -109,8 +107,8 @@ Das Modul Surgery enthält alle Informationen zu chirurgischen Eingriffen bei Sa
 
 **Beispielberechnung**
 
-- Fall A: 14 von 14 → **100 %**
-- Fall B: 13 von 14 → **≈ 92 %**
+- Fall A: 15 von 15 → **100 %**
+- Fall B: 13 von 15 → **≈ 86%**
 
 ---
 
@@ -176,7 +174,7 @@ Das Modul *SystemicTherapy* dokumentiert die Durchführung systemischer Therapie
 
 Toxizitätsfelder (toxicity_name, toxicity_grade, toxicity_date) sind aktuell nicht in der Datenbank vorhanden und werden daher nicht berücksichtigt. Bei späterer Integration können sie mit gelber Warnlogik eingebunden werden.
 
-- Die Felder `toxicity_name`, `toxicity_grade`, `toxicity_date` gelten als **erwartet**, jedoch nicht zwingend, aber sie sind auch nicht vorhandne im DB (stant 29.06.25):
+- Die Felder `toxicity_name`, `toxicity_grade`, `toxicity_date` gelten als **erwartet**, jedoch nicht zwingend, aber sie sind auch nicht vorhandne im DB (stand 29.06.25):
   - Wenn leer → **gelbe Warnung anzeigen**
   - Wenn ausgefüllt → **kein Einfluss auf Vollständigkeit**, aber bessere Datenqualität
 - Ein fehlender Pflichtwert (aus den oberen 20 Feldern) reduziert die Vollständigkeit direkt.
@@ -199,20 +197,16 @@ Das Modul *Hyperthermia* dokumentiert die Durchführung einer Hyperthermiebehand
 | Feld                        | Typ     | Pflichtfeld? |
 | --------------------------- | ------- | ------------ |
 | indication                  | enum    | Ja         |
-| start\_date                 | date    | Ja         |
-| end\_date                   | date    | Ja         |
-| hyperthermia\_type          | enum    | Ja         |
-| therapy\_sessions\_count    | int     | Ja         |
+| start_date                 | date    | Ja         |
+| end_date                   | date    | Ja         |
+| hyperthermia_type          | enum    | Ja         |
+| therapy_sessions_count    | int     | Ja         |
 | schedule                    | string  | Ja         |
-| board\_accepted\_indication | boolean | Ja         |
+| board_accepted_indication | boolean | Ja         |
 | comment                     | text    | Ja         |
-| therapy\_type               | enum    | Ja         |
+| therapy_type               | enum    | Ja         |
 | therapy\_id                 | bigint  | Ja         |
 
-
-- Alle **10 Felder** müssen ausgefüllt sein, um eine vollständige Datendokumentation zu gewährleisten.
-- Leere Felder, leere Strings oder nicht gesetzte Werte (z. B. `null`, `undefined`) werden als **unvollständig** gewertet.
-- Auch `schedule` als Freitext-Feld muss einen **sinnvollen Eintrag** enthalten (nicht nur Leerzeichen).
 
 ### Beispielberechnung
 
@@ -264,19 +258,19 @@ Das Modul *SarcomaBoard* dokumentiert die Besprechungen und Entscheidungen aus i
 | `presenting_physician`              | `enum`    | Nein, ist auch nicht in der DB!       |
 
 
-- Alle **27 Felder ausser `further_details`** gelten als Pflichtfelder.
+- Alle **26 Felder ausser `further_details`** gelten als Pflichtfelder.
 - Das Feld `further_details` kann leer bleiben, ohne dass dies die Vollständigkeit beeinflusst.
 - `presenting_physician` hat es nicht im DB-Dump.
 
 ### Beispielberechnung
 
 - **Fall A – alles ausgefüllt (ausser `further_details`):**  
-  → 21 von 21 Pflichtfeldern  
+  → 26 von 26 Pflichtfeldern  
   → **Vollständigkeit = 100 %**
 
 - **Fall B – `summary` fehlt, `further_details` leer:**  
-  → 20 von 21 Pflichtfeldern  
-  → **Vollständigkeit = (20 / 21) × 100 ≈ 95 %**
+  → 25 von 26 Pflichtfeldern  
+  → **Vollständigkeit = (25 / 26) × 100 ≈ 96%**
 
 ---
 ## Diagnosis
@@ -319,7 +313,7 @@ Das Modul *Diagnosis* dokumentiert die Haupt- und Nebendiagnosen sowie die krank
 
 ## Tumor
 
-**Dieses Modul gibt es nicht nur im ER-Diagarmm (stand 29.06.25), es ist wahrscheinlich mit Diagnosis verschmolzen!**
+**Dieses Modul gibt es nicht, nur im ER-Diagramm vorhanden, es ist wahrscheinlich mit Diagnosis verschmolzen! (Stand 29.06.25)**
 
 Das Modul *Tumor* enthält grundlegende Informationen zur Lage und klinischen Vorgeschichte der Tumorerkrankung. Diese Angaben sind essenziell für die Einordnung, Therapieplanung und Dokumentation im Verlauf.
 
