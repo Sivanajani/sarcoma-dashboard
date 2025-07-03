@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api")
 def get_patients():
     try:
         with engine_pg.connect() as conn:
-            result = conn.execute(text("SELECT id, external_code FROM croms_patients"))
+            result = conn.execute(text("SELECT id, external_code, birth_date FROM croms_patients"))
             patients = [
                 {
                     "id": row["id"],
@@ -46,6 +46,7 @@ def get_patient_modules(patient_id: int):
     }
 
     modules = {}
+    birth_date = None
 
     try:
         with engine_pg.connect() as conn:
@@ -60,10 +61,15 @@ def get_patient_modules(patient_id: int):
                 ).fetchone()
 
                 if result:
-                    modules[module_name] = dict(result._mapping)
+                    data = dict(result._mapping)
+                    if module_name == "patient" and "birth_date" in data:
+                        birth_date = data["birth_date"]
+                    modules[module_name] = data
+                    
 
         return {
             "patient_id": patient_id,
+            "birth_date": birth_date,
             "modules": modules
         }
 

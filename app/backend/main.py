@@ -9,6 +9,8 @@ from routes.crom_avg_completeness import router as crom_completeness_router
 from routes.crom_completness_module import router as crom_module_metrics_router
 from routes.crom_tables import router as crom_tables_router
 from routes.crom_patients import router as crom_patients_router
+from routes import crom_correctness_module
+
 
 
 app = FastAPI()
@@ -28,6 +30,9 @@ app.include_router(crom_completeness_router)
 
 # Vollständigkeit pro Modul
 app.include_router(crom_module_metrics_router)
+
+# Korrektheit pro Modul
+app.include_router(crom_correctness_module.router)
 
 # Tabellen anzeigen
 app.include_router(crom_tables_router)
