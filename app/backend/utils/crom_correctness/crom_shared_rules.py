@@ -11,9 +11,18 @@ def is_allowed_value(value, allowed_values: list) -> bool:
     normalized_allowed = [normalize(v) for v in allowed_values]
 
     if isinstance(value, list):
-        return all(normalize(v) in normalized_allowed for v in value)
+        for v in value:
+            if normalize(v) not in normalized_allowed:
+                print(f"[DEBUG] '{v}' not in allowed values")
+                return False
+        return True
+    
+    if normalize(value) not in normalized_allowed:
+        print(f"[DEBUG] '{value}' not in allowed values")
+        print(f"[DEBUG] Allowed: {normalized_allowed}")
+        return False
+    return True
 
-    return normalize(value) in normalized_allowed
 
 
 def is_valid_date(date_str: str, birth_date: str = None) -> bool:
@@ -41,3 +50,7 @@ def is_valid_date(date_str: str, birth_date: str = None) -> bool:
         print(f"[ERROR] Invalid date: {date_str}, error: {e}")
         return False
 
+def is_prefixed_allowed_value(value: str, allowed_prefixes: list[str]) -> bool:
+    if not isinstance(value, str):
+        return False
+    return any(value.lower().startswith(prefix.lower()) for prefix in allowed_prefixes)

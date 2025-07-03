@@ -71,7 +71,7 @@ REFERENCE_DATA = {
     "presentation_reasons": [
         "Erstdiagnose", "Rezidivverdacht", "Verlaufskontrolle", "Therapieentscheid",
         "Zweitmeinung", "Diskussion komplexer Fälle", "präoperative Einschätzung",
-        "Initial diagnosis", "Recurrence suspicion", "Follow-up", "Therapy decision",
+        "Initial diagnosis", "Recurrence suspicion", "Follow up", "Therapy decision",
         "Second opinion", "Discussion of complex cases", "Preoperative assessment"
     ],
     "status_list": [
@@ -90,7 +90,7 @@ REFERENCE_DATA = {
 
 
 
-    
+
     "disciplines": [
         "sarcoma surgery", "reconstructive", "VIS", "visceral", "Chest", "Vascular", "Orthopaedics", "trauma", "neuro",
         "spine", "gynecology", "urology", "Hand", "HNO", "MKG", "Kardial", "Dermatology",
