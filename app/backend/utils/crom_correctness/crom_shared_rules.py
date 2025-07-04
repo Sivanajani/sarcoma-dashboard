@@ -1,19 +1,24 @@
 from datetime import datetime, date
 import re
+from sqlalchemy import text
 
 def is_allowed_value(value, allowed_values: list) -> bool:
     if value is None:
         return False
 
     def normalize(val):
-        return str(val).strip().lower().replace("_", " ").replace("-", " ")
+        return re.sub(r"\s+", " ", str(val).strip().lower()
+                    .replace("_", " ")
+                    .replace("-", " ")
+                    .replace(":", " ")
+                    .replace("/", " ")
+                    .replace(",", " "))
 
     normalized_allowed = [normalize(v) for v in allowed_values]
 
     def value_matches(val):
         val = normalize(val)
         for allowed in normalized_allowed:
-            # Verwende Regex, um das erlaubte Wort als ganzes Wort zu finden
             pattern = rf"\b{re.escape(allowed)}\b"
             if re.search(pattern, val):
                 return True
@@ -86,7 +91,7 @@ def is_allowed_schedule_value(value: str, full_allowed: list[str], allowed_suffi
         return False
 
     def normalize(val):
-        return str(val).strip().lower().replace("_", " ").replace("-", " ")
+        return str(val).strip().lower().replace("_", " ").replace("-", " ").replace(":"," ")
 
     norm_val = normalize(value)
     norm_full = [normalize(v) for v in full_allowed]
@@ -101,3 +106,50 @@ def is_allowed_schedule_value(value: str, full_allowed: list[str], allowed_suffi
 
     print(f"[DEBUG] '{value}' is neither a full allowed value nor has valid suffix")
     return False
+
+def validate_cycles_planned(value: str) -> bool | None:
+    """
+    Validiert 'cycles_planned' grob:
+    - Akzeptiert Freitext
+    - Gibt True zurück, wenn eine vernünftige Zahl (1–20) enthalten ist
+    - Gibt None zurück, wenn kein numerischer Wert enthalten ist (Freitext wie 'nach Bedarf')
+    - Gibt False zurück, wenn eine zu hohe oder zu niedrige Zahl enthalten ist
+    """
+    if not isinstance(value, str):
+        return False
+    
+    numbers = re.findall(r'\d+', value)
+    if not numbers:
+        return None  # kein Zyklus angegeben → weder richtig noch falsch
+
+    return any(1 <= int(n) <= 20 for n in numbers)
+
+def compute_correctness_result(entry: dict, validation_fn, birth_date: str = None, module_name: str = "") -> dict:
+    result = validation_fn(entry, birth_date)
+
+    # Nur Felder prüfen, die im Entry auch wirklich ausgefüllt sind
+    relevant_fields = {
+        key: value
+        for key, value in result.items()
+        if entry.get(key) not in [None, "", [], {}] and value is not None
+    }
+
+    correct_count = sum(1 for v in relevant_fields.values() if v is True)
+    total_count = len(relevant_fields)
+    percent = round((correct_count / total_count) * 100, 2) if total_count > 0 else None
+
+    return {
+        "module": module_name,
+        "correct": correct_count,
+        "total": total_count,
+        "percent": percent,
+        "field_results": result
+    }
+
+
+def fetch_birth_date(conn, patient_id):
+    birth_result = conn.execute(
+        text("SELECT birth_date FROM croms_patients WHERE id = :pid"),
+        {"pid": patient_id}
+    ).mappings().fetchone()
+    return birth_result["birth_date"].isoformat() if birth_result and birth_result["birth_date"] else None

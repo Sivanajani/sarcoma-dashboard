@@ -120,6 +120,25 @@ REFERENCE_DATA = {
         "palliativ", "palliative",
         "kurativ", "curative"
     ],
+    "systemic_therapy_reasons": [
+        "curative intent neo adjuvant",
+        "curative intent adjuvant",
+        "palliative intent treatment pressure",
+        "palliative intent maintenance"
+    ],
+    "therapy_protocols": [  
+    ],
+    "systemic_therapy_discontinuation_reasons": [
+        "toxicity", "progressive disease", "planned",
+        "patient s wish", "death", "unfinished", "open"
+    ],
+    "clinical_trial_inclusion": [
+        "RCT", "Registerstudie", "nicht teilgenommen", "abgelehnt", "Included", "not Included"
+    ],
+    "hyperthermia_status": [
+        "geplant", "parallel", "nicht erfolgt", "nicht relevant", "Planned", "administered"
+    ],
+
 
 
 
