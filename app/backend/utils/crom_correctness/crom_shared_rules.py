@@ -55,3 +55,49 @@ def is_prefixed_allowed_value(value: str, allowed_prefixes: list[str]) -> bool:
         return False
     val = value.lower().replace("_", " ")
     return any(val.startswith(prefix.lower()) for prefix in allowed_prefixes)
+
+def has_allowed_suffix(value: str, allowed_suffixes: list[str]) -> bool:
+    """
+    Prüft, ob der Eintrag mit einem der erlaubten Suffixe endet (Groß-/Kleinschreibung egal, inkl. Normalisierung).
+    """
+    if not isinstance(value, str):
+        return False
+
+    def normalize(val):
+        return str(val).strip().lower().replace("_", " ").replace("-", " ")
+
+    normalized_value = normalize(value)
+
+    for suffix in allowed_suffixes:
+        normalized_suffix = normalize(suffix)
+        if normalized_value.endswith(normalized_suffix):
+            return True
+
+    print(f"[DEBUG] '{value}' has no allowed suffix from list {allowed_suffixes}")
+    return False
+
+def is_allowed_schedule_value(value: str, full_allowed: list[str], allowed_suffixes: list[str]) -> bool:
+    """
+    Kombiniert Vollwert-Check und Suffix-Check:
+    - z. B. erlaubt: „täglich“, „nach Bedarf“ (volle Werte)
+    - oder: „3x /Woche“, „10x /Monat“ (flexibler Präfix, erlaubtes Suffix)
+    """
+    if not isinstance(value, str):
+        return False
+
+    def normalize(val):
+        return str(val).strip().lower().replace("_", " ").replace("-", " ")
+
+    norm_val = normalize(value)
+    norm_full = [normalize(v) for v in full_allowed]
+    norm_suffixes = [normalize(s) for s in allowed_suffixes]
+
+    if norm_val in norm_full:
+        return True
+
+    for suffix in norm_suffixes:
+        if norm_val.endswith(suffix):
+            return True
+
+    print(f"[DEBUG] '{value}' is neither a full allowed value nor has valid suffix")
+    return False

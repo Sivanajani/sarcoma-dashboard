@@ -86,8 +86,40 @@ REFERENCE_DATA = {
         "ja", "nein", "noch offen",
         "yes", "no", "undecided"
     ],
-
-
+    "hyperthermia_indications": [
+        "Primärtherapie", "Primary therapy",
+        "Rezidivprävention", "Recurrence prevention",
+        "Metastasenchirurgie", "Metastasis surgery",
+        "Palliativtherapie", "Palliative therapy",
+        "Kontrolluntersuchung", "Follow up examination",
+        "Diagnosesicherung Nachsorge", "Diagnostic confirmation aftercare", 
+        "Supportive treatment prior to chemotherapy"
+    ],
+    "hyperthermia_types": [
+        "lokoregionär", "locoregional",
+        "Ganzkörper", "whole body",
+        "Intrakavitäre", "intracavitary",
+        "Regional", "regional",
+        "Intraläsional", "intralesional",
+        "Perfusionstechnisch", "perfusion-based",
+        "interstitiell", "interstitial"
+    ],
+    "hyperthermia_schedule_full_values": [
+            "täglich", "daily",
+            "nach Bedarf", "as needed",
+            "individuell angepasst", "individually adapted",
+            "wöchentlich", "weekly"
+    ],
+    "hyperthermia_schedule_suffixes": [
+        "/woche", "/week", "weekly",
+        "/monat", "/month"
+    ],
+    "therapy_types": [
+        "adjuvant", "adjuvant",
+        "neoadjuvant", "neoadjuvant",
+        "palliativ", "palliative",
+        "kurativ", "curative"
+    ],
 
 
 
