@@ -1,29 +1,29 @@
 from datetime import datetime, date
-
+import re
 
 def is_allowed_value(value, allowed_values: list) -> bool:
     if value is None:
         return False
 
     def normalize(val):
-        return str(val).strip().lower().replace("_", " ")
+        return str(val).strip().lower().replace("_", " ").replace("-", " ")
 
     normalized_allowed = [normalize(v) for v in allowed_values]
 
-    if isinstance(value, list):
-        for v in value:
-            if normalize(v) not in normalized_allowed:
-                print(f"[DEBUG] '{v}' not in allowed values")
-                return False
-        return True
-    
-    if normalize(value) not in normalized_allowed:
-        print(f"[DEBUG] '{value}' not in allowed values")
-        print(f"[DEBUG] Allowed: {normalized_allowed}")
+    def value_matches(val):
+        val = normalize(val)
+        for allowed in normalized_allowed:
+            # Verwende Regex, um das erlaubte Wort als ganzes Wort zu finden
+            pattern = rf"\b{re.escape(allowed)}\b"
+            if re.search(pattern, val):
+                return True
+        print(f"[DEBUG] '{val}' not matching any allowed values")
         return False
-    return True
 
+    if isinstance(value, list):
+        return all(value_matches(v) for v in value)
 
+    return value_matches(value)
 
 def is_valid_date(date_str: str, birth_date: str = None) -> bool:
     try:
@@ -53,4 +53,5 @@ def is_valid_date(date_str: str, birth_date: str = None) -> bool:
 def is_prefixed_allowed_value(value: str, allowed_prefixes: list[str]) -> bool:
     if not isinstance(value, str):
         return False
-    return any(value.lower().startswith(prefix.lower()) for prefix in allowed_prefixes)
+    val = value.lower().replace("_", " ")
+    return any(val.startswith(prefix.lower()) for prefix in allowed_prefixes)

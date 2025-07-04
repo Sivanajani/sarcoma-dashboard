@@ -26,29 +26,29 @@ REFERENCE_DATA = {
     "lesion_sides": ["links", "rechts", "beidseitig", "zentral", "nicht beurteilbar", "left", "right", "bilateral", "central", "not assessable"],
 
     "tumor_syndromes": [
-        "Li-Fraumeni-Syndrom", "Neurofibromatose Typ 1", "Gardner-Syndrom", "Turcot-Syndrom",
-        "Ollier-Krankheit", "Maffucci-Syndrom", "Multiple Osteochondrome",
-        "Carney-Trias", "Beckwith-Wiedemann-Syndrom",
-        "Rothmund-Thomson-Syndrom", "Bloom-Syndrom", "Werner-Syndrom",
-        "Gorlin-Goltz-Syndrom", "Cowden-Syndrom", "Fanconi-Anämie",
+        "Li Fraumeni Syndrom", "Neurofibromatose Typ 1", "Gardner Syndrom", "Turcot Syndrom",
+        "Ollier Krankheit", "Maffucci Syndrom", "Multiple Osteochondrome",
+        "Carney Trias", "Beckwith Wiedemann Syndrom",
+        "Rothmund Thomson Syndrom", "Bloom Syndrom", "Werner Syndrom",
+        "Gorlin Goltz Syndrom", "Cowden Syndrom", "Fanconi Anämie",
         "Kein Syndrom bekannt", "Syndromabklärung ausstehend", "nicht dokumentiert",
-        "Li-Fraumeni syndrome", "Neurofibromatosis type 1", "neurofibromatosis_type_1", "Gardner syndrome", "Turcot syndrome",
+        "Li Fraumeni syndrome", "Neurofibromatosis type 1", "Gardner syndrome", "Turcot syndrome",
         "Ollier disease", "Maffucci syndrome", "Multiple osteochondromas",
-        "Carney triad", "Beckwith-Wiedemann syndrome",
-        "Rothmund-Thomson syndrome", "Bloom syndrome", "Werner syndrome",
-        "Gorlin-Goltz syndrome", "Cowden syndrome", "Fanconi anemia",
+        "Carney triad", "Beckwith Wiedemann syndrome",
+        "Rothmund Thomson syndrome", "Bloom syndrome", "Werner syndrome",
+        "Gorlin Goltz syndrome", "Cowden syndrome", "Fanconi anemia",
         "No known syndrome", "Syndrome evaluation pending", "not documented"
     ],
     "sarcoma_diagnoses": [
         "Liposarkom", "Leiomyosarkom", "Rhabdomyosarkom", "Synovialsarkom", "Fibrosarkom", "Myxoides Sarkom",
-        "Osteosarkom", "Ewing-Sarkom", "Chondrosarkom", "Adamantinom", "Angiosarkom des Knochens",
-        "Gastrointestinaler Stromatumor (GIST)", "SDH-defizienter GIST",
+        "Osteosarkom", "Ewing Sarkom", "Chondrosarkom", "Adamantinom", "Angiosarkom des Knochens",
+        "Gastrointestinaler Stromatumor (GIST)", "SDH defizienter GIST",
         "Angiosarkom", "Hämangioendotheliom", "Primitive neuroektodermale Tumoren (PNET)",
-        "Embryonales Rhabdomyosarkom", "Klarzell-Sarkom", "UPS", "Spindelzell-Sarkom", "Sarkom NOS",
-        "Desmoid-Tumor", "alveoläres Weichgewebssarkom", "klarzelliges Sarkom",
+        "Embryonales Rhabdomyosarkom", "Klarzell Sarkom", "UPS", "Spindelzell Sarkom", "Sarkom NOS",
+        "Desmoid Tumor", "alveoläres Weichgewebssarkom", "klarzelliges Sarkom",
         "Liposarcoma", "Leiomyosarcoma", "Rhabdomyosarcoma", "Synovial sarcoma", "Fibrosarcoma", "Myxoid sarcoma",
         "Osteosarcoma", "Ewing sarcoma", "Chondrosarcoma", "Adamantinoma", "Bone angiosarcoma",
-        "Gastrointestinal stromal tumor (GIST)", "SDH-deficient GIST",
+        "Gastrointestinal stromal tumor (GIST)", "SDH deficient GIST",
         "Angiosarcoma", "Hemangioendothelioma", "Primitive neuroectodermal tumors (PNET)",
         "Embryonal rhabdomyosarcoma", "Clear cell sarcoma", "UPS", "Spindle cell sarcoma", "Sarcoma NOS",
         "Desmoid tumor", "Alveolar soft part sarcoma", "Clear cell sarcoma"
@@ -65,8 +65,8 @@ REFERENCE_DATA = {
     "death_reasons": [
         "tumorbedingt", "therapiekomplikation", "zweite tumorerkrankung", "infektion",
         "unfall", "herzversagen", "unbekannt", "nicht dokumentiert",
-        "tumor-related", "therapy complication", "second tumor", "infection",
-        "accident", "heart failure", "unknown", "not documented"
+        "tumor related", "therapy complication", "second tumor", "infection",
+        "accident", "heart failure", "unknown", "not documented", "of_other_cancer"
     ],
     "presentation_reasons": [
         "Erstdiagnose", "Rezidivverdacht", "Verlaufskontrolle", "Therapieentscheid",
@@ -75,8 +75,8 @@ REFERENCE_DATA = {
         "Second opinion", "Discussion of complex cases", "Preoperative assessment"
     ],
     "status_list": [
-        "Geplant", "bereits operiert", "nicht operiert", "nicht beurteilbar", "unklar", "nicht dokumentiert",
-        "Planned", "already operated", "not operated", "not assessable", "unclear", "not documented"
+        "Geplant", "bereits operiert", "nicht operiert", "nicht beurteilbar", "unklar", "nicht dokumentiert", "completed",
+        "Planned", "already operated", " operated", "not assessable", "unclear", "not documented", "no_evidence_of_disease"
     ],
     "therapy_forms": [
         "Keine", "Systemtherapie", "Bestrahlung", "Operation", "Hyperthermie", "klinische Studie", "andere",
@@ -96,7 +96,7 @@ REFERENCE_DATA = {
         "spine", "gynecology", "urology", "Hand", "HNO", "MKG", "Kardial", "Dermatology",
         "Hausarzt", "allgemeine Chirurgie",
         "Sarkomchirurgie", "rekonstruktiv", "Viszeral", "Thorax", "Gefässchirurgie", "Orthopädie", "Trauma",
-        "Neurochirurgie", "Wirbelsäule", "Gynäkologie", "Urologie", "Handchirurgie", "Hals-Nasen-Ohren",
-        "Mund-Kiefer-Gesicht", "Herzchirurgie", "Dermatologie", "Hausarzt", "Allgemeinchirurgie"
+        "Neurochirurgie", "Wirbelsäule", "Gynäkologie", "Urologie", "Handchirurgie", "Hals Nasen Ohren",
+        "Mund Kiefer Gesicht", "Herzchirurgie", "Dermatologie", "Hausarzt", "Allgemeinchirurgie"
     ]
 }
