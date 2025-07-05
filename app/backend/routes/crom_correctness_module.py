@@ -2,12 +2,13 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
 from db.engine import engine_pg
 
+from utils.crom_correctness.crom_shared_rules import compute_correctness_result, fetch_birth_date 
 from utils.crom_correctness.crom_diagnosis_correctness import validate_diagnosis_correctness
 from utils.crom_correctness.crom_sarcomaBoard_correctness import validate_sarcoma_board_correctness
 from utils.crom_correctness.crom_hyperthermia_correctness import validate_hyperthermia_correctness
 from utils.crom_correctness.crom_systemicTherapies_correctness import validate_systemic_therapy_correctness
-from utils.crom_correctness.crom_shared_rules import compute_correctness_result, fetch_birth_date 
 from utils.crom_correctness.crom_radiologyTherapies_correctness import validate_radiology_therapy_correctness
+from utils.crom_correctness.crom_surgeries_correctness import validate_surgery_correctness
 
 
 router = APIRouter(prefix="/api")
@@ -98,6 +99,24 @@ def get_radiology_therapy_correctness(patient_id: int):
 
             birth_date = fetch_birth_date(conn, patient_id)
             return compute_correctness_result(dict(row), validate_radiology_therapy_correctness, birth_date, "radiology_therapy")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/{patient_id}/correctness/surgery")
+def get_surgery_correctness(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_surgeries WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Surgery-Modul nicht gefunden")
+
+            birth_date = fetch_birth_date(conn, patient_id)
+            return compute_correctness_result(dict(row), validate_surgery_correctness, birth_date, "surgery")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

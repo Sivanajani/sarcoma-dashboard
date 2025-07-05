@@ -37,7 +37,7 @@ def is_allowed_value(value, allowed_values: list) -> bool:
         print(f"[DEBUG] '{val}' not matching any allowed values")
         return False
 
-    if isinstance(value, list):
+    if isinstance(value, (list, set)):
         return all(value_matches(v) for v in value)
 
     return value_matches(value)

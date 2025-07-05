@@ -159,14 +159,23 @@ REFERENCE_DATA = {
     "resection":[
         "r0", "r1", "r2", "R0", "R1", "R2"
     ],
+    "amputation": [
+    "keine", "none", "nicht erfolgt", "nicht notwendig", "n/a", "-",
+    "oberarm", "ellenbogen", "unterarm", "hand", "finger",
+    "oberschenkel", "knie", "unterschenkel", "fuss", "zehen", "calcaneus",
+    "upper arm", "elbow", "forearm", "fingers",
+    "thigh", "knee", "lower leg", "foot", "toes", "calcaneus",
+    "shoulder", "hip",  
+    "amputation nicht notwendig", "hemipelviktomie", "oberschenkelamputation", "unterschenkelamputation",
+    "not assessable", "other"
+    ],
     
-
     "disciplines": [
-        "sarcoma surgery", "reconstructive", "VIS", "visceral", "Chest", "Vascular", "Orthopaedics", "trauma", "neuro",
-        "spine", "gynecology", "urology", "Hand", "HNO", "MKG", "Kardial", "Dermatology",
-        "Hausarzt", "allgemeine Chirurgie",
-        "Sarkomchirurgie", "rekonstruktiv", "Viszeral", "Thorax", "Gefässchirurgie", "Orthopädie", "Trauma",
-        "Neurochirurgie", "Wirbelsäule", "Gynäkologie", "Urologie", "Handchirurgie", "Hals Nasen Ohren",
-        "Mund Kiefer Gesicht", "Herzchirurgie", "Dermatologie", "Hausarzt", "Allgemeinchirurgie"
+        "sarcoma surgery", "reconstructive", "vis", "visceral", "chest", "vascular", "orthopaedics", "trauma", "neuro",
+        "spine", "gynecology", "urology", "hand", "hnO", "mkg", "kardial", "dermatology",
+        "hausarzt", "allgemeine Chirurgie", "radiology", "pathology",
+        "sarkomchirurgie", "rekonstruktiv", "viszeral", "thorax", "gefässchirurgie", "orthopädie", "trauma",
+        "neurochirurgie", "wirbelsäule", "gynäkologie", "urologie", "handchirurgie", "hals nasen ohren",
+        "mund kiefer gesicht", "herzchirurgie", "dermatologie", "hausarzt", "allgemeinchirurgie"
     ]
 }
