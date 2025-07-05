@@ -2,6 +2,18 @@ from datetime import datetime, date
 import re
 from sqlalchemy import text
 
+def try_parse_date(date_str):
+    if isinstance(date_str, (datetime, date)):
+        return date_str
+    
+    for fmt in ("%Y-%m-%d", "%d.%m.%Y", "%Y/%m/%d"):
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    return None
+
+
 def is_allowed_value(value, allowed_values: list) -> bool:
     if value is None:
         return False
@@ -19,9 +31,9 @@ def is_allowed_value(value, allowed_values: list) -> bool:
     def value_matches(val):
         val = normalize(val)
         for allowed in normalized_allowed:
-            pattern = rf"\b{re.escape(allowed)}\b"
-            if re.search(pattern, val):
+            if val == allowed:
                 return True
+        
         print(f"[DEBUG] '{val}' not matching any allowed values")
         return False
 
@@ -35,6 +47,7 @@ def is_valid_date(date_str: str, birth_date: str = None) -> bool:
         if not date_str:
             return False
 
+        # Falls schon datetime oder date, in ISO umwandeln
         if isinstance(date_str, (datetime, date)):
             date_str = date_str.isoformat()
 
@@ -43,17 +56,33 @@ def is_valid_date(date_str: str, birth_date: str = None) -> bool:
 
         print(f"[DEBUG] Checking date: {date_str} vs today: {datetime.today().strftime('%Y-%m-%d')}")
 
-        date_val = datetime.strptime(date_str, "%Y-%m-%d")
-        today = datetime.today()
+        # Datum parsen
+        date_val = try_parse_date(date_str)
+        if not date_val:
+            print(f"[ERROR] Unable to parse date: {date_str}")
+            return False
+
+        # Konvertiere zu datetime.date, wenn datetime
+        if isinstance(date_val, datetime):
+            date_val = date_val.date()
+
+        today = datetime.today().date()
 
         if birth_date:
-            birth = datetime.strptime(birth_date, "%Y-%m-%d")
+            birth = try_parse_date(birth_date)
+            if not birth:
+                print(f"[ERROR] Unable to parse birth date: {birth_date}")
+                return False
+            if isinstance(birth, datetime):
+                birth = birth.date()
             return birth <= date_val <= today
 
         return date_val <= today
+
     except Exception as e:
         print(f"[ERROR] Invalid date: {date_str}, error: {e}")
         return False
+
 
 def is_prefixed_allowed_value(value: str, allowed_prefixes: list[str]) -> bool:
     if not isinstance(value, str):
@@ -153,3 +182,196 @@ def fetch_birth_date(conn, patient_id):
         {"pid": patient_id}
     ).mappings().fetchone()
     return birth_result["birth_date"].isoformat() if birth_result and birth_result["birth_date"] else None
+ 
+
+def validate_referral_date_field(entry: dict, birth_date: str = None) -> dict:
+    referral = entry.get("referral_date")
+    result = {}
+
+    # Wenn kein Datum angegeben → kein valider Wert möglich
+    if not referral:
+        result["referral_date"] = False
+        return result
+
+    parsed_referral = try_parse_date(referral)
+    if not parsed_referral:
+        print(f"[ERROR] referral_date nicht parsebar: {referral}")
+        result["referral_date"] = False
+        return result
+
+    if isinstance(parsed_referral, datetime):
+        parsed_referral = parsed_referral.date()
+
+    today = datetime.today().date()
+
+    # Check: referral_date <= today
+    if parsed_referral > today:
+        print(f"[ERROR] referral_date {parsed_referral} liegt in der Zukunft.")
+        result["referral_date"] = False
+        return result
+
+    # Check: referral_date >= birth_date
+    if birth_date:
+        parsed_birth = try_parse_date(birth_date)
+        if not parsed_birth:
+            print(f"[ERROR] birth_date nicht parsebar: {birth_date}")
+            result["referral_date"] = False
+            return result
+
+        if isinstance(parsed_birth, datetime):
+            parsed_birth = parsed_birth.date()
+
+        if parsed_referral < parsed_birth:
+            print(f"[ERROR] referral_date {parsed_referral} liegt vor birth_date {parsed_birth}")
+            result["referral_date"] = False
+            return result
+    
+    first_contact = entry.get("first_contact_date")
+    if first_contact:
+        parsed_first_contact = try_parse_date(first_contact)
+        if not parsed_first_contact:
+            print(f"[ERROR] first_contact_date nicht parsebar: {first_contact}")
+            result["referral_date"] = False
+            return result
+
+        if isinstance(parsed_first_contact, datetime):
+            parsed_first_contact = parsed_first_contact.date()
+
+        if parsed_referral > parsed_first_contact:
+            print(f"[ERROR] referral_date {parsed_referral} liegt nach first_contact_date {parsed_first_contact}")
+            result["referral_date"] = False
+            return result
+
+    result["referral_date"] = True
+    return result
+
+def validate_therapy_start_date_field(entry: dict, birth_date: str = None) -> dict:
+    result = {}
+    therapy_start = entry.get("therapy_start_date")
+
+    if not therapy_start:
+        result["therapy_start_date"] = False
+        return result
+
+    parsed_start = try_parse_date(therapy_start)
+    if not parsed_start:
+        print(f"[ERROR] therapy_start_date nicht parsebar: {therapy_start}")
+        result["therapy_start_date"] = False
+        return result
+
+    if isinstance(parsed_start, datetime):
+        parsed_start = parsed_start.date()
+
+    today = datetime.today().date()
+    if parsed_start > today:
+        print(f"[ERROR] therapy_start_date {parsed_start} liegt in der Zukunft.")
+        result["therapy_start_date"] = False
+        return result
+
+    if birth_date:
+        parsed_birth = try_parse_date(birth_date)
+        if not parsed_birth:
+            print(f"[ERROR] birth_date nicht parsebar: {birth_date}")
+            result["therapy_start_date"] = False
+            return result
+
+        if isinstance(parsed_birth, datetime):
+            parsed_birth = parsed_birth.date()
+
+        if parsed_start < parsed_birth:
+            print(f"[ERROR] therapy_start_date {parsed_start} liegt vor birth_date {parsed_birth}")
+            result["therapy_start_date"] = False
+            return result
+    
+    first_contact = entry.get("first_contact_date")
+    if first_contact:
+        parsed_first_contact = try_parse_date(first_contact)
+        if not parsed_first_contact:
+            print(f"[ERROR] first_contact_date nicht parsebar: {first_contact}")
+            result["therapy_start_date"] = False
+            return result
+
+        if isinstance(parsed_first_contact, datetime):
+            parsed_first_contact = parsed_first_contact.date()
+
+        if parsed_start < parsed_first_contact:
+            print(f"[ERROR] therapy_start_date {parsed_start} liegt vor first_contact_date {parsed_first_contact}")
+            result["therapy_start_date"] = False
+            return result
+
+    result["therapy_start_date"] = True
+    return result
+    
+
+def is_greater_equal_date(date_str: str, reference_str: str) -> bool:
+    try:
+        date_val = try_parse_date(date_str)
+        ref_val = try_parse_date(reference_str)
+        if not date_val or not ref_val:
+            return False
+        return date_val >= ref_val
+    except Exception as e:
+        print(f"[ERROR] Fehler bei is_greater_equal_date: {e}")
+        return False
+
+
+def is_valid_float_in_range(value, min_value=None, max_value=None) -> bool:
+    try:
+        val = float(value)
+        if min_value is not None and val < min_value:
+            return False
+        if max_value is not None and val > max_value:
+            return False
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def is_valid_int_in_range(value, min_value=None, max_value=None) -> bool:
+    try:
+        val = int(value)
+        if min_value is not None and val < min_value:
+            return False
+        if max_value is not None and val > max_value:
+            return False
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def is_greater_equal_float(value, min_value=0, max_value=None, warn_if_above=None) -> bool:
+    try:
+        if value is None:
+            return False
+
+        val = float(value)
+
+        if val < min_value:
+            print(f"[ERROR] Value {val} is less than minimum {min_value}")
+            return False
+
+        if max_value is not None and val > max_value:
+            print(f"[ERROR] Value {val} is greater than maximum {max_value}")
+            return False
+
+        if warn_if_above is not None and val > warn_if_above:
+            print(f"[WARNING] Value {val} is above recommended threshold {warn_if_above}")
+
+        return True
+
+    except Exception as e:
+        print(f"[ERROR] Invalid float: {value}, error: {e}")
+        return False
+
+
+def validate_volume_with_warning(value, field_name="volume", min_value=0, max_warning_threshold=2500):
+    try:
+        val = float(value)
+        if val < min_value:
+            return {"valid": False, "warning": None}
+        warning = None
+        if val > max_warning_threshold:
+            warning = f"{field_name} unusually high (> {max_warning_threshold} cm³)"
+        return {"valid": True, "warning": warning}
+    except (ValueError, TypeError):
+        return {"valid": False, "warning": None}

@@ -133,14 +133,33 @@ REFERENCE_DATA = {
         "patient s wish", "death", "unfinished", "open"
     ],
     "clinical_trial_inclusion": [
-        "RCT", "Registerstudie", "nicht teilgenommen", "abgelehnt", "Included", "not Included"
+        "rct", "registerstudie", "nicht teilgenommen", "abgelehnt", "included", "not included"
     ],
     "hyperthermia_status": [
         "geplant", "parallel", "nicht erfolgt", "nicht relevant", "Planned", "administered"
     ],
 
-
-
+   "radiology_therapy_indications": [
+        "preoperative",
+        "postoperative",
+        "intraoperative",
+        "stereotactic",
+        "palliativ",
+        "adjuvant therapy postoperative"
+    ],
+    "radiology_therapy_types": [
+        "intensity modulated radiotherapy",
+        "volumetric Arc VMAT",
+        "conventional 3D",
+        "stereotactic",
+        "proton",
+        "intensity modulated radiation therapy",
+        "(imrt)"
+    ],
+    "resection":[
+        "r0", "r1", "r2", "R0", "R1", "R2"
+    ],
+    
 
     "disciplines": [
         "sarcoma surgery", "reconstructive", "VIS", "visceral", "Chest", "Vascular", "Orthopaedics", "trauma", "neuro",
