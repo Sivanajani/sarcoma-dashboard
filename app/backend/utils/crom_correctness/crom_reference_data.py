@@ -21,9 +21,10 @@ REFERENCE_DATA = {
         "Musculature", "Subcutaneous tissue", "Fascia", "Tendons", "Connective tissue",
         "Femur", "Tibia", "Fibula", "Humerus", "Radius", "Ulna",
         "Kidney", "Bladder", "Uterus", "Prostate", "Intestine", "Stomach",
-        "Skin", "Lymph nodes", "Bone marrow", "not assessable", "other"
+        "Skin", "Lymph nodes", "Bone marrow", "not assessable", "other",
     ],
-    "lesion_sides": ["links", "rechts", "beidseitig", "zentral", "nicht beurteilbar", "left", "right", "bilateral", "central", "not assessable"],
+    "lesion_sides": ["links", "rechts", "beidseitig", "zentral", "nicht beurteilbar", "left", "right", "bilateral", "central", "not assessable",
+    ],
 
     "tumor_syndromes": [
         "Li Fraumeni Syndrom", "Neurofibromatose Typ 1", "Gardner Syndrom", "Turcot Syndrom",
@@ -37,7 +38,7 @@ REFERENCE_DATA = {
         "Carney triad", "Beckwith Wiedemann syndrome",
         "Rothmund Thomson syndrome", "Bloom syndrome", "Werner syndrome",
         "Gorlin Goltz syndrome", "Cowden syndrome", "Fanconi anemia",
-        "No known syndrome", "Syndrome evaluation pending", "not documented"
+        "No known syndrome", "Syndrome evaluation pending", "not documented",
     ],
     "sarcoma_diagnoses": [
         "Liposarkom", "Leiomyosarkom", "Rhabdomyosarkom", "Synovialsarkom", "Fibrosarkom", "Myxoides Sarkom",
@@ -51,40 +52,40 @@ REFERENCE_DATA = {
         "Gastrointestinal stromal tumor (GIST)", "SDH deficient GIST",
         "Angiosarcoma", "Hemangioendothelioma", "Primitive neuroectodermal tumors (PNET)",
         "Embryonal rhabdomyosarcoma", "Clear cell sarcoma", "UPS", "Spindle cell sarcoma", "Sarcoma NOS",
-        "Desmoid tumor", "Alveolar soft part sarcoma", "Clear cell sarcoma"
+        "Desmoid tumor", "Alveolar soft part sarcoma", "Clear cell sarcoma",
     ],
     "ecog_values": [
-        0, 1, 2, 3, 4
+        0, 1, 2, 3, 4,
     ],
     "last_status": [
         "no evidence of disease", "alive with disease", "dead of disease",
         "dead of other reasons", "no assessment possible - unknown",
         "kein Anzeichen einer Erkrankung", "lebend mit Erkrankung", "verstorben an Erkrankung",
-        "verstorben aus anderen Gründen", "keine Beurteilung möglich", "unbekannt"
+        "verstorben aus anderen Gründen", "keine Beurteilung möglich", "unbekannt",
     ],
     "death_reasons": [
         "tumorbedingt", "therapiekomplikation", "zweite tumorerkrankung", "infektion",
         "unfall", "herzversagen", "unbekannt", "nicht dokumentiert",
         "tumor related", "therapy complication", "second tumor", "infection",
-        "accident", "heart failure", "unknown", "not documented", "of_other_cancer"
+        "accident", "heart failure", "unknown", "not documented", "of_other_cancer",
     ],
     "presentation_reasons": [
         "Erstdiagnose", "Rezidivverdacht", "Verlaufskontrolle", "Therapieentscheid",
         "Zweitmeinung", "Diskussion komplexer Fälle", "präoperative Einschätzung",
         "Initial diagnosis", "Recurrence suspicion", "Follow up", "Therapy decision",
-        "Second opinion", "Discussion of complex cases", "Preoperative assessment"
+        "Second opinion", "Discussion of complex cases", "Preoperative assessment",
     ],
     "status_list": [
         "Geplant", "bereits operiert", "nicht operiert", "nicht beurteilbar", "unklar", "nicht dokumentiert", "completed",
-        "Planned", "already operated", " operated", "not assessable", "unclear", "not documented", "no_evidence_of_disease"
+        "Planned", "already operated", " operated", "not assessable", "unclear", "not documented", "no_evidence_of_disease",
     ],
     "therapy_forms": [
         "Keine", "Systemtherapie", "Bestrahlung", "Operation", "Hyperthermie", "klinische Studie", "andere",
-        "None", "Systemic therapy", "Radiation", "Surgery", "Hyperthermia", "Clinical trial", "Other"
+        "None", "Systemic therapy", "Radiation", "Surgery", "Hyperthermia", "Clinical trial", "Other",
     ],
     "yes_no_unknown": [
         "ja", "nein", "noch offen",
-        "yes", "no", "undecided"
+        "yes", "no", "undecided",
     ],
     "hyperthermia_indications": [
         "Primärtherapie", "Primary therapy",
@@ -93,7 +94,7 @@ REFERENCE_DATA = {
         "Palliativtherapie", "Palliative therapy",
         "Kontrolluntersuchung", "Follow up examination",
         "Diagnosesicherung Nachsorge", "Diagnostic confirmation aftercare", 
-        "Supportive treatment prior to chemotherapy"
+        "Supportive treatment prior to chemotherapy",
     ],
     "hyperthermia_types": [
         "lokoregionär", "locoregional",
@@ -102,41 +103,41 @@ REFERENCE_DATA = {
         "Regional", "regional",
         "Intraläsional", "intralesional",
         "Perfusionstechnisch", "perfusion-based",
-        "interstitiell", "interstitial"
+        "interstitiell", "interstitial",
     ],
     "hyperthermia_schedule_full_values": [
             "täglich", "daily",
             "nach Bedarf", "as needed",
             "individuell angepasst", "individually adapted",
-            "wöchentlich", "weekly"
+            "wöchentlich", "weekly",
     ],
     "hyperthermia_schedule_suffixes": [
         "/woche", "/week", "weekly",
-        "/monat", "/month"
+        "/monat", "/month",
     ],
     "therapy_types": [
         "adjuvant", "adjuvant",
         "neoadjuvant", "neoadjuvant",
         "palliativ", "palliative",
-        "kurativ", "curative"
+        "kurativ", "curative",
     ],
     "systemic_therapy_reasons": [
         "curative intent neo adjuvant",
         "curative intent adjuvant",
         "palliative intent treatment pressure",
-        "palliative intent maintenance"
+        "palliative intent maintenance",
     ],
     "therapy_protocols": [  
     ],
     "systemic_therapy_discontinuation_reasons": [
         "toxicity", "progressive disease", "planned",
-        "patient s wish", "death", "unfinished", "open"
+        "patient s wish", "death", "unfinished", "open",
     ],
     "clinical_trial_inclusion": [
-        "rct", "registerstudie", "nicht teilgenommen", "abgelehnt", "included", "not included"
+        "rct", "registerstudie", "nicht teilgenommen", "abgelehnt", "included", "not included",
     ],
     "hyperthermia_status": [
-        "geplant", "parallel", "nicht erfolgt", "nicht relevant", "Planned", "administered"
+        "geplant", "parallel", "nicht erfolgt", "nicht relevant", "Planned", "administered",
     ],
 
    "radiology_therapy_indications": [
@@ -145,7 +146,7 @@ REFERENCE_DATA = {
         "intraoperative",
         "stereotactic",
         "palliativ",
-        "adjuvant therapy postoperative"
+        "adjuvant therapy postoperative",
     ],
     "radiology_therapy_types": [
         "intensity modulated radiotherapy",
@@ -154,10 +155,10 @@ REFERENCE_DATA = {
         "stereotactic",
         "proton",
         "intensity modulated radiation therapy",
-        "(imrt)"
+        "(imrt)",
     ],
     "resection":[
-        "r0", "r1", "r2", "R0", "R1", "R2"
+        "r0", "r1", "r2", "R0", "R1", "R2",
     ],
     "amputation": [
     "keine", "none", "nicht erfolgt", "nicht notwendig", "n/a", "-",
@@ -167,15 +168,149 @@ REFERENCE_DATA = {
     "thigh", "knee", "lower leg", "foot", "toes", "calcaneus",
     "shoulder", "hip",  
     "amputation nicht notwendig", "hemipelviktomie", "oberschenkelamputation", "unterschenkelamputation",
-    "not assessable", "other"
+    "not assessable", "other",
     ],
-    
     "disciplines": [
         "sarcoma surgery", "reconstructive", "vis", "visceral", "chest", "vascular", "orthopaedics", "trauma", "neuro",
         "spine", "gynecology", "urology", "hand", "hnO", "mkg", "kardial", "dermatology",
         "hausarzt", "allgemeine Chirurgie", "radiology", "pathology",
         "sarkomchirurgie", "rekonstruktiv", "viszeral", "thorax", "gefässchirurgie", "orthopädie", "trauma",
         "neurochirurgie", "wirbelsäule", "gynäkologie", "urologie", "handchirurgie", "hals nasen ohren",
-        "mund kiefer gesicht", "herzchirurgie", "dermatologie", "hausarzt", "allgemeinchirurgie"
+        "mund kiefer gesicht", "herzchirurgie", "dermatologie", "hausarzt", "allgemeinchirurgie",
+    ],
+    "data_entry_type":[
+        "no biopsy",
+        "fine needle",
+        "core biopsy imaging guided",
+        "open incisional without suspicion of sarcoma",
+        "open incisional with suspicion of sarcoma",
+        "excisional without suspicion of sarcoma",
+        "excisional with suspicion of sarcoma",
+        "curretage unknown",
+    ],
+    "diagnostic_grading":[
+        "G1", "g1", "G2", "g2", "G3", "g3", "maligne unklares Grading", 
+        "suspicion of malignancy", "benigne",
+    ],
+    "judgment_of_surgical_margin":[
+        "r0 wide margin r0", "r0 wide margin", "wide margin",
+        "r1 marginal margin r1", "r1 marginal margin", "marginal margin"
+        "r2 intralesional margin r2", "r2 intralesional margin", "intralesional margin"
+        "nicht beurteilbar", "r0", "r1", "r2",
+    ],
+    "mitoses_per_10hpf":[
+        "not applicable in cases with neoadjuvant therapy & necrosis",
+        "not applicable in cases with neoadjuvant therapy and necrosis",
+        "not applicable in cases with neoadjuvant therapy necrosis",
+        "not applicable in cases with neoadjuvant",
+        "score 1 0 9 mitoses per 10 hpf",
+        "score 1",
+        "0 9 mitoses per 10 hpf",
+        "score 2 10 19 mitoses per 10 hpf",
+        "score 2",
+        "10 19 mitoses per 10 hpf",
+        "score 3 > 19 mitoses per 10 hpf",
+        "score 3",
+        "> 19 mitoses per 10 hpf",
+    ],
+    "proliferation_index": [
+        "not applicable in cases with neoadjuvant therapy & necrosis",
+        "not applicable in cases with neoadjuvant therapy and necrosis",
+        "not applicable in cases with neoadjuvant therapy necrosis",
+        "not applicable in cases with neoadjuvant",
+        "low",
+        "moderate",
+        "high",
+        "0%",
+        "1%",
+        "5%",
+        "10%",
+        "15%",
+        "20%",
+        "25%",
+        "30%",
+        "35%",
+        "40%",
+        "45%",
+        "50%",
+        "55%",
+        "60%",
+        "65%",
+        "70%",
+        "75%",
+        "80%",
+        "85%",
+        "90%",
+        "95%",
+        "100%",
+        "<10%",
+        "10 20%",
+        ">20%",
+        "not done",
+        "n/a",
+    ],
+    "extent_of_necrosis":[
+        "not applicable in cases with neoadjuvant therapy & necrosis",
+        "not applicable in cases with neoadjuvant therapy and necrosis",
+        "not applicable in cases with neoadjuvant therapy necrosis",
+        "< 10%",
+        "10 20%",
+        "21 30%",
+        "31 40%",
+        "41 50%",
+        "51 60%",
+        "61 70%",
+        "71 80%",
+        "81 90%",
+        "90%",
+    ],
+    "biological_barrier":[
+        "fascia", "periosteum",
+    ],
+    "performed_status":[
+        "Durchgeführt", "nicht durchgeführt", "ausstehend", "ja", "yes", "no", "nein",
+    ],
+    "imaging_type":[
+        "conventional x ray",
+        "mri",
+        "ct",
+        "ultrasound",
+        "pet ct",
+        "pet",
+    ],
+    "imaging_timing":[
+        "prätherapeutisch",
+        "postoperativ",
+        "verlaufskontrolle",
+        "staging",
+        "restaging",
+    ],
+    "response":[
+        "CR complete response",
+        "CR",
+        "complete response",
+        "PR partial response",
+        "PR",
+        "partial response",
+        "SD stable disease",
+        "SD",
+        "stable disease",
+        "PD progressive disease",
+        "PD",
+        "progressive disease",
+        "nicht beurteilbar",
+        "nicht durchgeführt",
+    ],
+    "location_of_lesion": [
+        "thorax", "abdomen", "pelvis", "extremities",
+        "upper extremity", "lower extremity", "retroperitoneum",
+        "spine", "skull", "brain", "liver",
+        "lung", "lymph nodes", "bone",
+        "soft tissue", "chest wall", "peritoneum",
+        "pleura", "mediastinum", "muscle",
+        "subcutaneous tissue", "head and neck",
+        "skin", "kidney", "bladder",
+        "prostate", "uterus", "ovary",
+        "bowel", "spleen", "adrenal gland", "pancreas",
     ]
 }

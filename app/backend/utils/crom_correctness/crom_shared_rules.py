@@ -83,6 +83,18 @@ def is_valid_date(date_str: str, birth_date: str = None) -> bool:
         print(f"[ERROR] Invalid date: {date_str}, error: {e}")
         return False
 
+def is_before_date(date_a: str, date_b: str) -> bool:
+    try:
+        parsed_a = try_parse_date(date_a)
+        parsed_b = try_parse_date(date_b)
+
+        if not parsed_a or not parsed_b:
+            return False
+
+        return parsed_a < parsed_b
+    except Exception as e:
+        print(f"[ERROR] is_before_date: {e}")
+        return False
 
 def is_prefixed_allowed_value(value: str, allowed_prefixes: list[str]) -> bool:
     if not isinstance(value, str):
@@ -375,3 +387,51 @@ def validate_volume_with_warning(value, field_name="volume", min_value=0, max_wa
         return {"valid": True, "warning": warning}
     except (ValueError, TypeError):
         return {"valid": False, "warning": None}
+
+def is_percentage_or_allowed_value(value, allowed_values: list) -> bool:
+    if value is None:
+        return False
+
+    try:
+        val_str = str(value).strip().replace("%", "").replace(",", ".")
+        percent = float(val_str)
+        if 0 <= percent <= 100:
+            return True
+    except ValueError:
+        pass  # Kein gültiger Prozentwert – weiter mit normaler Prüfung
+
+    # Fallback: ist es ein erlaubter Wert in der Liste?
+    return is_allowed_value(value, allowed_values)
+
+def is_fuzzy_biological_barrier_value(value, allowed_substrings: list) -> bool:
+    """
+    Erlaubt:
+    - genaue erlaubte Werte (wie 'fascia')
+    - sowie zusammengesetzte Werte wie 'muscle fascia', wenn sie erlaubte Teilstrings enthalten
+    """
+    if not value:
+        return False
+
+    def normalize(val):
+        return re.sub(r"\s+", " ", str(val).strip().lower()
+                    .replace("_", " ")
+                    .replace("-", " ")
+                    .replace(":", " ")
+                    .replace("/", " ")
+                    .replace(",", " "))
+
+    norm_value = normalize(value)
+    normalized_substrings = [normalize(v) for v in allowed_substrings]
+
+    # Exakter Match
+    if norm_value in normalized_substrings:
+        return True
+
+    # Teilstring-Match (z. B. "muscle fascia" enthält "fascia")
+    for allowed in normalized_substrings:
+        if allowed in norm_value:
+            return True
+
+    print(f"[DEBUG] '{value}' matched none of {allowed_substrings}")
+    return False
+

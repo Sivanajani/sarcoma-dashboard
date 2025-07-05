@@ -9,6 +9,8 @@ from utils.crom_correctness.crom_hyperthermia_correctness import validate_hypert
 from utils.crom_correctness.crom_systemicTherapies_correctness import validate_systemic_therapy_correctness
 from utils.crom_correctness.crom_radiologyTherapies_correctness import validate_radiology_therapy_correctness
 from utils.crom_correctness.crom_surgeries_correctness import validate_surgery_correctness
+from utils.crom_correctness.croms_pathologies_correctness import validate_pathology_correctness
+from utils.crom_correctness.crom_radiologyexams_correctness import validate_radiology_exam_correctness
 
 
 router = APIRouter(prefix="/api")
@@ -117,6 +119,41 @@ def get_surgery_correctness(patient_id: int):
 
             birth_date = fetch_birth_date(conn, patient_id)
             return compute_correctness_result(dict(row), validate_surgery_correctness, birth_date, "surgery")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/patients/{patient_id}/correctness/pathologies")
+def get_pathologies_correctness(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_pathologies WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Pathologies-Modul nicht gefunden")
+
+            birth_date = fetch_birth_date(conn, patient_id)
+            return compute_correctness_result(dict(row), validate_pathology_correctness, birth_date, "pathologies")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/{patient_id}/correctness/radiologyExams")
+def get_radiologyExams_correctness(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_radiology_exams WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Radiology Modul nicht gefunden")
+
+            birth_date = fetch_birth_date(conn, patient_id)
+            return compute_correctness_result(dict(row), validate_radiology_exam_correctness, birth_date, "Radiology")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
