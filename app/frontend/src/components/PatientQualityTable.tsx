@@ -36,15 +36,18 @@ const PatientQualityTable: React.FC = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const [baseRes, overviewRes] = await Promise.all([
+        const [baseRes, overviewRes, correctnessRes] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`)
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`),
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/correctness-overview`)
         ]);
 
         const baseData = await baseRes.json();
         const overviewData = await overviewRes.json();
+        const correctnessData = await correctnessRes.json();
 
         const combined: PatientQuality[] = baseData.map((p: any) => {
+          const correctness = correctnessData.find((q: any) => q.patient_id === p.id);
           const quality = overviewData.find((q: any) => q.patient_id === p.id);
           return {
             id: p.id,
@@ -52,8 +55,8 @@ const PatientQualityTable: React.FC = () => {
             completeness: quality?.average_completeness !== undefined
             ? Math.round(quality.average_completeness * 100)
             : undefined,
-            correctness: quality?.correctness !== undefined
-            ? Math.round(quality.correctness * 100)
+            correctness: correctness?.average_correctness !== undefined
+            ? Math.round(correctness.average_correctness)
             : undefined,
             consistency: quality?.consistency !== undefined
             ? Math.round(quality.consistency * 100)

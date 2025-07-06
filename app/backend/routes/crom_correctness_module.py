@@ -157,3 +157,36 @@ def get_radiologyExams_correctness(patient_id: int):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/patients/{patient_id}/correctness-patient")
+def get_correctness_patient(patient_id: int):
+    module_functions = [
+        ("diagnosis", "SELECT * FROM croms_diagnoses WHERE patient_id = :pid LIMIT 1", validate_diagnosis_correctness),
+        ("sarcoma_board", "SELECT * FROM croms_sarcoma_boards WHERE patient_id = :pid LIMIT 1", validate_sarcoma_board_correctness),
+        ("hyperthermia_therapy", "SELECT * FROM croms_hyperthermia_therapies WHERE patient_id = :pid LIMIT 1", validate_hyperthermia_correctness),
+        ("systemic_therapy", "SELECT * FROM croms_systemic_therapies WHERE patient_id = :pid LIMIT 1", validate_systemic_therapy_correctness),
+        ("radiology_therapy", "SELECT * FROM croms_radiology_therapies WHERE patient_id = :pid LIMIT 1", validate_radiology_therapy_correctness),
+        ("surgery", "SELECT * FROM croms_surgeries WHERE patient_id = :pid LIMIT 1", validate_surgery_correctness),
+        ("pathology", "SELECT * FROM croms_pathologies WHERE patient_id = :pid LIMIT 1", validate_pathology_correctness),
+        ("radiology_exam", "SELECT * FROM croms_radiology_exams WHERE patient_id = :pid LIMIT 1", validate_radiology_exam_correctness),
+    ]
+
+    overview = []
+
+    try:
+        with engine_pg.connect() as conn:
+            birth_date = fetch_birth_date(conn, patient_id)
+
+            for name, query, validator in module_functions:
+                row = conn.execute(text(query), {"pid": patient_id}).mappings().fetchone()
+                if row:
+                    result = compute_correctness_result(dict(row), validator, birth_date, name)
+                    overview.append({
+                        "name": name,
+                        "correctness": result.get("percent", 0)
+                    })
+
+        return overview
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -56,6 +56,7 @@
   "title": "Patient {{id}} – Detailansicht",
   "noModules": "Keine Module vorhanden.",
   "completeness": "Vollständigkeit",
+  "correctness": "Korrektheit",
   "of": "von",
   "fields": "Feldern",
   "loading": "Lade Patientendaten...",

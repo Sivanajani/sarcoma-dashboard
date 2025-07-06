@@ -50,7 +50,6 @@ def get_avgcorrectness_overview():
                 ]              
 
                 for module_name, table, validate_fn in modules:
-                    print(f"🔍 Prüfe Modul: {module_name}")
 
                     row = conn.execute(
                         text(f"SELECT * FROM {table} WHERE patient_id = :pid LIMIT 1"),
@@ -64,7 +63,6 @@ def get_avgcorrectness_overview():
                     try:
                         result = compute_correctness_result(dict(row), validate_fn, birth_date, module_name)
                         if isinstance(result.get("percent"), (int, float)):
-                            print(f"  ✅ Correctness (percent): {result['percent']}")
                             scores.append(result["percent"])
                         else:
                             print(f"  ⚠️ Kein correctness-Wert im Resultat: {result}")
@@ -73,7 +71,6 @@ def get_avgcorrectness_overview():
 
                 avg_score = round(sum(scores) / len(scores), 2) if scores else 0.0
                 flag = determine_flag(scores)
-                print(f"📊 Ø Correctness für Patient {pid}: {avg_score} ({flag})")
 
                 result_list.append({
                     "patient_id": pid,
