@@ -35,7 +35,6 @@ def get_avgcorrectness_overview():
 
             for patient in patients:
                 pid = patient[0]
-                print(f"\n👤 Patient {pid}")
                 birth_date = fetch_birth_date(conn, pid)
                 scores = []
                 modules = [
@@ -57,17 +56,15 @@ def get_avgcorrectness_overview():
                     ).mappings().fetchone()
 
                     if not row:
-                        print(f"  ⚠️ Kein Eintrag für {module_name}")
+                        #print(f"Kein Eintrag für {module_name}")
                         continue
                     
                     try:
                         result = compute_correctness_result(dict(row), validate_fn, birth_date, module_name)
                         if isinstance(result.get("percent"), (int, float)):
                             scores.append(result["percent"])
-                        else:
-                            print(f"  ⚠️ Kein correctness-Wert im Resultat: {result}")
                     except Exception as e:
-                        print(f"  ❌ Fehler bei Modul {module_name}: {e}")
+                        continue
 
                 avg_score = round(sum(scores) / len(scores), 2) if scores else 0.0
                 flag = determine_flag(scores)

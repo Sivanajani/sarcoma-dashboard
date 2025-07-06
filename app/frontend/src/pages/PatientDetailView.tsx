@@ -19,6 +19,13 @@ const PatientDetailView: React.FC = () => {
     return 'completeness-red';
   };
 
+  const getQualityClass = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return '';
+    if (value >= 90) return 'completeness-green';
+    if (value >= 60) return 'completeness-yellow';
+    return 'completeness-red';
+  };
+
 
   useEffect(() => {
   if (!patientId) return;
@@ -85,12 +92,10 @@ const PatientDetailView: React.FC = () => {
 
               {/* Korrektheit */}
               {mod.correctness !== undefined && (
-                <p className={`highlight correctness`}>
+                <p className={`highlight ${getQualityClass(mod.correctness)}`}>
                   {t('patientDetail.correctness')}: {mod.correctness}%
                 </p>
               )}
-
-
               <p>
                 {mod.fieldsFilled} {t('patientDetail.of')} {mod.fieldsTotal}{' '}
                 {t('patientDetail.fields')}
