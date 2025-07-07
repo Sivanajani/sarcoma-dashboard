@@ -5,6 +5,7 @@ from db.engine import engine_pg
 from utils.croms_consistency.crom_diagnosis_consistency import check_consistency_diagnosis
 from utils.croms_consistency.crom_sarcomaBoard_consistency import check_consistency_sarcoma_board
 from utils.croms_consistency.crom_hyperthermia_consistency import check_consistency_hyperthermia
+from utils.croms_consistency.crom_systemicTherapies_consistency import check_consistency_systemic_therapy
 
 router = APIRouter(prefix="/api")
 
@@ -81,6 +82,23 @@ def get_hyperthermia_consistency(patient_id: int):
                 raise HTTPException(status_code=404, detail="Hyperthermia Therapies-Modul nicht gefunden")
 
             return compute_consistency_result(dict(row), check_consistency_hyperthermia, "hyperthermia_therapies")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/patients/{patient_id}/consistency/systemic_therapy")
+def get_systemic_therapy_consistency(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_systemic_therapies WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+
+            if not row:
+                raise HTTPException(status_code=404, detail="Systemic Therapy Therapies-Modul nicht gefunden")
+
+            return compute_consistency_result(dict(row), check_consistency_systemic_therapy, "systemic_therapy")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

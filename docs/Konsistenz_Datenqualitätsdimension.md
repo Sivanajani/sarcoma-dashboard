@@ -179,3 +179,28 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
+## Konsistenzlogik für Hyperthermia
+
+|Regel                                                                |	Beschreibung                                                                                             |
+|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| Datums-Konsistenz: start_date/ end_date	                            | Wenn beide Daten (start_date, end_date) vorhanden sind, muss start_date ≤ end_date gelten.               |
+| Sitzungsanzahl vs. Indikation: therapy_sessions_count               |	Wenn therapy_sessions_count gesetzt ist, muss indication ebenfalls angegeben sein.                       |
+| board_accepted_indication vs. indication: board_accepted_indication |	Wenn board_accepted_indication = True, sollte auch indication gesetzt sein.                              |
+| start_date benötigt indication                                      |	Wenn start_date vorhanden ist, sollte indication gesetzt sein.                                           |
+| therapy_type benötigt indication: therapy_type                      | Wenn therapy_type gesetzt ist, sollte auch indication gesetzt sein                         |
+
+---
+
+## Korrektheitslogik für Systemic Therapy
+
+| **Regel** | **Beschreibung**                                                                              | **Validierungslogik**                                                                   | 
+| --------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | 
+| 1         | **treatment\_line > 1 → cycle\_start\_date muss gesetzt sein**                                | Wenn `treatment_line` > 1 → `cycle_start_date` darf nicht leer sein                     | 
+| 2         | **Wenn `hyperthermia_status` gesetzt ist, sollte auch `reason` oder `comments` gefüllt sein** | Logisch: Wenn Hyperthermie geplant ist, sollte ein Kontext dokumentiert sein            | 
+| 3         | **discontinuation\_reason gesetzt → cycle\_end\_date muss vorhanden sein**                    | Wenn eine Beendigungs-Begründung vorhanden ist, muss das Therapieende dokumentiert sein | 
+| 4         | **Wenn `was_rct_concomittant` = true → clinical\_trial\_inclusion sollte nicht leer sein**    | Wenn Begleitstudie aktiv, dann sollte Studienname gesetzt sein                          | 
+| 5         | **Wenn `bone_protocol` oder `softtissue_protocol` gesetzt → `reason` darf nicht leer sein**   | Es braucht einen medizinischen Grund für ein Protokoll                                  | 
+
+---
+
+## Korrektheitslogik für RadiologyTherapy
