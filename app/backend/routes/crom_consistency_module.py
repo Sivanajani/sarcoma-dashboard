@@ -3,6 +3,7 @@ from sqlalchemy import text
 from db.engine import engine_pg
 
 from utils.croms_consistency.crom_diagnosis_consistency import check_consistency_diagnosis
+from utils.croms_consistency.crom_sarcomaBoard_consistency import check_consistency_sarcoma_board
 
 router = APIRouter(prefix="/api")
 
@@ -44,6 +45,23 @@ def get_diagnosis_consistency(patient_id: int):
                 raise HTTPException(status_code=404, detail="Diagnosemodul nicht gefunden")
 
             return compute_consistency_result(dict(row), check_consistency_diagnosis, "diagnosis")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/consistency/sarcoma-board")
+def get_sarcoma_board_consistency(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_sarcoma_boards WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+
+            if not row:
+                raise HTTPException(status_code=404, detail="SarcomaBoard-Modul nicht gefunden")
+
+            return compute_consistency_result(dict(row), check_consistency_sarcoma_board, "sarcoma_board")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
