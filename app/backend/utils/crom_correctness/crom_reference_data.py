@@ -58,10 +58,10 @@ REFERENCE_DATA = {
         0, 1, 2, 3, 4,
     ],
     "last_status": [
-        "no evidence of disease", "alive with disease", "dead of disease",
+        "dead", "no evidence of disease", "alive with disease", "dead of disease",
         "dead of other reasons", "no assessment possible - unknown",
         "kein Anzeichen einer Erkrankung", "lebend mit Erkrankung", "verstorben an Erkrankung",
-        "verstorben aus anderen Gründen", "keine Beurteilung möglich", "unbekannt",
+        "verstorben aus anderen Gründen", "keine Beurteilung möglich", "unbekannt","tod", "verstorben",
     ],
     "death_reasons": [
         "tumorbedingt", "therapiekomplikation", "zweite tumorerkrankung", "infektion",

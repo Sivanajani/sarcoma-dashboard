@@ -169,7 +169,13 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
-## Konsistenzlogik für Diagnosis
+## Konsistenzlogik für SarcomaBoard
 
+| Regel                                                                                                         | Beschreibung                      | Validierungsidee                                     |
+| ------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------------- |
+| **1. `decision_* = "ja"` → `status_after_follow_up` ≠ leer** | Wenn eine Entscheidung (OP, Radiotherapie, Systemtherapie) getroffen wurde, sollte ein Folge-Status dokumentiert sein. | Wenn `decision_X = ja` → `status_after_follow_up` muss gesetzt sein   |
+| **2. `status_before_follow_up` ≠ `status_after_follow_up`**  | Sollte sich im Follow-up etwas ändern? Falls gleich: evtl. Hinweis auf fehlende Aktualisierung  | Optional, informativ – nicht zwingend als Fehler   |
+| **3. `current_ecog` gesetzt → `status_before_follow_up` oder `status_after_follow_up` sollte vorhanden sein** | Wenn ECOG gesetzt wurde, sollte auch ein medizinischer Status dokumentiert sein                                        | Konsistenz zwischen klinischem Zustand und Verlauf                                 |
 
+---
 

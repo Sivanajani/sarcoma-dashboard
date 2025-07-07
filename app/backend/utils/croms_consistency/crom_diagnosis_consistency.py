@@ -1,16 +1,57 @@
-def check_consistency_diagnosis(entry: dict) -> dict:
+import re
+
+DECEASED_STATUSES = {
+    "verstorben", "tod", "dead", "verstorben an erkrankung",
+    "verstorben aus anderen gründen", "dead of disease", "dead of other reasons"
+}
+
+VALID_DEATH_REASONS = {
+    "tumorbedingt", "therapiekomplikation", "zweite tumorerkrankung",
+    "infektion", "herzversagen",
+    "tumor related", "therapy complication", "second tumor",
+    "infection", "heart failure", "of_other_cancer"
+}
+
+IGNORED_DEATH_REASONS = {
+    "unbekannt", "nicht dokumentiert", "unknown", "not documented", "", "unfall", "accident"
+}
+
+
+def normalize(value):
+    if value is None:
+        return ""
+    return re.sub(r"\s+", " ", str(value).strip().lower()
+                  .replace("_", " ")
+                  .replace("-", " ")
+                  .replace(":", " ")
+                  .replace("/", " ")
+                  .replace(",", " "))
+
+
+def check_consistency_diagnosis(entry):
+    region = normalize(entry.get("tumor_anatomic_region"))
+    side = normalize(entry.get("tumor_anatomic_lesion_side"))
+    add_region = normalize(entry.get("additional_tumor_anatomic_region"))
+    add_side = normalize(entry.get("additional_tumor_anatomic_lesion_side"))
+    ecog = normalize(entry.get("diagnosis_ecog"))
+    death_reason = normalize(entry.get("death_reason"))
+    last_status = normalize(entry.get("last_status"))
+
     return {
         "region_side_coupling": (
-            bool(entry.get("tumor_anatomic_region")) == bool(entry.get("tumor_anatomic_lesion_side"))
+            (not region and not side) or (bool(region) and bool(side))
         ),
+
         "additional_region_side_coupling": (
-            bool(entry.get("additional_tumor_anatomic_region")) == bool(entry.get("additional_tumor_lesion_side"))
+            (not add_region and not add_side) or (bool(add_region) and bool(add_side))
         ),
+
         "ecog_vs_death": (
-            False if entry.get("death_reason") and entry.get("diagnosis_ecog") not in [None, ""] else True
+            None if last_status not in DECEASED_STATUSES
+            else ecog in ["", "0", None]
         ),
         "death_reason_vs_last_status": (
-            (not entry.get("death_reason") and entry.get("last_status") != "verstorben")
-            or (entry.get("death_reason") and entry.get("last_status") == "verstorben")
-        )
+            (death_reason in IGNORED_DEATH_REASONS and last_status not in DECEASED_STATUSES) or
+            (death_reason in VALID_DEATH_REASONS and last_status in DECEASED_STATUSES)
+        ),
     }
