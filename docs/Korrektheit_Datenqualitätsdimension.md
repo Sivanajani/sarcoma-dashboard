@@ -1,6 +1,4 @@
-Natürlich – hier ist deine überarbeitete, sprachlich klare Version des Abschnitts zur **Datenqualitätsdimension: Korrektheit**:
-
-## Benötigte Listen zur Validierung:
+# **Datenqualitätsdimension: Korrektheit**:
 
 ### **Benötigte Listen zur Validierung**
 
@@ -157,10 +155,6 @@ Natürlich – hier ist deine überarbeitete, sprachlich klare Version des Absch
 * Freitextfelder wie `indication` und `comment` lassen sich nur eingeschränkt prüfen – eine Liste häufiger Einträge kann helfen.
 * Typ-Felder wie `hyperthermia_type`, `schedule` und `therapy_type` eignen sich gut für kontrollierte `allowed`-Listen.
 * Das Boolean-Feld `board_accepted_indication` ist klar validierbar.
-
----
-
-Sehr gerne! Hier ist deine strukturierte Liste **nach vollständiger Durchsicht und Optimierung**, inklusive **einheitlicher Formatierung**, **kleiner Korrekturen** und **ergänzender Hinweise** – bereit für den produktiven Einsatz in deiner Datenqualitätslogik:
 
 ---
 

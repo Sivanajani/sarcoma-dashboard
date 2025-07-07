@@ -11,7 +11,7 @@ from routes.crom_tables import router as crom_tables_router
 from routes.crom_patients import router as crom_patients_router
 from routes import crom_correctness_module
 from routes.crom_avg_correctness import router as crom_correctness_avg_router
-
+from routes.crom_consistency_module import router as crom_consistency_router
 
 
 app = FastAPI()
@@ -38,6 +38,8 @@ app.include_router(crom_correctness_module.router)
 # Durchschnittliche Korrektheit pro Patient
 app.include_router(crom_correctness_avg_router)
 
+# Konsistenz pro Modul
+app.include_router(crom_consistency_router)
 
 # Tabellen anzeigen
 app.include_router(crom_tables_router)

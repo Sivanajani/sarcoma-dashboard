@@ -12,7 +12,10 @@ completeness_rules = {
                         "additional_tumor_diagnosis",
                         "other_diagnosis",
                         "patient_history",
-                        "diagnosis_ecog",
+                        {
+                            "key": "diagnosis_ecog",
+                            "conditional": lambda data: not bool(data.get("death_reason"))
+                        },
                         "last_contact_date",
                         "last_status",
                     ]
