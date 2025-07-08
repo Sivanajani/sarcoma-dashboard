@@ -7,6 +7,7 @@ from utils.croms_consistency.crom_sarcomaBoard_consistency import check_consiste
 from utils.croms_consistency.crom_hyperthermia_consistency import check_consistency_hyperthermia
 from utils.croms_consistency.crom_systemicTherapies_consistency import check_consistency_systemic_therapy
 from utils.croms_consistency.crom_radiologyTherapies_consistency import check_consistency_radiology_therapy
+from utils.croms_consistency.crom_surgery_consistency import check_consistency_surgery
 
 router = APIRouter(prefix="/api")
 
@@ -117,6 +118,24 @@ def get_radiology_therapy_consistency(patient_id: int):
                 raise HTTPException(status_code=404, detail="Radiology Therapy Modul nicht gefunden")
 
             return compute_consistency_result(dict(row), check_consistency_radiology_therapy, "radiology_therapy")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/{patient_id}/consistency/surgery")
+def get_surgery_consistency(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_surgeries WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+
+            if not row:
+                raise HTTPException(status_code=404, detail="Surgery Therapy Modul nicht gefunden")
+
+            return compute_consistency_result(dict(row), check_consistency_surgery, "surgery")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

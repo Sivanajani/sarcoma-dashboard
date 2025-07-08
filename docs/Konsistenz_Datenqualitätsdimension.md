@@ -215,3 +215,15 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
+## **Konsistenzregeln für `croms_surgeries`**
+
+| Regelname                         | Beschreibung                            | Validierungslogik                                              |
+| --------------------------------- | --------------------------------------- | -------------------------------------------------------------- |
+| `amputation_needs_region`         | Wenn eine Amputation durchgeführt wurde, muss auch eine anatomische Region dokumentiert sein     | → `amputation` ≠ "keine" → `anatomic_region` muss gesetzt sein |
+| `revision_needs_margin`           | Wenn `first_revision_details` oder `second_revision_details` gesetzt ist → `resected_tumor_margin` muss vorhanden sein | Revisionen setzen meist unzureichenden Tumorrand voraus        |
+| `surgery_side_needs_region`       | Wenn `surgery_side` gesetzt ist, sollte auch `anatomic_region` angegeben werden       | → `surgery_side` ≠ leer → `anatomic_region` ≠ leer             |
+| `reconstruction_needs_indication` | Wenn `reconstruction` gesetzt ist → `indication` sollte nicht leer sein       | → `reconstruction` ≠ leer → `indication` ≠ leer                |
+| `disciplines_needs_resection`     | Wenn mehrere Disziplinen beteiligt waren, sollte das Resection-Feld ausgefüllt sein    | → `participated_disciplines.length ≥ 2` → `resection` ≠ leer   |
+
+---
+
