@@ -57,6 +57,7 @@
   "noModules": "Keine Module vorhanden.",
   "completeness": "Vollständigkeit",
   "correctness": "Korrektheit",
+  "consistency": "Konsistenz",
   "of": "von",
   "fields": "Feldern",
   "loading": "Lade Patientendaten...",

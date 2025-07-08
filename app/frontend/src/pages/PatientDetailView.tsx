@@ -32,24 +32,28 @@ const PatientDetailView: React.FC = () => {
 
   const fetchMetrics = async () => {
     try {
-      const [moduleRes, correctnessRes, patientRes] = await Promise.all([
+      const [moduleRes, correctnessRes, consistencyRes, patientRes] = await Promise.all([
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/module-metrics`),
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/correctness-patient`),
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/consistency-patient`),
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}`)
       ]);
 
-      const [moduleData, correctnessData, patientData] = await Promise.all([
+      const [moduleData, correctnessData, consistencyData, patientData] = await Promise.all([
         moduleRes.json(),
         correctnessRes.json(),
+        consistencyRes.json(),
         patientRes.json()
       ]);
 
       // Kombiniere correctness in die moduleData-Objekte
       const enrichedModules = moduleData.map((mod: any) => {
         const correctnessEntry = correctnessData.find((c: any) => c.name === mod.name);
+        const consistencyEntry = consistencyData.find((c: any) => c.name === mod.name);
         return {
           ...mod,
-          correctness: correctnessEntry?.correctness ?? null
+          correctness: correctnessEntry?.correctness ?? null,
+          consistency: consistencyEntry?.consistency ?? null,
         };
       });
 
@@ -94,6 +98,12 @@ const PatientDetailView: React.FC = () => {
               {mod.correctness !== undefined && (
                 <p className={`highlight ${getQualityClass(mod.correctness)}`}>
                   {t('patientDetail.correctness')}: {mod.correctness}%
+                </p>
+              )}
+              {/* Konsistenz */}
+              {mod.consistency !== undefined && (
+                <p className={`highlight ${getQualityClass(mod.consistency)}`}>
+                  {t('patientDetail.consistency')}: {mod.consistency}%
                 </p>
               )}
               <p>
