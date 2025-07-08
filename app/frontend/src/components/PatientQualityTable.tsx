@@ -36,19 +36,22 @@ const PatientQualityTable: React.FC = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const [baseRes, overviewRes, correctnessRes] = await Promise.all([
+        const [baseRes, overviewRes, correctnessRes, consistencyRes ] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/correctness-overview`)
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/correctness-overview`),
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`)
         ]);
 
         const baseData = await baseRes.json();
         const overviewData = await overviewRes.json();
         const correctnessData = await correctnessRes.json();
+        const consistencyData = await consistencyRes.json();
 
         const combined: PatientQuality[] = baseData.map((p: any) => {
           const correctness = correctnessData.find((q: any) => q.patient_id === p.id);
           const quality = overviewData.find((q: any) => q.patient_id === p.id);
+          const consistency = consistencyData.find((q: any) => q.patient_id === p.id);
           return {
             id: p.id,
             patient_id: p.patient_id,
@@ -58,8 +61,8 @@ const PatientQualityTable: React.FC = () => {
             correctness: correctness?.average_correctness !== undefined
             ? Math.round(correctness.average_correctness)
             : undefined,
-            consistency: quality?.consistency !== undefined
-            ? Math.round(quality.consistency * 100)
+            consistency: consistency?.average_consistency !== undefined
+            ? Math.round(consistency.average_consistency)
             : undefined,
             timeliness: quality?.timeliness !== undefined
             ? Math.round(quality.timeliness * 100)
