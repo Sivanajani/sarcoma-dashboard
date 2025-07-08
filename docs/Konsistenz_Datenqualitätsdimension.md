@@ -2,7 +2,7 @@
 
 Konsistenz beschreibt den Grad an logischer Widerspruchsfreiheit innerhalb eines Datensatzes oder zwischen mehreren Einträgen. PROM-Daten gelten als konsistent, wenn sie inhaltlich zusammenpassen – sowohl untereinander als auch in Bezug auf andere Patientenmerkmale (z.B. Alter, Geschlecht, Erkrankungsverlauf). Inkonsistenzen entstehen häufig durch Mehrfacheinträge, Missverständnisse bei der Befragung oder technische Übertragungsfehler. Laut Batini et al. (2009) ist Konsistenz besonders relevant in Systemen mit mehreren Datenquellen oder bei manueller Dateneingabe.
 
-## Konsistenzlogik für Diagnosis
+## Konsistenzlogik für `croms_diagnoses`
 
 ## Konsistenzregel 1:
 
@@ -242,3 +242,12 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 ---
 
 ## **Konsistenzregeln für `croms_radiology_exams`**
+
+| Regelname                   | Beschreibung                                                                                              | Validierungslogik                                                          |
+| --------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `size_logic_consistent`     | Wenn grösste Läsion angegeben ist, sollten mittlere/kleinste ebenfalls angegeben sein (oder leer sein) | Wenn `largest_lesion_size_in_mm` gesetzt → `medium` **und** `smallest` ≠ NULL |
+| `recist_requires_sizes`     | Wenn RECIST-Bewertung angegeben ist, sollten auch Läsionsgrössen vorhanden sein                           | `recist_response` ≠ leer → alle drei lesion sizes gesetzt                 |
+| `imaging_timing_consistent` | Wenn `imaging_timing` gesetzt ist, sollte auch ein `exam_date` vorhanden sein                             | `imaging_timing` ≠ leer → `exam_date` ≠ NULL                              |
+| `metastasis_vs_location`    | Wenn Metastasen vorhanden sind, sollte ein Ort angegeben sein                                             | `metastasis_presence = true` → `location_of_lesion` ≠ NULL                |
+| `choi_requires_type`        | Wenn `choi_response` angegeben ist, sollte `imaging_type` nicht leer sein                                 | `choi_response` ≠ leer → `imaging_type` ≠ NULL                            |
+| `irecist_requires_recist`   | Wenn `irecist_response` gesetzt ist, sollte auch ein `recist_response` vorhanden sein                     | `irecist_response` ≠ leer → `recist_response` ≠ NULL                      |
