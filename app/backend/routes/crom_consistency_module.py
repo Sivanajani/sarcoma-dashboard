@@ -178,3 +178,36 @@ def get_radiology_exam_consistency(patient_id: int):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.get("/patients/{patient_id}/consistency-patient")
+def get_consistency_patient(patient_id: int):
+    module_functions = [
+        ("diagnosis", "SELECT * FROM croms_diagnoses WHERE patient_id = :pid LIMIT 1", check_consistency_diagnosis),
+        ("sarcoma_board", "SELECT * FROM croms_sarcoma_boards WHERE patient_id = :pid LIMIT 1", check_consistency_sarcoma_board),
+        ("hyperthermia_therapy", "SELECT * FROM croms_hyperthermia_therapies WHERE patient_id = :pid LIMIT 1", check_consistency_hyperthermia),
+        ("systemic_therapy", "SELECT * FROM croms_systemic_therapies WHERE patient_id = :pid LIMIT 1", check_consistency_systemic_therapy),
+        ("radiology_therapy", "SELECT * FROM croms_radiology_therapies WHERE patient_id = :pid LIMIT 1", check_consistency_radiology_therapy),
+        ("surgery", "SELECT * FROM croms_surgeries WHERE patient_id = :pid LIMIT 1", check_consistency_surgery),
+        ("pathology", "SELECT * FROM croms_pathologies WHERE patient_id = :pid LIMIT 1", check_consistency_pathology),
+        ("radiology_exam", "SELECT * FROM croms_radiology_exams WHERE patient_id = :pid LIMIT 1", check_consistency_radiology_exam),
+    ]
+
+    overview = []
+
+    try:
+        with engine_pg.connect() as conn:
+
+            for name, query, validator in module_functions:
+                row = conn.execute(text(query), {"pid": patient_id}).mappings().fetchone()
+                if row:
+                    result = compute_consistency_result(dict(row), validator, name)
+                    overview.append({
+                        "name": name,
+                        "consistency": result.get("percent", 0)
+                    })
+
+        return overview
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
