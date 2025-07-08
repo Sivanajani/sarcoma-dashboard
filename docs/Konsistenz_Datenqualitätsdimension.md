@@ -169,7 +169,7 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
-## Konsistenzlogik für SarcomaBoard
+## Konsistenzlogik für `croms_sarcoma_boards`
 
 | Regel                                                                                                         | Beschreibung                      | Validierungsidee                                     |
 | ------------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------------- |
@@ -179,7 +179,7 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
-## Konsistenzlogik für Hyperthermia
+## Konsistenzlogik für `croms_hyperthermia_therapies`
 
 |Regel                                                                |	Beschreibung                                                                                             |
 |---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
@@ -191,7 +191,7 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
-## Korrektheitslogik für Systemic Therapy
+## Korrektheitslogik für `croms_systemic_therapies`
 
 | **Regel** | **Beschreibung**                                                                              | **Validierungslogik**                                                                   | 
 | --------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | 
@@ -227,3 +227,18 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
+## **Konsistenzregeln für `croms_pathologies`**
+
+| **Regelname**                 | **Beschreibung**                                                                                    | **Validierungslogik**                                                          |
+| ----------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `final_after_first_report`    | Finalbericht darf nur vorhanden sein, wenn ein Erstbericht vorliegt                             | `final_report_date` → `first_report_date` muss vorhanden und ≤ `final_report_date` |
+| `ihc_result_needs_performed`  | Wenn `ihc_result` vorliegt, muss `ihc_performed_status` gesetzt und nicht „nicht durchgeführt“ sein | `ihc_result` ≠ leer → `ihc_performed_status` ∈ {"durchgeführt", "ausstehend"}  |
+| `fish_result_needs_performed` | Analog zu IHC                                                                                       | `fish_result` ≠ leer → `fish_performed_status` = "durchgeführt"                |
+| `rna_result_needs_performed`  | Analog zu IHC                                                                                       | `rna_result` ≠ leer → `rna_performed_status` ∈ {"durchgeführt", "ausstehend"}  |
+| `dna_result_needs_performed`  | Analog zu IHC                                                                                       | `dna_result` ≠ leer → `dna_performed_status` ∈ {"durchgeführt", "ausstehend"}  |
+| `distance_needs_barrier`      | Wenn Abstand zum Rand angegeben ist (> 0), sollte auch eine Barriere benannt sein              | `closest_distance_to_margin_mm` > 0 → `biological_barrier_to_closest_margin` ≠ leer |
+| `grading_vs_necrosis`         | Wenn Grading „high grade“ ist, sollte auch Nekrose-Wert angegeben sein                              | `diagnostic_grading` = "high grade" → `extent_of_necrosis` ≠ leer              |
+
+---
+
+## **Konsistenzregeln für `croms_radiology_exams`**
