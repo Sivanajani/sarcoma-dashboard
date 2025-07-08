@@ -1,14 +1,4 @@
-import re
-
-def normalize(value):
-    if value is None:
-        return ""
-    return re.sub(r"\s+", " ", str(value).strip().lower()
-                  .replace("_", " ")
-                  .replace("-", " ")
-                  .replace(":", " ")
-                  .replace("/", " ")
-                  .replace(",", " "))
+from utils.croms_consistency.crom_consistency_rules import normalize
 
 def check_consistency_hyperthermia(entry):
     indication = normalize(entry.get("indication"))

@@ -1,4 +1,4 @@
-import re
+from utils.croms_consistency.crom_consistency_rules import normalize
 
 DECEASED_STATUSES = {
     "verstorben", "tod", "dead", "verstorben an erkrankung",
@@ -15,17 +15,6 @@ VALID_DEATH_REASONS = {
 IGNORED_DEATH_REASONS = {
     "unbekannt", "nicht dokumentiert", "unknown", "not documented", "", "unfall", "accident"
 }
-
-
-def normalize(value):
-    if value is None:
-        return ""
-    return re.sub(r"\s+", " ", str(value).strip().lower()
-                  .replace("_", " ")
-                  .replace("-", " ")
-                  .replace(":", " ")
-                  .replace("/", " ")
-                  .replace(",", " "))
 
 
 def check_consistency_diagnosis(entry):

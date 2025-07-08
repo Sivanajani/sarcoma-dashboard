@@ -1,12 +1,6 @@
-import re
+from utils.croms_consistency.crom_consistency_rules import normalize
 
 JA_VALUES = {"ja", "yes", "oui", "sí"}
-
-
-def normalize(val):
-    if val is None:
-        return ""
-    return re.sub(r"\s+", " ", str(val).strip().lower())
 
 
 def check_consistency_sarcoma_board(entry):
