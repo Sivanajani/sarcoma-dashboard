@@ -203,4 +203,15 @@ Wenn ein Patient als `verstorben` markiert ist, aber kein `death_reason` eingetr
 
 ---
 
-## Korrektheitslogik für RadiologyTherapy
+## **Konsistenzregeln für `croms_radiology_therapies`**
+
+| **Regelname**                   | **Beschreibung**                                                    | **Validierungslogik**                                   |
+| ------------------------------- | --------------------------------------------------------------------| ------------------------------------------------------- |
+| `start_end_consistency`         | Wenn `therapy_start_date` oder `therapy_end_date` gesetzt sind, dann müssen **beide** vorhanden sein | → `(start AND end)` oder `(NOT start AND NOT end)` |
+| `dose_fraction_consistency`     | Wenn `total_dose_in_gy` gesetzt ist, muss auch `given_fractions` gesetzt sein – und umgekehrt | → `(dose AND fractions)` oder `(NOT dose AND NOT fractions)` |
+| `volume_consistency`            | Wenn `ptv_volume_in_cm3` gesetzt ist, sollte auch `gtv_volume_in_cm3` gesetzt sein (oder beide leer)  | → `(ptv AND gtv)` oder `(NOT ptv AND NOT gtv)`               |
+| `hyperthermia_needs_indication` | Wenn `hyperthermia_status` gesetzt ist, muss `indication` gesetzt sein (Kontextpflicht)   | → `if hyperthermia → indication OR comments`                 |
+| `first_before_start`            | Wenn `therapy_start_date` und `first_contact_date` vorhanden sind, dann muss `first_contact_date` ≤ `therapy_start_date` sein | → `first_contact_date <= therapy_start_date`                 |
+
+---
+
