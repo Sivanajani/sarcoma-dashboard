@@ -68,3 +68,4 @@ def calculate_diagnosis_actuality(entry: Dict[str, Any]) -> Dict[str, Any]:
     result["actuality_score"] = 100 if result["is_recent"] else 0
 
     return result
+

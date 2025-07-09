@@ -25,5 +25,25 @@ Aktualität beschreibt, wie gut die vorliegenden Daten den gegenwärtigen Zustan
 ---
 
 
+## Aktualitätslogik für Hyperthermia Therapies
 
+| **Feld**                                            | **Beschreibung**                                            | **Bewertungsregeln**                                                                             |
+| --------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `updated_at`                                        | Zeitpunkt der letzten Bearbeitung des Hyperthermie-Eintrags | • Modul gilt als **aktuell**, wenn `updated_at` **nicht älter als 180 Tage** ist.<br>• Bei fehlendem oder ungültigem Wert → Modul nicht aktuell. |
+| `start_date`, `end_date`                            | Zeitraum der Hyperthermiebehandlung                         | • Wird **nicht direkt** für die Aktualität gewertet, aber relevant für **Konsistenz- oder Korrektheitsprüfungen** (z. B. Chronologie, Zukunft).  |
+| `therapy_sessions_count`                            | Anzahl geplanter oder durchgeführter Sitzungen              | • Wird **nicht direkt** für die Aktualität verwendet, kann jedoch als Referenz für Verlaufskontrolle dienen. |
+| `board_accepted_indication`                         | Entscheidung des Tumorboards zur Indikation                 | • **Kein direkter Einfluss auf die Aktualität**, eher für medizinische Bewertung oder Logik von Entscheidungen.  |
+| `comment`, `schedule`, `indication`, `therapy_type` | Dokumentationsfelder zur Therapieplanung                    | • Reine **Inhaltsfelder** ohne Zeitbezug – **nicht relevant** für Aktualitätsbewertung.          |
+
+---
+
+## **Aktualitätslogik für SystemicTherapy**
+
+| **Feld**           | **Beschreibung**                                  | **Bewertungsregeln**                                                                                                                        |
+| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `updated_at`       | Zeitpunkt der letzten Änderung des Eintrags       | • Hauptkriterium für Aktualität.<br>• Modul gilt als *aktuell*, wenn `updated_at` **nicht älter als 180 Tage** ist.                         |
+| —                  | —                                                 | • Falls kein `updated_at` oder ungültig → Modul gilt als nicht aktuell.                                                                     |
+| —                  | —                                                 | • Wenn vorhanden: `updated_at` sollte ≥ `cycle_end_date` sein, falls `cycle_end_date` existiert.                                            |
+
+---
 
