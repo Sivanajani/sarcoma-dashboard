@@ -83,3 +83,11 @@ Ja, dein Vorschlag zur **Aktualitätslogik für das Modul „Pathology“** ist 
 |                     |                           | • Wenn `final_report_date` in der Zukunft liegt, zählt nur die Frische von `updated_at`                                                       |
 
 ---
+
+## **Aktualitätslogik für RadiologyExam**
+
+| Feld         | Beschreibung                          | Bewertungsregeln                                                                                                                        |
+| ------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `exam_date`  | Datum der radiologischen Untersuchung | • Wenn `exam_date` ≤ heute: Untersuchung abgeschlossen → sollte **upgedatet** worden sein.<br>• `updated_at` muss ≥ `exam_date` sein.   |
+| `updated_at` | Letzte Aktualisierung                 | • Muss vorhanden, gültig, ≤ heute<br>• Sollte **nicht älter als 365 Tage** sein.                                                        |
+| Kombination  | Beide zusammen                        | • Wenn `exam_date` ≤ heute **und** `updated_at` ≥ `exam_date` → ✅ 100 %<br>• Wenn `updated_at` < `exam_date` → ⚠️ 0 %, da Untersuchung geplant, aber veraltet.<br>• Wenn `updated_at` alt, obwohl `exam_date` in Zukunft → ⚠️ Hinweis. |
