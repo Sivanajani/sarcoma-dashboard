@@ -3,25 +3,36 @@ from typing import Dict, Any
 
 def calculate_systemic_therapy_actuality(entry: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Bewertet die Aktualität des SystemicTherapy-Moduls anhand von `updated_at`.
-    - Modul gilt als aktuell, wenn `updated_at` innerhalb der letzten 360 Tage liegt.
-    - Wenn vorhanden: `updated_at` sollte ≥ `cycle_end_date` sein.
+    Bewertet die Aktualität des SystemicTherapy-Moduls.
+    Regeln:
+    - Wenn `discontinuation_reason` vorhanden → Modul gilt als final und aktuell.
+    - Sonst: `updated_at` muss vorhanden und ≤ 365 Tage alt sein.
     """
 
     result = {
         "updated_at": None,
-        "cycle_end_date": None,
+        "discontinuation_reason": entry.get("discontinuation_reason"),
         "is_valid": False,
         "is_recent": False,
         "days_since_update": None,
-        "actuality_score": 0
+        "actuality_score": 0,
+        "reason": ""
     }
 
-    updated_raw = entry.get("updated_at")
-    cycle_end_raw = entry.get("cycle_end_date")
+    today = datetime.today().date()
 
-    # Kein updated_at → nicht aktuell
+    # Fall 1: Therapie wurde beendet → automatisch aktuell
+    if entry.get("discontinuation_reason"):
+        result["is_valid"] = True
+        result["is_recent"] = True
+        result["actuality_score"] = 100
+        result["reason"] = "Therapy discontinued – no further update expected"
+        return result
+
+    # Fall 2: Normale Prüfung über updated_at
+    updated_raw = entry.get("updated_at")
     if not updated_raw:
+        result["reason"] = "Missing updated_at"
         return result
 
     try:
@@ -32,37 +43,21 @@ def calculate_systemic_therapy_actuality(entry: Dict[str, Any]) -> Dict[str, Any
         elif isinstance(updated_raw, date):
             updated_at = updated_raw
         else:
-            return result
+            updated_at = None
     except ValueError:
+        updated_at = None
+
+    if not updated_at or updated_at > today:
+        result["reason"] = "Invalid or future updated_at"
         return result
 
-    # Optional: cycle_end_date prüfen
-    cycle_end_date = None
-    if cycle_end_raw:
-        try:
-            if isinstance(cycle_end_raw, str):
-                cycle_end_date = datetime.strptime(cycle_end_raw, "%Y-%m-%d").date()
-            elif isinstance(cycle_end_raw, datetime):
-                cycle_end_date = cycle_end_raw.date()
-            elif isinstance(cycle_end_raw, date):
-                cycle_end_date = cycle_end_raw
-        except ValueError:
-            pass
-
-    today = datetime.today().date()
-
-    if updated_at > today:
-        return result  # Zukunft = ungültig
-
-    if cycle_end_date and updated_at < cycle_end_date:
-        return result  # Inkonsistenz → nicht aktuell
-
-    days_since = (today - updated_at).days
+    days = (today - updated_at).days
     result["updated_at"] = updated_at.isoformat()
-    result["cycle_end_date"] = cycle_end_date.isoformat() if cycle_end_date else None
-    result["days_since_update"] = days_since
+    result["days_since_update"] = days
     result["is_valid"] = True
-    result["is_recent"] = days_since <= 360
+    
+    result["is_recent"] = days <= 365
     result["actuality_score"] = 100 if result["is_recent"] else 0
+    result["reason"] = "Based on updated_at"
 
     return result

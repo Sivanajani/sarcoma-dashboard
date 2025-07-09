@@ -40,11 +40,12 @@ Aktualität beschreibt, wie gut die vorliegenden Daten den gegenwärtigen Zustan
 
 ## **Aktualitätslogik für SystemicTherapy**
 
-| **Feld**           | **Beschreibung**                                  | **Bewertungsregeln**                                                                                                                        |
-| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `updated_at`       | Zeitpunkt der letzten Änderung des Eintrags       | • Hauptkriterium für Aktualität.<br>• Modul gilt als *aktuell*, wenn `updated_at` **nicht älter als 180 Tage** ist.                         |
-| —                  | —                                                 | • Falls kein `updated_at` oder ungültig → Modul gilt als nicht aktuell.                                                                     |
-| —                  | —                                                 | • Wenn vorhanden: `updated_at` sollte ≥ `cycle_end_date` sein, falls `cycle_end_date` existiert.                                            |
+| **Feld**                 | **Beschreibung**                                                    | **Bewertungsregel**                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------|
+| `updated_at`             | Zeitpunkt der letzten Bearbeitung                                   | Muss vorhanden und nicht älter als **365 Tage** sein → Modul gilt als *aktuell*.                                    |
+| `discontinuation_reason` | Grund für Therapieabbruch (optional, aber semantisch finalisierend) | Wenn ausgefüllt → Modul wird als final behandelt → gilt automatisch als *aktuell*, unabhängig vom `updated_at`-Wert.|
+
+
 
 ---
 

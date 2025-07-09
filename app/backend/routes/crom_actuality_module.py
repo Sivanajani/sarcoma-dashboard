@@ -94,7 +94,7 @@ def get_systemicTherapy_actuality(patient_id: int):
             if not row:
                 raise HTTPException(status_code=404, detail="Systemic Therapy-Modul nicht gefunden")
 
-            result = calculate_hyperthermia_actuality(dict(row))
+            result = calculate_systemic_therapy_actuality(dict(row))
 
             return {
                 "module": "systemicTherapy",
