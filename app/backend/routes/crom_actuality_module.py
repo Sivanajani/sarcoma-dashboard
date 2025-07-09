@@ -13,7 +13,6 @@ from utils.crom_actuality.crom_radiologyExam_actuality import calculate_radiolog
 
 router = APIRouter(prefix="/api")
 
-
 @router.get("/patients/{patient_id}/actuality/diagnosis")
 def get_diagnosis_actuality(patient_id: int):
     try:
@@ -200,6 +199,44 @@ def get_radiologyExam_actuality(patient_id: int):
                 "actuality_score": result.get("actuality_score", 0),
                 "details": result
             }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/{patient_id}/actuality-patient")
+def get_actuality_patient(patient_id: int):
+    module_functions = [
+        ("diagnosis", "SELECT * FROM croms_diagnoses WHERE patient_id = :pid LIMIT 1", calculate_diagnosis_actuality),
+        ("sarcoma_board", "SELECT * FROM croms_sarcoma_boards WHERE patient_id = :pid LIMIT 1", calculate_sarcoma_board_actuality),
+        ("hyperthermia_therapy", "SELECT * FROM croms_hyperthermia_therapies WHERE patient_id = :pid LIMIT 1", calculate_hyperthermia_actuality),
+        ("systemic_therapy", "SELECT * FROM croms_systemic_therapies WHERE patient_id = :pid LIMIT 1", calculate_systemic_therapy_actuality),
+        ("radiology_therapy", "SELECT * FROM croms_radiology_therapies WHERE patient_id = :pid LIMIT 1", calculate_radiology_therapy_actuality),
+        ("surgery", "SELECT * FROM croms_surgeries WHERE patient_id = :pid LIMIT 1", calculate_surgery_actuality),
+        ("pathology", "SELECT * FROM croms_pathologies WHERE patient_id = :pid LIMIT 1", calculate_pathology_actuality),
+        ("radiology_exam", "SELECT * FROM croms_radiology_exams WHERE patient_id = :pid LIMIT 1", calculate_radiology_exam_actuality),
+    ]
+
+    overview = []
+
+    try:
+        with engine_pg.connect() as conn:
+            for name, query, validator in module_functions:
+                row = conn.execute(text(query), {"pid": patient_id}).mappings().fetchone()
+                if row:
+                    result = validator(dict(row))  
+                    overview.append({
+                        "name": name,
+                        "actuality": result.get("actuality_score", 0)
+                    })
+                else:
+                    overview.append({
+                        "name": name,
+                        "actuality": None,
+                        "reason": "no data"
+                    })
+
+        return {"patient_id": patient_id, "modules": overview}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
