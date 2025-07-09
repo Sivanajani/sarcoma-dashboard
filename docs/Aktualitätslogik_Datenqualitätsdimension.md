@@ -46,6 +46,15 @@ Aktualität beschreibt, wie gut die vorliegenden Daten den gegenwärtigen Zustan
 | `discontinuation_reason` | Grund für Therapieabbruch (optional, aber semantisch finalisierend) | Wenn ausgefüllt → Modul wird als final behandelt → gilt automatisch als *aktuell*, unabhängig vom `updated_at`-Wert.|
 
 
+---
+
+## **Aktualitätslogik für RadiologyTherapy**
+
+| **Feld**           | **Beschreibung**                  | **Bewertungsregel**                                                                                                          |
+| ------------------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `updated_at`       | Zeitpunkt der letzten Bearbeitung | Muss vorhanden und darf nicht älter als **365 Tage** sein → Bedingung für *Aktualität*, **wenn Therapie noch läuft**.        |
+| `therapy_end_date` | Ende der Radiotherapie            | Wenn vorhanden und **Datum liegt in der Vergangenheit oder ist heute** → Therapie ist abgeschlossen → *nicht mehr aktuell*.  |
+| —                  | —                                 | Ein Modul mit abgeschlossener Therapie muss **nicht** mehr als „aktuell“ gelten, da keine laufende Betreuung mehr nötig ist. |
 
 ---
 
