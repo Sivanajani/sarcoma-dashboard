@@ -13,6 +13,8 @@ from routes import crom_correctness_module
 from routes.crom_avg_correctness import router as crom_correctness_avg_router
 from routes.crom_consistency_module import router as crom_consistency_router
 from routes.crom_avg_consistency import router as crom_consistency_avg_router
+from routes.crom_actuality_module import router as crom_actuality_module
+
 
 
 app = FastAPI()
@@ -44,6 +46,9 @@ app.include_router(crom_consistency_router)
 
 # Durchschnittliche Konsistenz pro Modul
 app.include_router(crom_consistency_avg_router)
+
+# Aktualität
+app.include_router(crom_actuality_module)
 
 # Tabellen anzeigen
 app.include_router(crom_tables_router)
