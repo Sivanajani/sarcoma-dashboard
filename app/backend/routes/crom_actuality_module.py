@@ -8,6 +8,7 @@ from utils.crom_actuality.crom_hyperthermia_actuality import calculate_hyperther
 from utils.crom_actuality.crom_systemicTherapy_actuality import calculate_systemic_therapy_actuality
 from utils.crom_actuality.crom_radiologyTherapy_actuality import calculate_radiology_therapy_actuality
 from utils.crom_actuality.crom_surgery_actuality import calculate_surgery_actuality
+from utils.crom_actuality.crom_pathology_actuality import calculate_pathology_actuality
 
 router = APIRouter(prefix="/api")
 
@@ -148,6 +149,30 @@ def get_surgery_actuality(patient_id: int):
 
             return {
                 "module": "surgery",
+                "actuality_score": result.get("actuality_score", 0),
+                "details": result
+            }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.get("/patients/{patient_id}/actuality/pathology")
+def get_pathology_actuality(patient_id: int):
+    try:
+        with engine_pg.connect() as conn:
+            row = conn.execute(
+                text("SELECT * FROM croms_pathologies WHERE patient_id = :pid LIMIT 1"),
+                {"pid": patient_id}
+            ).mappings().fetchone()
+
+            if not row:
+                raise HTTPException(status_code=404, detail="Pathology-Modul nicht gefunden")
+
+            result = calculate_pathology_actuality(dict(row))
+
+            return {
+                "module": "pathology",
                 "actuality_score": result.get("actuality_score", 0),
                 "details": result
             }

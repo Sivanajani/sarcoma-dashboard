@@ -67,3 +67,19 @@ Aktualität beschreibt, wie gut die vorliegenden Daten den gegenwärtigen Zustan
 
 ---
 
+Ja, dein Vorschlag zur **Aktualitätslogik für das Modul „Pathology“** ist im Grundsatz richtig, aber ich helfe dir, ihn **klarer, präziser und konsistenter** zu formulieren. Wichtig ist dabei zu unterscheiden zwischen:
+
+* **laufender Pathologie-Bericht** → Relevanz der letzten Aktualisierung
+* **abgeschlossener Bericht (final\_report\_date in der Vergangenheit)** → keine weitere Änderung nötig → trotzdem ggf. aktuell
+
+---
+
+## **Aktualitätslogik für Pathology**
+
+| Feld                | Beschreibung              | Bewertungsregeln                                                                                                                              |
+| ------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `updated_at`        | Letzte Änderung im Modul  | • Pflichtfeld<br>• Muss ein gültiges Datum ≤ heute sein<br>• Gilt als *aktuell*, wenn ≤ 365 Tage alt                                          |
+| `final_report_date` | Datum des finalen Befunds | • Wenn vorhanden und `final_report_date` ≤ heute:<br> → Modul gilt als **abgeschlossen**<br> → `updated_at` sollte ≥ `final_report_date` sein |
+|                     |                           | • Wenn `final_report_date` in der Zukunft liegt, zählt nur die Frische von `updated_at`                                                       |
+
+---
