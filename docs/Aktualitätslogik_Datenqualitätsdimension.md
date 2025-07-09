@@ -9,8 +9,9 @@ Aktualität beschreibt, wie gut die vorliegenden Daten den gegenwärtigen Zustan
 | **Feld**            | **Beschreibung**                              | **Bewertungsregeln**                                                                                                                  |
 | ------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `last_contact_date` | Datum des letzten bekannten Patientenkontakts | • Wenn kein Datum vorhanden ist → Diagnosemodul gilt als **nicht aktuell**. <br> • Wenn das Datum **in der Zukunft liegt** → **nicht gültig** und **nicht aktuell**. <br> • Wenn das Datum **älter als 365 Tage** ist → **nicht aktuell**. <br> • Wenn das Datum **innerhalb der letzten 365 Tage** liegt → Modul ist **aktuell**. |
-| `last_status`       | Letzter bekannter klinischer Status           | Wird für die Aktualität **nicht direkt bewertet**, kann aber ergänzend zur Beurteilung des Verlaufs herangezogen werden.              |
-| `death_reason`      | Grund für Tod (nur relevant bei Verstorbenen) | Wird bei **verstorbenen Patient\:innen** ergänzend berücksichtigt, aber **nicht für die Aktualitätsbewertung** verwendet.             |
+| `last_status`       | Letzter bekannter klinischer Status           | Gültig, nicht in der Zukunft → ≤ 365 Tage → aktuell              |
+| `death_reason`      | Grund für Tod (nur relevant bei Verstorbenen) | Wenn ausgefüllt → Patient:in verstorben → Modul gilt als final, unabhängig von Aktualitätsdaten.             |
+
 
 ---
 

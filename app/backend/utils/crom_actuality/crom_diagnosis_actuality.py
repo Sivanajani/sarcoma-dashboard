@@ -3,69 +3,91 @@ from typing import Dict, Any
 
 def calculate_diagnosis_actuality(entry: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Bewertet die Aktualität des Diagnosis-Moduls anhand von `last_contact_date` und optional `updated_at`.
-    Gilt als aktuell, wenn einer der beiden Werte ≤ 365 Tage alt ist.
+    Bewertet die Aktualität des Diagnosis-Moduls.
+    Regeln:
+    - Wenn `death_reason` vorhanden → automatisch aktuell (final).
+    - Sonst: Modul ist aktuell, wenn `last_contact_date` ODER `updated_at` ≤ 365 Tage alt ist.
     """
 
     result = {
         "last_contact_date": None,
         "updated_at": None,
+        "death_reason": entry.get("death_reason"),
         "is_valid": False,
         "is_recent": False,
         "days_since_last_contact": None,
         "days_since_update": None,
-        "actuality_score": 0
+        "actuality_score": 0,
+        "reason": ""
     }
 
     today = datetime.today().date()
 
-    # Verarbeitung von last_contact_date
-    last_contact_value = entry.get("last_contact_date")
-    if last_contact_value:
-        try:
-            if isinstance(last_contact_value, str):
-                last_contact_date = datetime.strptime(last_contact_value, "%Y-%m-%d").date()
-            elif isinstance(last_contact_value, datetime):
-                last_contact_date = last_contact_value.date()
-            elif isinstance(last_contact_value, date):
-                last_contact_date = last_contact_value
-            else:
-                last_contact_date = None
-        except ValueError:
-            last_contact_date = None
+    # Wenn Todesursache angegeben → Modul final, keine Aktualitätsbewertung nötig
+    if entry.get("death_reason"):
+        result["is_valid"] = True
+        result["is_recent"] = True
+        result["actuality_score"] = 100
+        result["reason"] = "Patient deceased – no update required"
+        return result
 
-        if last_contact_date and last_contact_date <= today:
-            days = (today - last_contact_date).days
-            result["last_contact_date"] = last_contact_date.isoformat()
-            result["days_since_last_contact"] = days
-            if days <= 365:
+    # Verarbeitung last_contact_date
+    lcd_raw = entry.get("last_contact_date")
+    if lcd_raw:
+        try:
+            if isinstance(lcd_raw, str):
+                lcd = datetime.strptime(lcd_raw, "%Y-%m-%d").date()
+            elif isinstance(lcd_raw, datetime):
+                lcd = lcd_raw.date()
+            elif isinstance(lcd_raw, date):
+                lcd = lcd_raw
+            else:
+                lcd = None
+        except ValueError:
+            lcd = None
+
+        if lcd and lcd <= today:
+            days_lcd = (today - lcd).days
+            result["last_contact_date"] = lcd.isoformat()
+            result["days_since_last_contact"] = days_lcd
+            if days_lcd <= 365:
                 result["is_valid"] = True
                 result["is_recent"] = True
+                result["reason"] = "Based on last_contact_date"
 
-    # Verarbeitung von updated_at
-    updated_value = entry.get("updated_at")
-    if updated_value:
+    # Verarbeitung updated_at
+    updated_raw = entry.get("updated_at")
+    if updated_raw:
         try:
-            if isinstance(updated_value, str):
-                updated_at = datetime.fromisoformat(updated_value).date()
-            elif isinstance(updated_value, datetime):
-                updated_at = updated_value.date()
-            elif isinstance(updated_value, date):
-                updated_at = updated_value
+            if isinstance(updated_raw, str):
+                updated = datetime.fromisoformat(updated_raw).date()
+            elif isinstance(updated_raw, datetime):
+                updated = updated_raw.date()
+            elif isinstance(updated_raw, date):
+                updated = updated_raw
             else:
-                updated_at = None
+                updated = None
         except ValueError:
-            updated_at = None
+            updated = None
 
-        if updated_at and updated_at <= today:
-            days = (today - updated_at).days
-            result["updated_at"] = updated_at.isoformat()
-            result["days_since_update"] = days
-            if days <= 365:
+        if updated and updated <= today:
+            days_upd = (today - updated).days
+            result["updated_at"] = updated.isoformat()
+            result["days_since_update"] = days_upd
+            if days_upd <= 365:
                 result["is_valid"] = True
                 result["is_recent"] = True
+                result["reason"] = "Based on updated_at"
+
+    # Logischer Check: last_contact_date sollte nicht nach updated_at liegen
+    if result.get("last_contact_date") and result.get("updated_at"):
+        try:
+            lcd_date = datetime.fromisoformat(result["last_contact_date"]).date()
+            upd_date = datetime.fromisoformat(result["updated_at"]).date()
+            if lcd_date > upd_date:
+                result["reason"] += " (Warning: last_contact_date is after updated_at)"
+        except Exception:
+            pass
 
     result["actuality_score"] = 100 if result["is_recent"] else 0
-
     return result
-
