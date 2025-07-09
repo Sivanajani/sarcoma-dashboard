@@ -57,9 +57,9 @@ def get_avgactuality_overview():
                         continue
                     
                     try:
-                        result = (dict(row), validate_fn, module_name)
-                        if isinstance(result.get("percent"), (int, float)):
-                            scores.append(result["percent"])
+                        result = validate_fn(dict(row))
+                        if isinstance(result.get("actuality_score"), (int, float)):
+                            scores.append(result["actuality_score"])
                     except Exception as e:
                         continue
 
