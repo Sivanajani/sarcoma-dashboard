@@ -58,3 +58,12 @@ Aktualität beschreibt, wie gut die vorliegenden Daten den gegenwärtigen Zustan
 
 ---
 
+## **Aktualitätslogik für Surgery**
+
+| **Feld**       | **Beschreibung**                        | **Bewertungsregeln**                                                                                                                                      |
+| -------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `surgery_date` | Datum des chirurgischen Eingriffs       | • Wenn `surgery_date` vorhanden und ≤ heute → Operation gilt als abgeschlossen.<br>• Es ist keine laufende Behandlung, daher zählt Aktualität nur bedingt.|
+| `updated_at`   | Zeitpunkt der letzten Änderung am Modul | • Modul gilt als *aktuell*, wenn `updated_at` **nicht älter als 365 Tage** ist.<br>• Optional: Sollte ≥ `surgery_date` liegen, wenn vorhanden.            |
+
+---
+
