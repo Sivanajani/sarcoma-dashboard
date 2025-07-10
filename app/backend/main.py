@@ -15,6 +15,7 @@ from routes.crom_consistency_module import router as crom_consistency_router
 from routes.crom_avg_consistency import router as crom_consistency_avg_router
 from routes.crom_actuality_module import router as crom_actuality_module
 from routes.crom_avg_actuality_module import router as crom_actuality_avg_router
+from routes.crom_uniqueness_module import router as crom_uniqueness_router
 
 
 
@@ -53,6 +54,9 @@ app.include_router(crom_actuality_module)
 
 # Durchschnittliche Aktualität pro Modul
 app.include_router(crom_actuality_avg_router)
+
+# Uniqueness
+app.include_router(crom_uniqueness_router)
 
 # Tabellen anzeigen
 app.include_router(crom_tables_router)
