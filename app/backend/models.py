@@ -154,3 +154,43 @@ class CROMSarcomaBoard(Base):
     fast_track = Column(Boolean, nullable=True, default=False)
     created_at = Column(TIMESTAMP, nullable=False)
     updated_at = Column(TIMESTAMP, nullable=False)
+
+class CROMSystemicTherapy(Base):
+    __tablename__ = "croms_systemic_therapies"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    patient_id = Column(BigInteger, nullable=False)
+    reason = Column(String, nullable=True)
+    treatment_line = Column(Integer, nullable=True)
+    cycles_planned = Column(String, nullable=True)
+    bone_protocol = Column(String, nullable=True)
+    softtissue_protocol = Column(String, nullable=True)
+    institution_name = Column(String, nullable=False)
+    cycle_start_date = Column(Date, nullable=True)
+    cycle_end_date = Column(Date, nullable=True)
+    discontinuation_reason = Column(String, nullable=True)
+    was_rct_concomittant = Column(Boolean, nullable=False, default=False)
+    comments = Column(Text, nullable=True)
+    clinical_trial_inclusion = Column(String, nullable=True)
+    hyperthermia_status = Column(String, nullable=True)
+    created_at = Column(TIMESTAMP, nullable=False)
+    updated_at = Column(TIMESTAMP, nullable=False)
+
+
+class CROMHyperthermiaTherapy(Base):
+    __tablename__ = "croms_hyperthermia_therapies"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    indication = Column(String, nullable=True)
+    start_date = Column(Date, nullable=True)
+    end_date = Column(Date, nullable=True)
+    hyperthermia_type = Column(String, nullable=True)
+    therapy_sessions_count = Column(Integer, nullable=True)
+    schedule = Column(String, nullable=True)
+    board_accepted_indication = Column(Boolean, nullable=True)
+    comment = Column(Text, nullable=True)
+    therapy_type = Column(String, nullable=True)
+    therapy_id = Column(BigInteger, nullable=True)
+    patient_id = Column(BigInteger, nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False)
+    updated_at = Column(TIMESTAMP, nullable=False)
