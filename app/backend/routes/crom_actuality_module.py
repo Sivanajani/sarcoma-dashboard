@@ -236,7 +236,7 @@ def get_actuality_patient(patient_id: int):
                         "reason": "no data"
                     })
 
-        return {"patient_id": patient_id, "modules": overview}
+        return overview
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

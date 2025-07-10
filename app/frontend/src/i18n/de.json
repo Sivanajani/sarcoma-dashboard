@@ -43,7 +43,7 @@
     "completeness": "Vollst.",
     "correctness": "Korr.",
     "consistency": "Konsist.",
-    "timeliness": "Aktualität",
+    "actuality": "Aktualität",
     "uniqueness": "Eindeutigkeit",
     "plausibility": "Plausib."
   },
@@ -58,6 +58,7 @@
   "completeness": "Vollständigkeit",
   "correctness": "Korrektheit",
   "consistency": "Konsistenz",
+  "actuality": "Aktualität",
   "of": "von",
   "fields": "Feldern",
   "loading": "Lade Patientendaten...",

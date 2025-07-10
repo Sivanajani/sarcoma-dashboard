@@ -15,7 +15,7 @@ type PatientQuality = {
   completeness?: number;
   correctness?: number;
   consistency?: number;
-  timeliness?: number;
+  actuality?: number;
   uniqueness?: number;
   plausibility?: number;
   flag?: 'red' | 'yellow';
@@ -36,22 +36,25 @@ const PatientQualityTable: React.FC = () => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const [baseRes, overviewRes, correctnessRes, consistencyRes ] = await Promise.all([
+        const [baseRes, overviewRes, correctnessRes, consistencyRes, actualityRes ] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/correctness-overview`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`)
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`),
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/actuality-overview`)
         ]);
 
         const baseData = await baseRes.json();
         const overviewData = await overviewRes.json();
         const correctnessData = await correctnessRes.json();
         const consistencyData = await consistencyRes.json();
+        const actualityData = await actualityRes.json();
 
         const combined: PatientQuality[] = baseData.map((p: any) => {
           const correctness = correctnessData.find((q: any) => q.patient_id === p.id);
           const quality = overviewData.find((q: any) => q.patient_id === p.id);
           const consistency = consistencyData.find((q: any) => q.patient_id === p.id);
+          const actuality = actualityData.find((q: any) => q.patient_id === p.id);
           return {
             id: p.id,
             patient_id: p.patient_id,
@@ -64,8 +67,8 @@ const PatientQualityTable: React.FC = () => {
             consistency: consistency?.average_consistency !== undefined
             ? Math.round(consistency.average_consistency)
             : undefined,
-            timeliness: quality?.timeliness !== undefined
-            ? Math.round(quality.timeliness * 100)
+            actuality: actuality?.average_actuality !== undefined
+            ? Math.round(actuality.average_actuality)
             : undefined,
             uniqueness: quality?.uniqueness !== undefined
             ? Math.round(quality.uniqueness * 100)
@@ -143,7 +146,7 @@ const PatientQualityTable: React.FC = () => {
             <th>{t('patientTable.headers.completeness')}</th>
             <th>{t('patientTable.headers.correctness')}</th>
             <th>{t('patientTable.headers.consistency')}</th>
-            <th>{t('patientTable.headers.timeliness')}</th>
+            <th>{t('patientTable.headers.actuality')}</th>
             <th>{t('patientTable.headers.uniqueness')}</th>
             <th>{t('patientTable.headers.plausibility')}</th>
           </tr>
@@ -178,8 +181,8 @@ const PatientQualityTable: React.FC = () => {
               <td className={`value ${getColorClass(p.consistency)}`}>
                 {p.consistency !== undefined ? `${p.consistency}%` : '–'}
               </td>
-              <td className={`value ${getColorClass(p.timeliness)}`}>
-                {p.timeliness !== undefined ? `${p.timeliness}%` : '–'}
+              <td className={`value ${getColorClass(p.actuality)}`}>
+                {p.actuality !== undefined ? `${p.actuality}%` : '–'}
               </td>
               <td className={`value ${getColorClass(p.uniqueness)}`}>
                 {p.uniqueness !== undefined ? `${p.uniqueness}%` : '–'}

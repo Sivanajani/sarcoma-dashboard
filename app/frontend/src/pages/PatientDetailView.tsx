@@ -32,28 +32,32 @@ const PatientDetailView: React.FC = () => {
 
   const fetchMetrics = async () => {
     try {
-      const [moduleRes, correctnessRes, consistencyRes, patientRes] = await Promise.all([
+      const [moduleRes, correctnessRes, consistencyRes, actualityRes, patientRes] = await Promise.all([
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/module-metrics`),
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/correctness-patient`),
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/consistency-patient`),
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}/actuality-patient`),
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}`)
       ]);
 
-      const [moduleData, correctnessData, consistencyData, patientData] = await Promise.all([
+      const [moduleData, correctnessData, consistencyData, actualityData, patientData] = await Promise.all([
         moduleRes.json(),
         correctnessRes.json(),
         consistencyRes.json(),
-        patientRes.json()
+        actualityRes.json(),
+        patientRes.json(),
       ]);
 
       // Kombiniere correctness in die moduleData-Objekte
       const enrichedModules = moduleData.map((mod: any) => {
         const correctnessEntry = correctnessData.find((c: any) => c.name === mod.name);
         const consistencyEntry = consistencyData.find((c: any) => c.name === mod.name);
+        const actualityEntry = actualityData.find((c: any) => c.name === mod.name);
         return {
           ...mod,
           correctness: correctnessEntry?.correctness ?? null,
           consistency: consistencyEntry?.consistency ?? null,
+          actuality: actualityEntry?.actuality ?? null,
         };
       });
 
@@ -104,6 +108,12 @@ const PatientDetailView: React.FC = () => {
               {mod.consistency !== undefined && (
                 <p className={`highlight ${getQualityClass(mod.consistency)}`}>
                   {t('patientDetail.consistency')}: {mod.consistency}%
+                </p>
+              )}
+              {/* Aktualität */}
+              {mod.actuality !== undefined && (
+                <p className={`highlight ${getQualityClass(mod.actuality)}`}>
+                  {t('patientDetail.actuality')}: {mod.actuality}%
                 </p>
               )}
               <p>
