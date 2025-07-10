@@ -63,7 +63,12 @@
   "fields": "Feldern",
   "loading": "Lade Patientendaten...",
   "error": "Fehler beim Laden der Patientendaten.",
-  "patientLabel": "Patient: {{pid}}"
+  "patientLabel": "Patient: {{pid}}",
+  "uniquenessTitle": "Eindeutigkeit",
+  "noDuplicates": "Keine Duplikate vorhanden.",
+  "duplicatesFound": "Duplikate in den folgenden Modulen gefunden",
+  "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden.",
+  "noDuplicates": "Keine Duplikate in diesem Modul."
 }
 
 }
