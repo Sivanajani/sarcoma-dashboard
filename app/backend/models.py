@@ -23,7 +23,6 @@ class CROMDiagnosis(Base):
     created_at = Column(TIMESTAMP, nullable=False)
     updated_at = Column(TIMESTAMP, nullable=False)
 
-
 class CROMSurgery(Base):
     __tablename__ = "croms_surgeries"
 
@@ -74,5 +73,26 @@ class CROMPathology(Base):
     rna_result = Column(String, nullable=True)
     dna_result = Column(String, nullable=True)
     patient_id = Column(BigInteger, nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False)
+    updated_at = Column(TIMESTAMP, nullable=False)
+
+class CROMRadiologyExam(Base):
+    __tablename__ = "croms_radiology_exams"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    patient_id = Column(BigInteger, nullable=False)
+    exam_date = Column(Date, nullable=False)
+    exam_type = Column(String, nullable=True)
+    imaging_timing = Column(String, nullable=True)
+    imaging_type = Column(String, nullable=False)
+    largest_lesion_size_in_mm = Column(Integer, nullable=True)
+    medium_lesion_size_in_mm = Column(Integer, nullable=True)
+    smallest_lesion_size_in_mm = Column(Integer, nullable=True)
+    location_of_lesion = Column(String, nullable=True)
+    recist_response = Column(String, nullable=True)
+    choi_response = Column(String, nullable=True)
+    irecist_response = Column(String, nullable=True)
+    pet_response = Column(String, nullable=True)
+    metastasis_presence = Column(Boolean, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False)
     updated_at = Column(TIMESTAMP, nullable=False)

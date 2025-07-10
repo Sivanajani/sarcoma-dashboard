@@ -4,6 +4,7 @@ from db.session import get_db
 from utils.crom_uniqueness.crom_diagnoses_uniqueness import calculate_diagnosis_uniqueness, calculate_diagnosis_uniqueness_per_patient
 from utils.crom_uniqueness.crom_surgeries_uniqueness import calculate_surgery_uniqueness, calculate_surgery_uniqueness_per_patient
 from utils.crom_uniqueness.crom_pathologies_uniqueness import calculate_pathology_uniqueness, calculate_pathology_uniqueness_per_patient
+from utils.crom_uniqueness.crom_radiologyExams_uniqueness import calculate_radiology_exam_uniqueness, calculate_radiology_exam_uniqueness_per_patient
 
 router = APIRouter()
 
@@ -30,6 +31,15 @@ def get_surgery_uniqueness_per_patient(db: Session = Depends(get_db)):
 def get_uniqueness_pathologies(db: Session = Depends(get_db)):
     return calculate_pathology_uniqueness(db)
 
-@router.get("/uniqueness/surgery/pathologies")
+@router.get("/uniqueness/surgery/pathologies/patient")
 def get_pathologies_uniqueness_per_patient(db: Session = Depends(get_db)):
     return calculate_pathology_uniqueness_per_patient(db)
+
+
+@router.get("/uniqueness/radiologyExams")
+def get_uniqueness_radiologyExams(db: Session = Depends(get_db)):
+    return calculate_radiology_exam_uniqueness(db)
+
+@router.get("/uniqueness/surgery/radiologyExams/patient")
+def get_pathologies_uniqueness_per_patient(db: Session = Depends(get_db)):
+    return calculate_radiology_exam_uniqueness_per_patient(db)
