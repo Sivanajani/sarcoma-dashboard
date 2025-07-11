@@ -56,7 +56,7 @@ app.include_router(crom_actuality_module)
 app.include_router(crom_actuality_avg_router)
 
 # Uniqueness
-app.include_router(crom_uniqueness_router)
+app.include_router(crom_uniqueness_router, prefix="/api")
 
 # Tabellen anzeigen
 app.include_router(crom_tables_router)

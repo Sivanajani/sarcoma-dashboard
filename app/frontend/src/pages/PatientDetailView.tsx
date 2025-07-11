@@ -12,8 +12,7 @@ const PatientDetailView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [patientInfo, setPatientInfo] = useState<{ id: number; patient_id: string } | null>(null);
-  const [duplicateModules, setDuplicateModules] = useState<string[]>([]);
-
+  
   const getCompletenessClass = (value: number) => {
     if (value >= 90) return 'completeness-green';
     if (value >= 60) return 'completeness-yellow';
@@ -48,14 +47,6 @@ const PatientDetailView: React.FC = () => {
         actualityRes.json(),
         patientRes.json(),
       ]);
-
-      const [uniquenessRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_BASE_URL}/api/uniqueness/patient/${patientId}`)
-      ]);
-
-      const uniquenessData = await uniquenessRes.json();
-      setDuplicateModules(uniquenessData.modules_with_duplicates ?? []);
-
 
       // Kombiniere correctness in die moduleData-Objekte
       const enrichedModules = moduleData.map((mod: any) => {
@@ -125,13 +116,6 @@ const PatientDetailView: React.FC = () => {
                   {t('patientDetail.actuality')}: {mod.actuality}%
                 </p>
               )}
-
-              {/* Eindeutigkeit */}
-              <p style={{ color: duplicateModules.includes(mod.name) ? 'red' : 'green' }}>
-                {duplicateModules.includes(mod.name)
-                ? t('patientDetail.duplicateInModule')
-                : t('patientDetail.noDuplicates')}
-              </p>
 
               <p>
                 {mod.fieldsFilled} {t('patientDetail.of')} {mod.fieldsTotal}{' '}

@@ -16,7 +16,6 @@ type PatientQuality = {
   correctness?: number;
   consistency?: number;
   actuality?: number;
-  uniqueness?: number;
   plausibility?: number;
   flag?: 'red' | 'yellow';
 };
@@ -69,9 +68,6 @@ const PatientQualityTable: React.FC = () => {
             : undefined,
             actuality: actuality?.average_actuality !== undefined
             ? Math.round(actuality.average_actuality)
-            : undefined,
-            uniqueness: quality?.uniqueness !== undefined
-            ? Math.round(quality.uniqueness * 100)
             : undefined,
             plausibility: quality?.plausibility !== undefined
             ? Math.round(quality.plausibility * 100)
@@ -147,7 +143,6 @@ const PatientQualityTable: React.FC = () => {
             <th>{t('patientTable.headers.correctness')}</th>
             <th>{t('patientTable.headers.consistency')}</th>
             <th>{t('patientTable.headers.actuality')}</th>
-            <th>{t('patientTable.headers.uniqueness')}</th>
             <th>{t('patientTable.headers.plausibility')}</th>
           </tr>
         </thead>
@@ -183,9 +178,6 @@ const PatientQualityTable: React.FC = () => {
               </td>
               <td className={`value ${getColorClass(p.actuality)}`}>
                 {p.actuality !== undefined ? `${p.actuality}%` : '–'}
-              </td>
-              <td className={`value ${getColorClass(p.uniqueness)}`}>
-                {p.uniqueness !== undefined ? `${p.uniqueness}%` : '–'}
               </td>
               <td className={`value ${getColorClass(p.plausibility)}`}>
                 {p.plausibility !== undefined ? `${p.plausibility}%` : '–'}

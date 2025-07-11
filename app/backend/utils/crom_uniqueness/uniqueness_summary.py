@@ -26,10 +26,8 @@ def get_uniqueness_summary_for_patient(patient_id: int, db: Session) -> dict:
         result = func(db)
         for entry in result.get("duplicate_summary_per_patient", []):
             if entry["patient_id"] == patient_id:
-                modules_with_duplicates.append({
-                    "module": module_name,
-                    "duplicates": entry["duplicates"]
-                })
+                modules_with_duplicates.append(module_name)
+                break
 
     return {
         "patient_id": patient_id,
