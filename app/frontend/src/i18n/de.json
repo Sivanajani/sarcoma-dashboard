@@ -2,7 +2,7 @@
   "sidebar": {
     "title": "PROMage",
     "dashboard": "Dashboard",
-    "forms": "Fragebögen",
+    "forms": "Datenbank",
     "patients": "Patient:innen",
     "redflags": "Red Flags",
     "settings": "Einstellungen"
@@ -42,7 +42,7 @@
     "id": "Patient ID",
     "completeness": "Vollst.",
     "correctness": "Korr.",
-    "consistency": "Konsist.",
+    "consistency": "Inh. Richtigk.",
     "actuality": "Aktualität",
     "uniqueness": "Eindeutigkeit",
     "plausibility": "Plausib."
@@ -56,7 +56,7 @@
   "title": "Patient {{id}} – Detailansicht",
   "noModules": "Keine Module vorhanden.",
   "completeness": "Vollständigkeit",
-  "correctness": "Korrektheit",
+  "correctness": "Inhaltliche Richtigkeit",
   "consistency": "Konsistenz",
   "actuality": "Aktualität",
   "of": "von",
