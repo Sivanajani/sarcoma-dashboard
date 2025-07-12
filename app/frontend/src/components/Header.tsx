@@ -5,6 +5,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import { Menu, MenuItem, IconButton, InputAdornment, TextField } from '@mui/material';
+import keycloak from '../keycloak';
+
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -22,9 +24,10 @@ const Header = () => {
   const handleUserClick = (e: React.MouseEvent<HTMLElement>) => setUserAnchorEl(e.currentTarget);
   const handleUserClose = () => setUserAnchorEl(null);
   const handleLogout = () => {
-    alert(t('header.menu.logoutSuccess'));
+    keycloak.logout({ redirectUri: window.location.origin });
     handleUserClose();
   };
+
   
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -93,9 +96,22 @@ const Header = () => {
             <AccountCircleIcon fontSize="large" />
           </div>
           <div className="user-text">
-            <span className="user-name">Sivanajani</span>
-            {/* Platzhalter für Rolle */}
-            {/* <span className="user-role">Medizininformatik</span> */}
+            <span className="user-name">
+              {keycloak.tokenParsed?.name || keycloak.tokenParsed?.preferred_username || 'User'}
+            </span>
+
+            
+            <span className="user-role">
+              {(keycloak.tokenParsed?.realm_access?.roles || [])
+              .filter((role: string) =>
+                !role.startsWith('default-') &&
+                !role.includes('offline_access') &&
+                !role.includes('uma_authorization')
+              )
+              .join(', ') || 'Keine Rolle'}
+            </span>
+
+
           </div>
           <ExpandMoreIcon fontSize="small" style={{ color: '#555' }} />
         </div>
