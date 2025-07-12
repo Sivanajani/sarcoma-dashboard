@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import SettingsIcon from '@mui/icons-material/Settings';
+import StorageIcon from '@mui/icons-material/Storage';
 import Tooltip from '@mui/material/Tooltip';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { icon: <DashboardIcon fontSize="small" />, label: t('sidebar.dashboard'), path: '/' },
-    { icon: <AssignmentIcon fontSize="small" />, label: t('sidebar.forms'), path: '/forms' },
+    { icon: <StorageIcon fontSize="small" />, label: t('sidebar.forms'), path: '/forms' },
     { icon: <PeopleIcon fontSize="small" />, label: t('sidebar.patients'), path: '/patients' },
     { icon: <ReportProblemIcon fontSize="small" />, label: t('sidebar.redflags'), path: '/redflags' },
     { icon: <SettingsIcon fontSize="small" />, label: t('sidebar.settings'), path: '/settings' },

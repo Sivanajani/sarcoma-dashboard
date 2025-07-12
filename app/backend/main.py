@@ -16,7 +16,7 @@ from routes.crom_avg_consistency import router as crom_consistency_avg_router
 from routes.crom_actuality_module import router as crom_actuality_module
 from routes.crom_avg_actuality_module import router as crom_actuality_avg_router
 from routes.crom_uniqueness_module import router as crom_uniqueness_router
-
+from routes.crom_pathology_module import router as crom_pathology_router
 
 
 app = FastAPI()
@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(crom_pathology_router)
 
 #Durschnitt Berechnung von der Vollstädnigkeit
 app.include_router(crom_completeness_router)

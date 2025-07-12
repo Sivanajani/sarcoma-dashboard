@@ -98,3 +98,24 @@ def get_patient_by_id(id: int):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# external_code abrufen und Module für diesen Patienten
+@router.get("/patients/by-external-code/{external_code}")
+def get_patient_modules_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient not found")
+
+            patient_id = result["id"]
+
+        # Nutze einfach deinen bestehenden Endpunkt /patients/{id}/modules intern
+        return get_patient_modules(patient_id)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

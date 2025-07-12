@@ -3,9 +3,10 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Overview from './components/Overview';
 import PatientQualityTable from './components/PatientQualityTable';
-import PatientDetailView from './pages/PatientDetailView'; // 
+import PatientDetailView from './pages/PatientDetailView'; 
 import { useTranslation } from 'react-i18next';
 import DuplicateNotifier from './components/DuplicateNotifier';
+import DatabasePage from './pages/DatabasePage';
 
 import {
   BrowserRouter as Router,
@@ -40,6 +41,10 @@ function App() {
               <Route
                 path="/patients/:patientId"
                 element={<PatientDetailView />}
+              />
+              <Route
+                path="/forms"
+                element={<DatabasePage />}
               />
             </Routes>
           </main>
