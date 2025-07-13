@@ -119,3 +119,23 @@ def get_patient_modules_by_external_code(external_code: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Module aktualisieren
+@router.put("/croms/{module}/{id}")
+def update_crom_module(module: str, id: int, data: dict):
+    try:
+        table_name = f"croms_{module}"
+        if not data:
+            raise HTTPException(status_code=400, detail="Leerer Payload")
+
+        set_clause = ", ".join([f"{key} = :{key}" for key in data.keys()])
+        sql = f"UPDATE {table_name} SET {set_clause} WHERE id = :id"
+        data["id"] = id  # ID hinzufügen
+
+        with engine_pg.begin() as conn:
+            result = conn.execute(text(sql), data)
+
+        return {"status": "success", "updated_id": id}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

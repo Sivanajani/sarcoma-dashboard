@@ -51,12 +51,49 @@ const DatabasePage = () => {
     setEditModules(newEditModules);
   };
 
-  const handleSave = (moduleName: string) => {
-    console.log('Gespeicherte Daten:', editedData[moduleName]);
+const handleSave = async (moduleName: string) => {
+  const dataToSave = editedData[moduleName];
+
+  if (!dataToSave?.id) {
+    alert("Dieses Modul enthält keinen ID-Wert und kann nicht gespeichert werden.");
+    return;
+  }
+
+  const cleanedData = Object.fromEntries(
+    Object.entries(dataToSave).filter(
+      ([_, value]) =>
+        !(
+          typeof value === 'object' &&
+          value !== null &&
+          !Array.isArray(value) &&
+          Object.keys(value).length === 0
+        )
+    )
+  );
+
+  console.log("Speichere Modul:", moduleName);
+  console.log("Zu speichernde Daten:", cleanedData);
+
+  try {
+    const endpoint = `http://localhost:8000/api/pathology/${dataToSave.id}`;
+    const response = await axios.put(endpoint, cleanedData);
+
+    console.log("Update erfolgreich:", response.data);
+
     const newEditModules = new Set(editModules);
     newEditModules.delete(moduleName);
     setEditModules(newEditModules);
-  };
+
+    // ✅ Patientendaten neu laden
+    await handleSearch();
+
+    alert("Änderungen wurden erfolgreich gespeichert.");
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
+    alert("Fehler beim Speichern. Siehe Konsole.");
+  }
+};
+
 
   return (
     <div className="dashboard-main">
@@ -105,7 +142,10 @@ const DatabasePage = () => {
           </p>
 
           <div className="module-container">
-            {Object.entries(patientData.modules).map(([moduleName, moduleData]) => (
+            {Object.entries(patientData.modules)
+            .filter(([moduleName]) => moduleName === 'pathology')
+            .map(([moduleName, moduleData]) => (
+
               <div key={moduleName} className="module-card">
                 <div className="module-header" onClick={() => toggleModuleOpen(moduleName)}>
                   <h4>{moduleName}</h4>
