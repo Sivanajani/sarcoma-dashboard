@@ -75,7 +75,7 @@ const handleSave = async (moduleName: string) => {
   console.log("Zu speichernde Daten:", cleanedData);
 
   try {
-    const endpoint = `http://localhost:8000/api/pathology/${dataToSave.id}`;
+    const endpoint = `http://localhost:8000/api/${moduleName.replace(/_/g, '-')}/${dataToSave.id}`;
     const response = await axios.put(endpoint, cleanedData);
 
     console.log("Update erfolgreich:", response.data);
@@ -143,7 +143,7 @@ const handleSave = async (moduleName: string) => {
 
           <div className="module-container">
             {Object.entries(patientData.modules)
-            .filter(([moduleName]) => moduleName === 'pathology')
+            //.filter(([moduleName]) => moduleName === 'pathology')
             .map(([moduleName, moduleData]) => (
 
               <div key={moduleName} className="module-card">

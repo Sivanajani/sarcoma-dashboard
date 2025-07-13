@@ -194,3 +194,31 @@ class CROMHyperthermiaTherapy(Base):
     patient_id = Column(BigInteger, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False)
     updated_at = Column(TIMESTAMP, nullable=False)
+
+
+class CROMPatient(Base):
+    __tablename__ = "croms_patients"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    external_code = Column(String, nullable=False)
+    consent = Column(Boolean, nullable=False)
+    ahv = Column(String, nullable=False)
+    institution_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=False)
+    first_name = Column(String, nullable=False)
+    birth_date = Column(Date, nullable=True)
+    gender = Column(String, nullable=False)
+    street_name = Column(String, nullable=True)
+    street_number = Column(String, nullable=True)
+    zip_code = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    phone_number = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    insurance_name = Column(String, nullable=True)
+    insurance_class = Column(String, nullable=True)
+    insurance_number = Column(String, nullable=True)
+    general_practitioner_name = Column(String, nullable=True)
+    general_practitioner_email = Column(String, nullable=True)
+    created_at = Column(TIMESTAMP, nullable=False)
+    updated_at = Column(TIMESTAMP, nullable=False)

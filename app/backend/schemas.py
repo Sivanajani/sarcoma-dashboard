@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
+from typing import List
 
 
-# Gemeinsame Basis
+# --- Pathalogy ---
 class PathologyBase(BaseModel):
     data_entry_type: str
     biopsy_resection_date: Optional[date] = None
@@ -40,4 +41,245 @@ class PathologyRead(PathologyBase):
 
 # Für Updates (PUT)
 class PathologyUpdate(PathologyBase):
+    pass
+
+# --- Radiology Exam ---
+class RadiologyExamBase(BaseModel):
+    exam_date: Optional[date] = None
+    exam_type: Optional[str] = None
+    imaging_timing: Optional[str] = None
+    imaging_type: Optional[str] = None
+    largest_lesion_size_in_mm: Optional[int] = None
+    location_of_lesion: Optional[str] = None
+    recist_response: Optional[str] = None
+    comment: Optional[str] = None
+
+
+class RadiologyExamRead(RadiologyExamBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class RadiologyExamUpdate(RadiologyExamBase):
+    pass
+
+# --- Systemic Therapy ---
+class SystemicTherapyBase(BaseModel):
+    reason: Optional[str] = None
+    treatment_line: Optional[int] = None
+    cycles_planned: Optional[str] = None
+    bone_protocol: Optional[str] = None
+    softtissue_protocol: Optional[str] = None
+    institution_name: str
+    cycle_start_date: Optional[date] = None
+    cycle_end_date: Optional[date] = None
+    discontinuation_reason: Optional[str] = None
+    was_rct_concomittant: bool = False
+    comments: Optional[str] = None
+    clinical_trial_inclusion: Optional[str] = None
+    hyperthermia_status: Optional[str] = None
+
+
+class SystemicTherapyRead(SystemicTherapyBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class SystemicTherapyUpdate(SystemicTherapyBase):
+    pass
+ 
+# --- Surgery ---
+
+class SurgeryBase(BaseModel):
+    surgery_date: date
+    institution_name: Optional[str] = None
+    indication: Optional[str] = None
+    surgery_side: Optional[str] = None
+    greatest_surgical_tumor_dimension_in_mm: Optional[int] = None
+    had_tumor_spillage: Optional[bool] = None
+    first_revision_details: Optional[str] = None
+    second_revision_details: Optional[str] = None
+    anatomic_region: Optional[str] = None
+    resection: Optional[str] = None
+    reconstruction: Optional[str] = None
+    amputation: Optional[str] = None
+    resected_tumor_margin: Optional[str] = None
+    participated_disciplines: Optional[List[str]] = None
+    hemipelvectomy: Optional[List[str]] = None
+
+
+class SurgeryRead(SurgeryBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class SurgeryUpdate(SurgeryBase):
+    pass
+
+# --- Diagnosis ---
+class DiagnosisBase(BaseModel):
+    tumor_anatomic_region: Optional[str] = None
+    tumor_anatomic_lesion_side: Optional[str] = None
+    tumor_syndromes: Optional[List[str]] = None
+    tumor_diagnosis: Optional[str] = None
+    additional_tumor_anatomic_region: Optional[str] = None
+    additional_tumor_anatomic_lesion_side: Optional[str] = None
+    additional_tumor_diagnosis: Optional[str] = None
+    other_diagnosis: Optional[str] = None
+    patient_history: Optional[str] = None
+    diagnosis_ecog: Optional[int] = None
+    last_contact_date: Optional[date] = None
+    last_status: Optional[str] = None
+    death_reason: Optional[str] = None
+
+
+class DiagnosisRead(DiagnosisBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class DiagnosisUpdate(DiagnosisBase):
+    pass
+
+# --- Radiology Therapy ---
+class RadiologyTherapyBase(BaseModel):
+    indication: Optional[str] = None
+    therapy_type: str
+    referral_date: Optional[date] = None
+    first_contact_date: Optional[date] = None
+    therapy_start_date: date
+    therapy_end_date: Optional[date] = None
+    institution_name: Optional[str] = None
+    total_dose_in_gy: Optional[float] = None
+    given_fractions: Optional[int] = None
+    ptv_volume_in_cm3: Optional[float] = None
+    gtv_volume_in_cm3: Optional[float] = None
+    was_tumor_located_in_radiated_area: Optional[bool] = None
+    was_tumor_located_with_pre_existing_lymph_edema: Optional[bool] = None
+    comments: Optional[str] = None
+    hyperthermia_status: Optional[str] = None
+
+
+class RadiologyTherapyRead(RadiologyTherapyBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class RadiologyTherapyUpdate(RadiologyTherapyBase):
+    pass
+
+# --- Hyperthermia Therapy ---
+class HyperthermiaTherapyBase(BaseModel):
+    indication: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    hyperthermia_type: Optional[str] = None
+    therapy_sessions_count: Optional[int] = None
+    schedule: Optional[str] = None
+    board_accepted_indication: Optional[bool] = None
+    comment: Optional[str] = None
+    therapy_type: Optional[str] = None
+    therapy_id: Optional[int] = None
+
+
+class HyperthermiaTherapyRead(HyperthermiaTherapyBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class HyperthermiaTherapyUpdate(HyperthermiaTherapyBase):
+    pass
+
+# --- CROM Patient ---
+class CROMPatientBase(BaseModel):
+    external_code: str
+    consent: bool
+    ahv: str
+    institution_name: Optional[str] = None
+    last_name: str
+    first_name: str
+    birth_date: Optional[date] = None
+    gender: str
+    street_name: Optional[str] = None
+    street_number: Optional[str] = None
+    zip_code: Optional[str] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
+    insurance_name: Optional[str] = None
+    insurance_class: Optional[str] = None
+    insurance_number: Optional[str] = None
+    general_practitioner_name: Optional[str] = None
+    general_practitioner_email: Optional[str] = None
+
+
+class CROMPatientRead(CROMPatientBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class CROMPatientUpdate(CROMPatientBase):
+    pass
+
+# --- CROM Sarcoma Board ---
+class SarcomaBoardBase(BaseModel):
+    presentation_date: date
+    reason_for_presentation: Optional[str] = None
+    status_before_follow_up: Optional[str] = None
+    unplanned_excision_date: Optional[date] = None
+    whoops_surgery_institution_name: Optional[str] = None
+    status_after_follow_up: Optional[str] = None
+    treatment_before_follow_up: Optional[str] = None
+    follow_up_reason: Optional[str] = None
+    question: Optional[str] = None
+    last_execution: Optional[str] = None
+    proposed_procedure: Optional[str] = None
+    current_ecog: Optional[int] = None
+    decision_surgery: Optional[str] = None
+    decision_surgery_comment: Optional[str] = None
+    decision_radio_therapy: Optional[str] = None
+    decision_radio_therapy_comment: Optional[str] = None
+    decision_systemic_surgery: Optional[str] = None
+    decision_systemic_surgery_comment: Optional[str] = None
+    decision_follow_up: Optional[str] = None
+    decision_follow_up_comment: Optional[str] = None
+    decision_diagnostics: Optional[str] = None
+    decision_diagnostics_comment: Optional[str] = None
+    decision_palliative_care: Optional[str] = None
+    decision_palliative_care_comment: Optional[str] = None
+    summary: Optional[str] = None
+    further_details: Optional[str] = None
+    fast_track: Optional[bool] = False
+
+
+class SarcomaBoardRead(SarcomaBoardBase):
+    id: int
+    patient_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class SarcomaBoardUpdate(SarcomaBoardBase):
     pass

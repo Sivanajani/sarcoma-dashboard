@@ -16,7 +16,15 @@ from routes.crom_avg_consistency import router as crom_consistency_avg_router
 from routes.crom_actuality_module import router as crom_actuality_module
 from routes.crom_avg_actuality_module import router as crom_actuality_avg_router
 from routes.crom_uniqueness_module import router as crom_uniqueness_router
+from routes.crom_radiologyExams_module import router as crom_radiology_exam_router
+from routes.crom_systemicTherapies_module import router as crom_systemic_therapies_router
+from routes.crom_surgery_module import router as crom_surgery_router
+from routes.crom_diagnoses_module import router as crom_diagnoses_router
+from routes.crom_radiologyTherapies_module import router as crom_radiology_therapies_router
 from routes.crom_pathology_module import router as crom_pathology_router
+from routes.crom_hyperthermiaTherapies_module import router as crom_hyperthermia_therapies_router
+from routes.crom_patient_module import router as crom_patient_router
+from routes.crom_sarcomaBoard_module import router as crom_sarcoma_board_router
 
 
 app = FastAPI()
@@ -29,8 +37,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+# Datenbankverbindung für Module
 app.include_router(crom_pathology_router)
+app.include_router(crom_radiology_exam_router)
+app.include_router(crom_systemic_therapies_router)
+app.include_router(crom_surgery_router)
+app.include_router(crom_diagnoses_router)
+app.include_router(crom_radiology_therapies_router)
+app.include_router(crom_hyperthermia_therapies_router)
+app.include_router(crom_patient_router)
+app.include_router(crom_sarcoma_board_router)
+
 
 #Durschnitt Berechnung von der Vollstädnigkeit
 app.include_router(crom_completeness_router)
