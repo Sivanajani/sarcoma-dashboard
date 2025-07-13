@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import React from 'react';
 
 type EditableFieldProps = {
@@ -6,7 +7,6 @@ type EditableFieldProps = {
 };
 
 const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
-  // 🟢 Boolean als Dropdown anzeigen
   if (typeof value === 'boolean') {
     return (
       <select
@@ -14,13 +14,12 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
         onChange={(e) => onChange(e.target.value === 'true')}
         style={inputStyle}
       >
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
+        <option value="true">{t('yes')}</option>
+        <option value="false">{t('no')}</option>
       </select>
     );
   }
 
-  // 🔵 Array mit + / −
   if (Array.isArray(value)) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -42,16 +41,16 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
                 onChange(updated);
               }}
               style={removeButtonStyle}
-              title="Feld entfernen"
+              title={t('editableField.removeField')}
             >
-              −
+              {t('noDataDash')}
             </button>
           </div>
         ))}
         <button
           onClick={() => onChange([...value, ''])}
           style={addButtonStyle}
-          title="Feld hinzufügen"
+          title={t('editableField.addField')}
         >
           + Feld
         </button>
@@ -59,7 +58,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
     );
   }
 
-  // 🔶 Datumsauswahl (falls ISO-Datum)
+  // Datumsauswahl (falls ISO-Datum)
   const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (typeof value === 'string' && isoDateRegex.test(value)) {
     return (
@@ -72,7 +71,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
     );
   }
 
-  // ⚪ Standard-Textfeld
+  // Standard-Textfeld
   return (
     <input
       type="text"
@@ -83,7 +82,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
   );
 };
 
-// 🔧 Style-Objekte
+// Style-Objekte
 const inputStyle = {
   width: '100%',
   padding: '6px',

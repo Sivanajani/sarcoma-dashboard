@@ -1,10 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FormattedModuleDataProps {
   data: Record<string, any>;
 }
 
 const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data }) => {
+  const { t } = useTranslation();
+
   const renderValue = (value: any): React.ReactNode => {
     if (Array.isArray(value)) {
       return (
@@ -23,9 +26,11 @@ const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data }) => {
         </div>
       );
     } else if (typeof value === 'boolean') {
-      return value ? 'Ja' : 'Nein';
+      return value ? t('yes') : t('no');
     } else {
-      return value === null || value === '' ? <i style={{ color: '#999' }}>–</i> : String(value);
+      return value === null || value === '' 
+      ? <i style={{ color: '#999' }}>{t('noDataDash')}</i>
+      : String(value);
     }
   };
 
