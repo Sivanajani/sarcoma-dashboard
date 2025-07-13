@@ -4,6 +4,7 @@ import './DatabasePage.css';
 import FormattedModuleData from './FormattedModuleData';
 import EditableField from '../components/EditableField';
 import EditIcon from '@mui/icons-material/Edit';
+import Swal from 'sweetalert2';
 
 const DatabasePage = () => {
   const [externalCode, setExternalCode] = useState('');
@@ -55,7 +56,11 @@ const handleSave = async (moduleName: string) => {
   const dataToSave = editedData[moduleName];
 
   if (!dataToSave?.id) {
-    alert("Dieses Modul enthält keinen ID-Wert und kann nicht gespeichert werden.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Fehlende ID',
+      text: 'Dieses Modul enthält keinen ID-Wert und kann nicht gespeichert werden.'
+    });
     return;
   }
 
@@ -71,6 +76,18 @@ const handleSave = async (moduleName: string) => {
     )
   );
 
+  const confirmed = await Swal.fire({
+    title: 'Änderungen speichern?',
+    text: `Möchten Sie die Änderungen für das Modul "${moduleName}" speichern?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ja, speichern',
+    cancelButtonText: 'Abbrechen'
+  });
+  if (!confirmed.isConfirmed) {
+    return;
+  }
+
   console.log("Speichere Modul:", moduleName);
   console.log("Zu speichernde Daten:", cleanedData);
 
@@ -84,13 +101,21 @@ const handleSave = async (moduleName: string) => {
     newEditModules.delete(moduleName);
     setEditModules(newEditModules);
 
-    // ✅ Patientendaten neu laden
+    // Patientendaten neu laden
     await handleSearch();
 
-    alert("Änderungen wurden erfolgreich gespeichert.");
+    Swal.fire({
+      icon: 'success',
+      title: 'Erfolgreich gespeichert',
+      text: `Die Änderungen für das Modul "${moduleName}" wurden erfolgreich gespeichert.`
+    });
   } catch (err) {
     console.error("Fehler beim Speichern:", err);
-    alert("Fehler beim Speichern. Siehe Konsole.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Fehler beim Speichern',
+      text: 'Es gab ein Problem beim Speichern der Änderungen. Bitte versuchen Sie es später erneut.'
+    });
   }
 };
 
