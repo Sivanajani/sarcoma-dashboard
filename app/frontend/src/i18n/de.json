@@ -67,8 +67,40 @@
   "uniquenessTitle": "Eindeutigkeit",
   "noDuplicates": "Keine Duplikate vorhanden.",
   "duplicatesFound": "Duplikate in den folgenden Modulen gefunden",
-  "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden.",
-  "noDuplicates": "Keine Duplikate in diesem Modul."
+  "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden."
+},
+"databasePage": {
+  "title": "Datenbank: CROM-Module",
+  "searchPlaceholder": "Patient-Id (z. B. P1)",
+  "searchButton": "Suchen",
+  "patientId": "Patienten-ID in der Datenbank",
+  "birthDate": "Geburtsdatum",
+  "noData": "Keine Daten vorhanden",
+  "edit": "Bearbeiten",
+  "save": "Speichern",
+  "missingIdTitle": "Fehlende ID",
+  "missingIdText": "Dieses Modul enthält keinen ID-Wert und kann nicht gespeichert werden.",
+  "confirmTitle": "Änderungen speichern?",
+  "confirmText": "Möchten Sie die Änderungen für das Modul \"{{module}}\" speichern?",
+  "confirmYes": "Ja, speichern",
+  "confirmNo": "Abbrechen",
+  "saveSuccessTitle": "Erfolgreich gespeichert",
+  "saveSuccessText": "Die Änderungen für das Modul \"{{module}}\" wurden erfolgreich gespeichert.",
+  "saveErrorTitle": "Fehler beim Speichern",
+  "saveErrorText": "Es gab ein Problem beim Speichern der Änderungen. Bitte versuchen Sie es später erneut.",
+  "notFound": "Patient nicht gefunden oder Serverfehler."
+},
+"modules": {
+  "diagnosis": "Diagnose",
+  "pathology": "Pathologie",
+  "surgery": "Chirurgie",
+  "radiology_exam": "Radiologische Untersuchung",
+  "radiology_therapy": "Radiologische Therapie",
+  "systemic_therapy": "Systemische Therapie",
+  "sarcoma_board": "Tumorboard",
+  "hyperthermia_therapy": "Hyperthermie-Therapie",
+  "hyperthermia": "Hyperthermie-Therapie",
+  "patient": "Patient:in"
 }
 
 }

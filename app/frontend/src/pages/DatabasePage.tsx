@@ -4,7 +4,11 @@ import './DatabasePage.css';
 import FormattedModuleData from './FormattedModuleData';
 import EditableField from '../components/EditableField';
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Swal from 'sweetalert2';
+import { useTranslation } from 'react-i18next';
+
 
 const DatabasePage = () => {
   const [externalCode, setExternalCode] = useState('');
@@ -13,6 +17,8 @@ const DatabasePage = () => {
   const [openModules, setOpenModules] = useState<Set<string>>(new Set());
   const [editModules, setEditModules] = useState<Set<string>>(new Set());
   const [editedData, setEditedData] = useState<Record<string, any>>({});
+  const { t } = useTranslation();
+
 
   const handleSearch = async () => {
     try {
@@ -23,7 +29,7 @@ const DatabasePage = () => {
       setEditModules(new Set());
       setEditedData({});
     } catch (err) {
-      setError('Patient nicht gefunden oder Serverfehler.');
+      setError(t("databasePage.notFound"));
       setPatientData(null);
     }
   };
@@ -58,8 +64,8 @@ const handleSave = async (moduleName: string) => {
   if (!dataToSave?.id) {
     Swal.fire({
       icon: 'error',
-      title: 'Fehlende ID',
-      text: 'Dieses Modul enthält keinen ID-Wert und kann nicht gespeichert werden.'
+      title: t('databasePage.missingIdTitle'),
+      text: t('databasePage.missingIdText')
     });
     return;
   }
@@ -77,19 +83,16 @@ const handleSave = async (moduleName: string) => {
   );
 
   const confirmed = await Swal.fire({
-    title: 'Änderungen speichern?',
-    text: `Möchten Sie die Änderungen für das Modul "${moduleName}" speichern?`,
+    title:  t('databasePage.confirmTitle'),
+    text: t('databasePage.confirmText', { module: moduleName }),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Ja, speichern',
-    cancelButtonText: 'Abbrechen'
+    confirmButtonText: t('databasePage.confirmYes'),
+    cancelButtonText: t('databasePage.confirmNo')
   });
   if (!confirmed.isConfirmed) {
     return;
   }
-
-  console.log("Speichere Modul:", moduleName);
-  console.log("Zu speichernde Daten:", cleanedData);
 
   try {
     const endpoint = `http://localhost:8000/api/${moduleName.replace(/_/g, '-')}/${dataToSave.id}`;
@@ -100,21 +103,18 @@ const handleSave = async (moduleName: string) => {
     const newEditModules = new Set(editModules);
     newEditModules.delete(moduleName);
     setEditModules(newEditModules);
-
-    // Patientendaten neu laden
     await handleSearch();
 
     Swal.fire({
       icon: 'success',
-      title: 'Erfolgreich gespeichert',
-      text: `Die Änderungen für das Modul "${moduleName}" wurden erfolgreich gespeichert.`
+      title: t('databasePage.saveSuccessTitle'),
+      text: t('databasePage.saveSuccessText', { module: moduleName })
     });
   } catch (err) {
-    console.error("Fehler beim Speichern:", err);
     Swal.fire({
       icon: 'error',
-      title: 'Fehler beim Speichern',
-      text: 'Es gab ein Problem beim Speichern der Änderungen. Bitte versuchen Sie es später erneut.'
+      title: t('databasePage.saveErrorTitle'),
+      text: t('databasePage.saveErrorText')
     });
   }
 };
@@ -122,24 +122,28 @@ const handleSave = async (moduleName: string) => {
 
   return (
     <div className="dashboard-main">
-      <h1>Datenbank: CROM-Module</h1>
+      <h1>{t("databasePage.title")}</h1>
 
       <div className="search-bar">
         <input
-          type="text"
-          placeholder="External Code (z. B. P1)"
-          style={{
-            backgroundColor: '#f9f9f9',
-            color: '#213547',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            padding: '10px 14px',
-            fontSize: '1rem',
-            width: '280px'
-          }}
-          value={externalCode}
-          onChange={(e) => setExternalCode(e.target.value)}
-        />
+        type="text"
+        placeholder={t("databasePage.searchPlaceholder")}
+        style={{
+          backgroundColor: '#f9f9f9',
+          color: '#213547',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          padding: '10px 14px',
+          fontSize: '1rem',
+          width: '280px'
+        }}
+        value={externalCode}
+        onChange={(e) => setExternalCode(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') { handleSearch();}
+        }}
+      />
+
         <button
           onClick={handleSearch}
           style={{
@@ -153,28 +157,30 @@ const handleSave = async (moduleName: string) => {
             boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
           }}
         >
-          Suchen
+          {t("databasePage.searchButton")}
         </button>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {error && <p className="error">{t("databasePage.notFound")}</p>}
 
       {patientData && patientData.modules && (
         <div>
-          <h2>Patienten-ID: {patientData.patient_id}</h2>
+          <h2>{t("databasePage.patientId")}: {patientData.patient_id}</h2>
           <p style={{ color: '#213547', fontSize: '1rem' }}>
-            Geburtsdatum: {patientData.birth_date}
+            {t("databasePage.birthDate")}: {patientData.birth_date}
           </p>
 
           <div className="module-container">
             {Object.entries(patientData.modules)
-            //.filter(([moduleName]) => moduleName === 'pathology')
             .map(([moduleName, moduleData]) => (
 
               <div key={moduleName} className="module-card">
                 <div className="module-header" onClick={() => toggleModuleOpen(moduleName)}>
-                  <h4>{moduleName}</h4>
-                  <span>{openModules.has(moduleName) ? '▲' : '▼'}</span>
+                  <h4>{t(`modules.${moduleName}`, { defaultValue: moduleName })}</h4>
+                  {openModules.has(moduleName)
+                  ? <ExpandLessIcon style={{ color: '#4da6ff' }} />
+                  : <ExpandMoreIcon style={{ color: '#4da6ff' }} />
+                  }
                 </div>
 
                 {openModules.has(moduleName) && (
@@ -190,7 +196,7 @@ const handleSave = async (moduleName: string) => {
                           marginBottom: '0.5rem',
                           color: '#4da6ff'
                         }}
-                        title="Bearbeiten"
+                        title= {t("databasePage.edit")}
                       >
                         <EditIcon fontSize="small" />
                       </button>
@@ -228,14 +234,14 @@ const handleSave = async (moduleName: string) => {
                             marginTop: '0.5rem'
                           }}
                         >
-                          Speichern
+                          {t("databasePage.save")}
                         </button>
                       </div>
                     ) : (
                       moduleData ? (
                         <FormattedModuleData data={moduleData} />
                       ) : (
-                        <p style={{ color: '#999' }}>Keine Daten vorhanden</p>
+                        <p style={{ color: '#999' }}>{t("databasePage.noData")}</p>
                       )
                     )}
                   </div>
