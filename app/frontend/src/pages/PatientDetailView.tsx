@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../pages/ModuleCard.css';
 import type { QualityMetrics } from '../types/metrics';
+import { useNavigate } from 'react-router-dom';
 
 
 const PatientDetailView: React.FC = () => {
@@ -12,6 +13,7 @@ const PatientDetailView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [patientInfo, setPatientInfo] = useState<{ id: number; patient_id: string } | null>(null);
+  const navigate = useNavigate();
   
   const getCompletenessClass = (value: number) => {
     if (value >= 90) return 'completeness-green';
@@ -88,9 +90,15 @@ const PatientDetailView: React.FC = () => {
       {modules.length === 0 ? (
         <p>{t('patientDetail.noModules')}</p>
       ) : (
-        <div className="module-container">
-          {modules.map((mod) => (
-            <div key={mod.name} className="module-card">
+        <div className="module-container"> {modules.map((mod) => (
+            <div key={mod.name} className="module-card" onClick={() => {
+              if (patientInfo?.patient_id) {
+                navigate(`/patients/${patientInfo.patient_id}/${mod.name}/details`);}
+            }}
+            title={t('patientDetail.moduleCardTooltip')}
+            style={{ cursor: 'pointer' }}
+            >
+
               <h4>{mod.name}</h4>
 
               {/* Vollständigkeit */}

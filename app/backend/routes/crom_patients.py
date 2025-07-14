@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
 from db.engine import engine_pg
+import requests
 
 router = APIRouter(prefix="/api")
 
@@ -136,6 +137,73 @@ def update_crom_module(module: str, id: int, data: dict):
             result = conn.execute(text(sql), data)
 
         return {"status": "success", "updated_id": id}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/by-external-code/{external_code}/diagnosis/details")
+def get_diagnosis_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_patients_diagnosis_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/{patient_id}/diagnosis/details")
+def get_patients_diagnosis_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_diagnoses WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Diagnose nicht gefunden")
+            field_values = dict(row._mapping)
+
+        # Endpunkte abrufen
+        base_url = "http://localhost:8000"
+        try:
+            correctness = requests.get(f"{base_url}/api/patients/{patient_id}/correctness/diagnosis").json()["field_results"]
+        except:
+            correctness = {}
+
+        try:
+            consistency = requests.get(f"{base_url}/api/patients/{patient_id}/consistency/diagnosis").json()["rule_results"]
+        except:
+            consistency = {}
+
+        try:
+            actuality = requests.get(f"{base_url}/api/patients/{patient_id}/actuality/diagnosis").json()["details"]
+        except:
+            actuality = {}
+
+        try:
+            completeness = requests.get(f"{base_url}/patients/{patient_id}/completeness/diagnosis").json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "diagnosis",
+            "patient_id": patient_id,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

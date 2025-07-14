@@ -92,3 +92,33 @@
   padding-left: 1.5rem;
   margin-top: 0.25rem;
 }
+
+.quality-dimensions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.dimension-card {
+  background: #fff;
+  border-left: 6px solid #5d5dff;
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.dimension-card h3 {
+  margin-bottom: 1rem;
+  color: #213547;
+}
+
+.dimension-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.dimension-card li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}

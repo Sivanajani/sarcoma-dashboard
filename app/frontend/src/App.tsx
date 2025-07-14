@@ -7,6 +7,8 @@ import PatientDetailView from './pages/PatientDetailView';
 import { useTranslation } from 'react-i18next';
 import DuplicateNotifier from './components/DuplicateNotifier';
 import DatabasePage from './pages/DatabasePage';
+import ModuleDetailView from './pages/ModuleDetailView';
+
 
 import {
   BrowserRouter as Router,
@@ -41,6 +43,10 @@ function App() {
               <Route
                 path="/patients/:patientId"
                 element={<PatientDetailView />}
+              />
+              <Route
+                path="/patients/:externalCode/:module/details"
+                element={<ModuleDetailView />}
               />
               <Route
                 path="/forms"

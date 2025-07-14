@@ -67,7 +67,8 @@
   "uniquenessTitle": "Eindeutigkeit",
   "noDuplicates": "Keine Duplikate vorhanden.",
   "duplicatesFound": "Duplikate in den folgenden Modulen gefunden",
-  "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden."
+  "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden.",
+  "moduleCardTooltip": "Klicke, um Detailansicht zu öffnen"
 },
 "databasePage": {
   "title": "Datenbank: CROM-Module",
@@ -106,6 +107,11 @@
   "addField": "Feld hinzufügen",
   "removeField": "Feld entfernen",
   "field": "Feld"
+},
+"moduleDetail": {
+    "loadError": "Fehler beim Laden der Moduldaten.",
+    "patient": "Patient",
+    "noData": "Keine Daten verfügbar."
 },
 "yes": "Ja",
 "no": "Nein",
