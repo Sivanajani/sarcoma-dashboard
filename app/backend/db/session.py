@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker, declarative_base
-from .engine import engine_pg  # nur für die PostgreSQL-Verbindung
+from .engine import engine_pg  
 
 # Gemeinsame Basisklasse für alle Modelle
 Base = declarative_base()

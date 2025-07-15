@@ -8,5 +8,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432
 engine_pg = create_engine(DATABASE_URL)
 
 # Externe MySQL-Datenbank (PROMs)
-PROM_DB_URL = os.getenv("PROM_DB_URL")
-engine_mysql = create_engine(PROM_DB_URL)
+PROM_DB_URL = os.getenv(
+    "PROM_DB_URL",
+    "postgresql+psycopg2://dbadmin:admin123@db_prom:5432/proms_db"
+)
+engine_prom = create_engine(PROM_DB_URL)
+
