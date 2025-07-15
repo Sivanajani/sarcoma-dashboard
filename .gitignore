@@ -10,3 +10,8 @@ full_backup.dump
 full_backup3.dump
 sql-spick.md
 full_backup4.dump
+backup.sql
+1prom.sql
+foreign_keys.sql
+proms.sql
+init.sql

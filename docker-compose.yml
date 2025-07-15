@@ -13,6 +13,21 @@ services:
       - ./backup:/backup
     ports:
       - "5432:5432"
+  
+  db_prom:
+    image: postgres:15
+    container_name: postgres-prom
+    restart: always
+    environment:
+      POSTGRES_USER: dbadmin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: proms_db
+    volumes:
+      - ./db/proms.sql:/docker-entrypoint-initdb.d/proms.sql
+      - postgres-prom-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  
+
 
   backend:
     build: ./app/backend
@@ -71,3 +86,4 @@ services:
 volumes:
   postgres-data:
   pgadmin-data:
+  postgres-prom-data:
