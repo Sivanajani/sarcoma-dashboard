@@ -86,10 +86,14 @@ from routes.prom_correctness_module import router as prom_correctness_module
 from routes.prom_consistency_module import router as prom_consistency_module
 from routes.prom_actuality_module import router as prom_actuality_module
 from routes.prom_uniqueness_module import router as prom_uniqueness_module
+from routes.prom_avg_correctness import router as prom_avg_correctness_router
 
 
 # PROMs Vollständigkeit
 app.include_router(prom_completeness_module)
+
+# Durchschnittliche Korrektheit pro Patient
+app.include_router(prom_avg_correctness_router)
 
 # PROMs Korrektheit
 app.include_router(prom_correctness_module)
