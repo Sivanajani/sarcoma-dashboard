@@ -103,3 +103,36 @@ Pflichtfelder:
 | Wenn `angst` ≤ 2, dann `funktion` sollte nicht extrem niedrig sein (z. B. > 3)           | Niedrige Angst → keine stark beeinträchtigte Funktion                 |
 | `belastung` und `funktion` sollten korrelieren (ρ > 0.6)                                 | Beide Felder messen subjektive Einschränkung                          |
 | `vas` darf nicht negativ sein                                                            | Negativwerte sind ausgeschlossen                                      |
+
+
+Natürlich – hier ist ein gut abgestimmter Abschnitt zur **inhaltlichen Richtigkeit** (`Korrektheit` und `Plausibilität`) für das PROM-Modul `proms_biopsy`:
+
+---
+
+### `proms_biopsy` – Korrektheitsregeln
+
+| Feldname                      | Typ  | Regel                                                     |
+| ----------------------------- | ---- | --------------------------------------------------------- |
+| `biopsy_schmerz`              | int  | Wert zwischen 0–10 (Schmerzskala)                         |
+| `biopsy_eqvas`                | int  | Wert zwischen 0–100 (visuelle Analogskala)                |
+| `biopsy_team_raum`            | int  | Wert zwischen 1–10 (subjektive Zufriedenheit)             |
+| `biopsy_organisation`         | int  | Wert zwischen 1–10 (subjektive Zufriedenheit)             |
+| `biopsy_schmerz_wie_erwartet` | str  | Muss `"Ja"`, `"Nein"` oder `"Ungefähr wie erwartet"` sein |
+| Alle Boolean-Felder           | bool | Muss bool sein (`True`, `False` oder `None`)              |
+
+> **Hinweis:** Felder wie `biopsy_notwendigkeit`, `biopsy_angst`, `biopsy_medikamente` etc. gelten als korrekt, wenn sie `True`, `False` oder `None` sind (keine Typfehler oder Strings).
+
+---
+
+### `proms_biopsy` – Plausibilitätsregeln
+
+| Regel                                                                                            | Beschreibung                                                      |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Wenn `biopsy_schmerz` ≥ 7, dann `biopsy_eqvas` sollte ≥ 60 sein                                  | Starker Schmerz → hoher VAS                                       |
+| Wenn `biopsy_notwendigkeit` ist `False` und `biopsy_angst` ist `True` → potenzieller Widerspruch | Eingriff wird nicht als notwendig empfunden, aber Angst vorhanden |
+| Wenn `biopsy_schmerz` ≤ 2, dann `biopsy_medikamente` sollte `False` oder `None` sein             | Kein/geringer Schmerz → Schmerzmittel ungewöhnlich                |
+| `biopsy_team_raum` und `biopsy_organisation` sollten korrelieren (Differenz ≤ 3)                 | Beide messen subjektive Zufriedenheit mit Ablauf und Umgebung     |
+| Wenn `biopsy_erklaerung` ist `False` und `biopsy_verstehen` ist `True`, dann ist das unplausibel | Ohne Erklärung kein vollständiges Verständnis erwartet            |
+| `biopsy_eqvas` darf nicht negativ sein                                                           | Negativwerte sind ausgeschlossen                                  |
+
+
