@@ -82,9 +82,13 @@ app.include_router(crom_patients_router)
 # Routen für PROMs
 from routes.prom_tables import router as prom_tables_module
 from routes.prom_completeness_module import router as prom_completeness_router
+from routes.prom_correctness_module import router as prom_correctness_module
 
 # PROMs Vollständigkeit
 app.include_router(prom_completeness_router)
+
+# PROMs Korrektheit
+app.include_router(prom_correctness_module)
 
 #Liste der PROMs Tabellen
 app.include_router(prom_tables_module)
