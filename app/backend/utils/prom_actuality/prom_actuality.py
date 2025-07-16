@@ -16,13 +16,15 @@ def check_prom_aktualitaet(record_date: date, modul: str) -> dict:
     if record_date is None:
         return {
             "aktualitaet": "nicht beurteilbar",
-            "begründung": "Kein Datum vorhanden (Regel A3)"
+            "begründung": "Kein Datum vorhanden (Regel A3)",
+            "aktualitaet_prozent": 0
         }
     
     if record_date > today:
         return {
             "aktualitaet": "inkorrekt",
-            "begründung": "Datum liegt in der Zukunft (Regel A4)"
+            "begründung": "Datum liegt in der Zukunft (Regel A4)",
+            "aktualitaet_prozent": 0
         }
     
     # Modulabhängige Grenzwerte
@@ -33,7 +35,8 @@ def check_prom_aktualitaet(record_date: date, modul: str) -> dict:
     else:
         return {
             "aktualitaet": "nicht beurteilbar",
-            "begründung": f"Unbekanntes Modul: {modul}"
+            "begründung": f"Unbekanntes Modul: {modul}",
+            "aktualitaet_prozent": 0
         }
 
     delta = today - record_date
@@ -41,10 +44,12 @@ def check_prom_aktualitaet(record_date: date, modul: str) -> dict:
     if delta > threshold:
         return {
             "aktualitaet": "veraltet",
-            "begründung": f"{modul}-Eintrag ist älter als zulässig (Regel A1/A2)"
+            "begründung": f"{modul}-Eintrag ist älter als zulässig (Regel A1/A2)",
+            "aktualitaet_prozent": 0
         }
     
     return {
         "aktualitaet": "aktuell",
-        "begründung": f"{modul}-Eintrag ist innerhalb des zulässigen Zeitrahmens"
+        "begründung": f"{modul}-Eintrag ist innerhalb des zulässigen Zeitrahmens",
+        "aktualitaet_prozent": 100
     }
