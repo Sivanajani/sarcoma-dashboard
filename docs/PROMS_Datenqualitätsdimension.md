@@ -135,4 +135,52 @@ Natürlich – hier ist ein gut abgestimmter Abschnitt zur **inhaltlichen Richti
 | Wenn `biopsy_erklaerung` ist `False` und `biopsy_verstehen` ist `True`, dann ist das unplausibel | Ohne Erklärung kein vollständiges Verständnis erwartet            |
 | `biopsy_eqvas` darf nicht negativ sein                                                           | Negativwerte sind ausgeschlossen                                  |
 
+---
+
+## Konsistenz
+## Konsistenzregeln – `proms_biopsy`
+
+| Regel-ID | Felder                                           | Konsistenzregel                                                                | Begründung                                                            |
+| -------- | ------------------------------------------------ | ------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| K1       | `biopsy_schmerz`, `biopsy_schmerz_wie_erwartet`  | Wenn `schmerz` ≥ 7 → `schmerz_wie_erwartet` sollte nicht „wie erwartet“ sein   | Starker Schmerz wird normalerweise als „mehr als erwartet“ empfunden  |
+| K2       | `biopsy_angst`, `biopsy_erklaerung`              | Wenn `angst` = `True` & `erklaerung` = `True` → Potenzieller Widerspruch       | Angst trotz guter Erklärung kann Hinweis auf zusätzliche Probleme sein|
+| K3       | `biopsy_verstehen`, `biopsy_erklaerung`          | Wenn `erklaerung` = `True` → `verstehen` sollte auch `True` sein               | Erklärung sollte verstanden werden                                    |
+| K4       | `biopsy_medikamente`, `biopsy_schmerz`           | Wenn `medikamente` = `True` → Schmerz sollte ≤ 6 sein                          | Schmerzmittel sollten wirksam sein                                    |
+| K5       | `biopsy_blutende_wunde`, `biopsy_probleme_wunde` | Wenn `blutende_wunde` = `False`, aber `probleme_wunde` = `True` → Inkonsistenz | Ohne Blutung sollten keine Wundprobleme auftreten                     |
+| K6       | `biopsy_eqvas`, `biopsy_schmerz`                 | Wenn `schmerz` ≥ 7 → `eqvas` sollte ≥ 60 sein                                  | Hoher Schmerz sollte sich im VAS widerspiegeln                        |
+| K7       | `biopsy_verstehen`, `biopsy_questions`           | Wenn `verstehen` = `False` → `questions` sollte nicht leer sein                | Bei Unverständnis sollten Fragen gestellt werden                      |
+| K8       | `biopsy_schmerzkontrolle`, `biopsy_schmerz`      | Wenn `schmerz` ≥ 7 → `schmerzkontrolle` sollte `False` sein                    | Schmerz schlecht kontrolliert                                         |
+| K9       | `biopsy_team_raum`, `biopsy_organisation`        | Beide sollten in ähnlichem Bereich liegen (± 1)                                | Subjektive Bewertung von Umgebung & Organisation sollten korrelieren  |
+
+
+---
+
+## Konsistenzregeln – `EQ5D`
+
+| Regel-ID | Felder                                      | Konsistenzregel                                                           | Begründung                                                                 |
+| -------- | ------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| K1       | `mobilitaet`, `funktion`                    | Wenn `mobilitaet` = 1 (keine Probleme), dann `funktion` sollte ≥ 7 sein   | Gute Mobilität sollte sich in hoher Funktionsfähigkeit widerspiegeln       |
+| K2       | `schmerz`, `belastung`                      | Wenn `schmerz` ≥ 4, dann `belastung` sollte ≥ 5 sein                      | Starke Schmerzen verursachen hohe Belastung                                |
+| K3       | `selbstversorgung`, `gewohnte_aktivitaeten` | Wenn `selbstversorgung` ≥ 4, dann `gewohnte_aktivitaeten` sollte ≥ 4 sein | Eingeschränkte Selbstversorgung geht oft mit Aktivitätseinbußen einher     |
+| K4       | `angst`, `questions`                        | Wenn `angst` ≥ 4, dann `questions` sollte **nicht leer** sein             | Hohe Angst sollte mit Rückfragen einhergehen                               |
+| K5       | `funktion`, `belastung`                     | `funktion` und `belastung` sollten ±2 zueinander liegen                   | Subjektives Belastungsempfinden und Funktionsfähigkeit sollten korrelieren |
+| K6       | `schmerz`, `vas`                            | Wenn `schmerz` ≥ 4, dann `vas` sollte ≥ 60 sein                           | Hoher Schmerz → hoher VAS-Wert                                             |
+| K7       | `mobilitaet`, `selbstversorgung`            | Wenn `mobilitaet` ≥ 4, dann `selbstversorgung` sollte nicht = 1           | Eingeschränkte Mobilität geht selten mit völliger Selbstständigkeit einher |
+| K8       | `angst`, `funktion`                         | Wenn `angst` ≤ 2, dann `funktion` sollte nicht < 4 sein                   | Keine Angst sollte nicht mit sehr schlechter Funktion einhergehen          |
+
+---
+
+## Aktualitätsprüfung
+
+* **Sind die PROM-Daten "frisch" genug, um im klinischen Verlauf noch relevant zu sein?**
+* **Gibt es veraltete oder überfällige Einträge?**
+
+## *Aktualitätsregeln* bei `eq5d` und `biopsy`
+
+| Regel-ID | Modul  | Feld(e)        | Bedingung                                           | Begründung                                                            |
+| -------- | ------ | -------------- | --------------------------------------------------- | --------------------------------------------------------------------- |
+| A1       | eq5d   | `date`         | `date` < heute − 6 Monate → **veraltet**            | PROMs sollten regelmäßig (z. B. alle 3–6 Monate) erhoben werden       |
+| A2       | biopsy | `biopsy_date`  | `biopsy_date` < heute − 12 Monate → **veraltet**    | Biopsie-Erfahrungen verlieren nach einem Jahr an Relevanz für Verlauf |
+| A3       | beide  | `date` fehlt   | Kein Datum → **nicht bewertbar**                    | Ohne Datum kann Aktualität nicht geprüft werden                       |
+| A4       | beide  | `date` > heute | Datum liegt in der Zukunft → **inkorrekt/Artefakt** | Daten können nicht aus der Zukunft stammen                            |
 
