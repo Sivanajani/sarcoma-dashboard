@@ -184,3 +184,18 @@ Natürlich – hier ist ein gut abgestimmter Abschnitt zur **inhaltlichen Richti
 | A3       | beide  | `date` fehlt   | Kein Datum → **nicht bewertbar**                    | Ohne Datum kann Aktualität nicht geprüft werden                       |
 | A4       | beide  | `date` > heute | Datum liegt in der Zukunft → **inkorrekt/Artefakt** | Daten können nicht aus der Zukunft stammen                            |
 
+---
+
+## Was bedeutet **Eindeutigkeit** bei PROMs?
+
+Eindeutigkeit bedeutet, dass **für denselben Patienten (PID) und denselben Zeitpunkt (Datum)** **nicht mehrere Einträge existieren dürfen**, die sich z.B. nur minimal unterscheiden. Ziel ist es, **Dubletten** oder **falsche Mehrfacheinträge** zu erkennen.
+
+---
+
+## Regeln für **Eindeutigkeit**:
+
+| Regel-ID | Modul  | Feld(er)                    | Bedingung / Prüfung                                                                     |
+| -------- | ------ | --------------------------- | --------------------------------------------------------------------------------------- |
+| U1       | eq5d   | `pid`, `date`               | **Nur 1 Eintrag pro Patient pro Tag erlaubt**                                           |
+| U2       | biopsy | `biopsy_pid`, `biopsy_date` | **Nur 1 Biopsy-Eintrag pro Patient pro Tag erlaubt**                                    |
+| U3       | beide  | kompletter Datensatz        | Optional: Wenn zwei Einträge exakt gleich sind → potenzielle Duplikate (Deduplizierung) |
