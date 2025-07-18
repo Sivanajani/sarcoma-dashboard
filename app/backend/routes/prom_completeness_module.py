@@ -30,12 +30,12 @@ def get_eq5d_completeness_by_pid(pid: int):
                 text("SELECT * FROM eq5d WHERE pid = :pid"),
                 {"pid": pid}
             )
-            row = result.mappings().first()
+            row = result.mappings().all()
 
         if not row:
             return {"message": f"No EQ5D entry found for pid {pid}"}
 
-        return calculate_eq5d_completeness(row)
+        return [calculate_eq5d_completeness(row) for row in row]
 
     except Exception as e:
         return {"error": str(e)}
@@ -63,12 +63,12 @@ def get_biopsy_completeness_by_pid(pid: int):
                 text("SELECT * FROM proms_biopsy WHERE biopsy_pid = :pid"),
                 {"pid": pid}
             )
-            row = result.mappings().first()
+            row = result.mappings().all()
 
         if not row:
             return {"message": f"No Biopsy entry found for pid {pid}"}
 
-        return calculate_biopsy_completeness(row)
+        return [calculate_biopsy_completeness(row) for row in row]
 
     except Exception as e:
         return {"error": str(e)}

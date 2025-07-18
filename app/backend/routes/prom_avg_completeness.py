@@ -34,16 +34,16 @@ def get_avg_prom_completeness():
             scores = []
 
             # EQ5D
-            eq5d_row = next((r for r in eq5d_rows if r["pid"] == pid), None)
-            if eq5d_row:
-                result = calculate_eq5d_completeness(eq5d_row)
+            eq5d_entries = [r for r in eq5d_rows if r["pid"] == pid]
+            for entry in eq5d_entries:
+                result = calculate_eq5d_completeness(entry)
                 if isinstance(result.get("completeness_percent"), (int, float)):
                     scores.append(result["completeness_percent"])
 
             # Biopsy
-            biopsy_row = next((r for r in biopsy_rows if r["biopsy_pid"] == pid), None)
-            if biopsy_row:
-                result = calculate_biopsy_completeness(biopsy_row)
+            biopsy_entries = [r for r in biopsy_rows if r["biopsy_pid"] == pid]
+            for entry in biopsy_entries:
+                result = calculate_biopsy_completeness(entry)
                 if isinstance(result.get("completeness_percent"), (int, float)):
                     scores.append(result["completeness_percent"])
 

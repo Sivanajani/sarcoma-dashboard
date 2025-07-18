@@ -1,5 +1,3 @@
-# utils/prom_consistency/biopsy_consistency.py
-
 def check_biopsy_consistency(biopsy_data: dict) -> dict:
     field_results = {}
     reasons = {}
@@ -53,6 +51,18 @@ def check_biopsy_consistency(biopsy_data: dict) -> dict:
 
     except Exception as e:
         reasons["__error__"] = f"Fehler bei Konsistenzprüfung: {str(e)}"
+
+    if not field_results:
+        return {
+            "module": "biopsy",
+            "consistent": None,
+            "total": 0,
+            "percent": None,
+            "field_results": {},
+            "reasons": {
+                "__info__": "Keine Konsistenzregeln zutreffend oder nichts zu prüfen"
+            }
+        }
 
     total_fields = sum(1 for v in field_results.values() if v is not None)
     consistent_fields = sum(1 for v in field_results.values() if v is True)

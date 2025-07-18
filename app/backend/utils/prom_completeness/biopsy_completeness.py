@@ -9,10 +9,12 @@ def calculate_biopsy_completeness(entry: dict) -> dict:
         "biopsy_organisation", "biopsy_eqvas", "biopsy_questions"
     ]
 
-    total = len(required_fields)
-    missing = [field for field in required_fields if not entry.get(field)]
-    filled = total - len(missing)
-    completeness_percent = round((filled / total) * 100, 1)
+    def is_missing(value):
+        return value is None or value == ""  
+
+    missing = [field for field in required_fields if is_missing(entry.get(field))]
+    filled = len(required_fields) - len(missing)
+    completeness_percent = round((filled / len(required_fields)) * 100, 1)
 
     return {
         "pid": entry.get("biopsy_pid"),
