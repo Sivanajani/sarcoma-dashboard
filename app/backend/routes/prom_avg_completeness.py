@@ -51,7 +51,7 @@ def get_avg_prom_completeness():
             flag = determine_flag(scores)
 
             result_list.append({
-                "pid": pid,
+                "patient_id": pid,
                 "average_completeness": avg_score,
                 "modules_checked": len(scores),
                 "flag": flag
