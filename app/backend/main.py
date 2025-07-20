@@ -89,7 +89,10 @@ from routes.prom_uniqueness_module import router as prom_uniqueness_module
 from routes.prom_avg_completeness import router as prom_avg_completeness_router
 from routes.prom_avg_correctness import router as prom_avg_correctness_router
 from routes.prom_avg_consistency import router as prom_avg_consistency_router
+from routes.prom_patients import router as prom_patients_router
 
+# PROM Patienten Routen
+app.include_router(prom_patients_router)
 
 # PROMs Vollständigkeit
 app.include_router(prom_completeness_module)
