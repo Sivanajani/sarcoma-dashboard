@@ -85,6 +85,7 @@ from routes.prom_completeness_module import router as prom_completeness_module
 from routes.prom_correctness_module import router as prom_correctness_module
 from routes.prom_consistency_module import router as prom_consistency_module
 from routes.prom_actuality_module import router as prom_actuality_module
+from routes.prom_avg_actuality import router as prom_avg_actuality_router
 from routes.prom_uniqueness_module import router as prom_uniqueness_module
 from routes.prom_avg_completeness import router as prom_avg_completeness_router
 from routes.prom_avg_correctness import router as prom_avg_correctness_router
@@ -114,6 +115,9 @@ app.include_router(prom_avg_consistency_router)
 
 # PROMs Aktualität
 app.include_router(prom_actuality_module)
+
+# Durchschnittliche Aktualität pro Patient
+app.include_router(prom_avg_actuality_router)
 
 # PROMs Eindeutigkeit
 app.include_router(prom_uniqueness_module)
