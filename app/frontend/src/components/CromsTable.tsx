@@ -78,7 +78,7 @@ const CromsTable: React.FC = () => {
 
   return (
     <div className="patient-quality-table">
-      <h2 className="overview-title">{t('patientTable.title')}</h2>
+      <h2 className="overview-title">{t('patientTable.titleCroms')}</h2>
 
       <TextField
         placeholder={t('patientTable.search')}

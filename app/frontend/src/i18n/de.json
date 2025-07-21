@@ -37,6 +37,8 @@
   },
   "patientTable": {
   "title": "Patientenübersicht - Datenqualität",
+  "titleCroms": "CROMs - Datenqualität",
+  "titleProms": "PROMs - Datenqualität",
   "search": "Suche nach Patient:in...",
   "headers": {
     "id": "Patient ID",
@@ -46,6 +48,11 @@
     "actuality": "Aktualität",
     "uniqueness": "Eindeutigkeit",
     "plausibility": "Plausib."
+  },
+  "tabs": {
+    "all": "Alle Patient:innen",
+    "croms": "Crom's",
+    "proms": "Prom's"
   },
   "tooltips": {
     "redFlag": "Kritisch unvollständiges Modul",
