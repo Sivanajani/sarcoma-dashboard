@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import CromsDetailView from './CromsDetailView';
 import PromDetailView from './PromDetailView';
+import { Tabs, Tab, Box } from '@mui/material';
+
 
 const PatientDetailView: React.FC = () => {
   const { t } = useTranslation();
@@ -40,10 +42,17 @@ const PatientDetailView: React.FC = () => {
       </h1>
 
       {showToggle && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginBottom: '1rem' }}>
-          <button onClick={() => setView('CROM')} className={view === 'CROM' ? 'active-toggle-btn' : 'inactive-toggle-btn'}>CROMs</button>
-          <button onClick={() => setView('PROM')} className={view === 'PROM' ? 'active-toggle-btn' : 'inactive-toggle-btn'}>PROMs</button>
-        </div>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs
+            value={view}
+            onChange={(_, newValue) => setView(newValue)}
+            textColor="primary"
+            indicatorColor="primary"
+          >
+            <Tab label={t('patientDetail.tabs.croms')} value="CROM" />
+            <Tab label={t('patientDetail.tabs.proms')} value="PROM" />
+          </Tabs>
+        </Box>
       )}
 
       {view === 'CROM' && patientInfo.has_croms && (

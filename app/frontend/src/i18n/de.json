@@ -60,6 +60,10 @@
   }
 },
 "patientDetail": {
+  "tabs": {
+    "croms": "CROMs",
+    "proms": "PROMs"
+  },
   "title": "Patient {{id}} – Detailansicht",
   "noModules": "Keine Module vorhanden.",
   "completeness": "Vollständigkeit",
@@ -76,6 +80,7 @@
   "duplicatesFound": "Duplikate in den folgenden Modulen gefunden",
   "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden.",
   "moduleCardTooltip": "Klicke, um Detailansicht zu öffnen"
+
 },
 "databasePage": {
   "title": "Datenbank: CROM-Module",
