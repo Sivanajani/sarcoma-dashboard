@@ -115,6 +115,16 @@
   "hyperthermia": "Hyperthermie-Therapie",
   "patient": "Patient:in"
 },
+"modulesDetail": {
+  "diagnosis": "Diagnose",
+  "pathology": "Pathologie",
+  "surgery": "Chirurgie",
+  "radiology_exam": "Radiologische Untersuchung",
+  "radiology_therapy": "Radiologische Therapie",
+  "systemic_therapy": "Systemische Therapie",
+  "sarcoma_board": "Tumorboard",
+  "hyperthermia_therapy": "Hyperthermie-Therapie"
+},
 "editableField": {
   "addField": "Feld hinzufügen",
   "removeField": "Feld entfernen",

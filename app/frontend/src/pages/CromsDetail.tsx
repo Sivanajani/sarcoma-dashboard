@@ -35,7 +35,7 @@ const CromsDetail: React.FC<CromsDetailProps> = ({ modules, patientId }) => {
           title={t('patientDetail.moduleCardTooltip')}
           style={{ cursor: 'pointer' }}
         >
-          <h4>{mod.name}</h4>
+          <h4>{t(`modulesDetail.${mod.name}`, mod.name)}</h4>
           <p className={`highlight ${getCompletenessClass(mod.completeness)}`}>
             {t('patientDetail.completeness')}: {mod.completeness}%
           </p>
