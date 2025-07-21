@@ -9,14 +9,14 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
 
 export type PatientQuality = {
-  id: number;
+  id?: number;
   patient_id: string | number;
   completeness?: number;
   correctness?: number;
   consistency?: number;
   actuality?: number;
   flag?: 'red' | 'yellow';
-  source: 'croms' | 'proms';
+  source: 'croms' | 'proms' | 'croms+proms';
 };
 
 const getColorClass = (value?: number): string => {
@@ -30,11 +30,11 @@ const AllPatientsTable: React.FC = () => {
   const { t } = useTranslation();
   const [patients, setPatients] = useState<PatientQuality[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        //CROM-Daten
+        // CROM-Daten
         const [baseRes, overviewRes, correctnessRes, consistencyRes, actualityRes] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`),
@@ -42,61 +42,83 @@ const AllPatientsTable: React.FC = () => {
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/actuality-overview`)
         ]);
-        
+
         const baseData = await baseRes.json();
-        const overviewData = await overviewRes.json();      
-        const correctnessData = await correctnessRes.json();      
-        const consistencyData = await consistencyRes.json();      
+        const overviewData = await overviewRes.json();
+        const correctnessData = await correctnessRes.json();
+        const consistencyData = await consistencyRes.json();
         const actualityData = await actualityRes.json();
-        
+
         const cromPatients: PatientQuality[] = baseData.map((p: any) => {
-          const correctness = correctnessData.find((q: any) => q.patient_id === p.id);        
-          const quality = overviewData.find((q: any) => q.patient_id === p.id);        
-          const consistency = consistencyData.find((q: any) => q.patient_id === p.id);        
-          const actuality = actualityData.find((q: any) => q.patient_id === p.id);        
-          return {          
-            id: p.id,      
-            patient_id: p.patient_id,          
-            completeness: quality?.average_completeness !== undefined ? Math.round(quality.average_completeness * 100) : undefined,          
-            correctness: correctness?.average_correctness !== undefined ? Math.round(correctness.average_correctness) : undefined,         
-            consistency: consistency?.average_consistency !== undefined ? Math.round(consistency.average_consistency) : undefined,          
-            actuality: actuality?.average_actuality !== undefined ? Math.round(actuality.average_actuality) : undefined,          
-            flag: quality?.flag ?? undefined,          
+          const correctness = correctnessData.find((q: any) => q.patient_id === p.id);
+          const quality = overviewData.find((q: any) => q.patient_id === p.id);
+          const consistency = consistencyData.find((q: any) => q.patient_id === p.id);
+          const actuality = actualityData.find((q: any) => q.patient_id === p.id);
+          return {
+            id: p.id,
+            patient_id: p.patient_id,
+            completeness: quality?.average_completeness !== undefined ? Math.round(quality.average_completeness * 100) : undefined,
+            correctness: correctness?.average_correctness !== undefined ? Math.round(correctness.average_correctness) : undefined,
+            consistency: consistency?.average_consistency !== undefined ? Math.round(consistency.average_consistency) : undefined,
+            actuality: actuality?.average_actuality !== undefined ? Math.round(actuality.average_actuality) : undefined,
+            flag: quality?.flag ?? undefined,
             source: 'croms'
           };
         });
-        
+
         // PROM-Daten
         const [promBaseRes, promCompletenessRes, promActualityRes] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/patients`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/completeness/average`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/actuality-overview`)
         ]);
-      
+
         const promBaseData = await promBaseRes.json();
         const promCompleteness = await promCompletenessRes.json();
         const promActuality = await promActualityRes.json();
 
         const promPatients: PatientQuality[] = promBaseData.map((p: any) => {
-          const completeness = promCompleteness.find((q: any) => q.patient_id === p.patient_id);        
+          const completeness = promCompleteness.find((q: any) => q.patient_id === p.patient_id);
           const actuality = promActuality.find((q: any) => q.patient_id === p.patient_id);
           return {
             patient_id: p.patient_id,
             completeness: completeness?.average_completeness,
             actuality: actuality?.average_actuality,
             flag: completeness?.flag,
-            source: 'proms'        
+            source: 'proms'
           };
         });
-        
-      setPatients([...cromPatients, ...promPatients]);
-    } catch (err) { console.error('Fehler beim Laden der Patienten:', err); }
-  };
-  
-  fetchPatients();
-}, []);
 
+        // Zusammenführen nach patient_id
+        const patientMap: { [key: string]: PatientQuality } = {};
 
+        cromPatients.forEach((p) => {
+          patientMap[p.patient_id] = { ...p };
+        });
+
+        promPatients.forEach((p) => {
+          const existing = patientMap[p.patient_id];
+          if (existing) {
+            patientMap[p.patient_id] = {
+              ...existing,
+              completeness: existing.completeness ?? p.completeness,
+              actuality: existing.actuality ?? p.actuality,
+              flag: existing.flag ?? p.flag,
+              source: 'croms+proms'
+            };
+          } else {
+            patientMap[p.patient_id] = { ...p };
+          }
+        });
+
+        setPatients(Object.values(patientMap));
+      } catch (err) {
+        console.error('Fehler beim Laden der Patienten:', err);
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   const filteredPatients = patients.filter((p) =>
     p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
@@ -165,16 +187,43 @@ const AllPatientsTable: React.FC = () => {
                 )}
               </td>
               <td>
-                <Link 
-                to={ 
-                  p.source === 'croms' 
-                  ? `/patients/${p.id}` // CROM: /patients/ID
-                  : `/proms/${p.patient_id}` // PROM: z. B. /proms/22
-                }
-                className="patient-link" 
+                <Link
+                  to={
+                    p.source === 'proms'
+                      ? `/proms/${p.patient_id}`
+                      : `/patients/${p.id}`
+                  }
+                  className="patient-link"
                 >
                   {p.patient_id}
                 </Link>
+                <div style={{ marginTop: '4px' }}>
+                  <span
+                    style={{
+                      backgroundColor:
+                        p.source === 'croms+proms'
+                          ? '#b5d0e4ff'
+                          : p.source === 'croms'
+                            ? '#cac5bcff'
+                            : '#fce4ec',
+                      color:
+                        p.source === 'croms+proms'
+                          ? '#1565c0'
+                          : p.source === 'croms'
+                            ? '#ef6c00'
+                            : '#d31762ff',
+                      padding: '2px 6px',
+                      fontSize: '0.7rem',
+                      borderRadius: '12px',
+                      fontWeight: 'bold',
+                      display: 'inline-block'
+                    }}
+                  >
+                    {p.source === 'croms+proms'
+                      ? 'CROM + PROM'
+                      : p.source.toUpperCase()}
+                  </span>
+                </div>
               </td>
 
               <td className={`value ${getColorClass(p.completeness)}`}>
