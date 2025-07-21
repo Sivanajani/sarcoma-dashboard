@@ -20,7 +20,7 @@ const PatientQualityTable: React.FC = () => {
       }}
     >
       {/* Tabs oben im Container */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '0.5rem' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '0.1rem' }}>
         <Tabs
           value={selectedTab}
           onChange={(_, newValue) => setSelectedTab(newValue)}

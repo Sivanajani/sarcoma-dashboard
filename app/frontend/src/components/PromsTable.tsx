@@ -125,7 +125,7 @@ const PromsTable: React.FC = () => {
                 )}
               </td>
               <td>
-                <Link to={`/patients/${p.patient_id}`} className="patient-link">
+                <Link to={`/proms/${p.patient_id}`} className="patient-link">
                   {p.patient_id}
                 </Link>
               </td>

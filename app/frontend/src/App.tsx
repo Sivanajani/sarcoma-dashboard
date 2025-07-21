@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import DuplicateNotifier from './components/DuplicateNotifier';
 import DatabasePage from './pages/DatabasePage';
 import ModuleDetailView from './pages/ModuleDetailView';
+import PromDetailView from './pages/PromDetailView';
 
 
 import {
@@ -47,6 +48,10 @@ function App() {
               <Route
                 path="/patients/:externalCode/:module/details"
                 element={<ModuleDetailView />}
+              />
+              <Route
+                path="/proms/:id"
+                element={<PromDetailView />}
               />
               <Route
                 path="/forms"
