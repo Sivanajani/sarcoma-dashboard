@@ -202,16 +202,16 @@ const AllPatientsTable: React.FC = () => {
                     style={{
                       backgroundColor:
                         p.source === 'croms+proms'
-                          ? '#b5d0e4ff'
+                          ? '#cadff0ff'
                           : p.source === 'croms'
-                            ? '#cac5bcff'
+                            ? '#f0e8d9ff'
                             : '#fce4ec',
                       color:
                         p.source === 'croms+proms'
                           ? '#1565c0'
                           : p.source === 'croms'
                             ? '#ef6c00'
-                            : '#d31762ff',
+                            : '#df4768ff',
                       padding: '2px 6px',
                       fontSize: '0.7rem',
                       borderRadius: '12px',
