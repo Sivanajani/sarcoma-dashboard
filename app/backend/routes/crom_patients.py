@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
-from db.engine import engine_pg
+from db.engine import engine_pg, engine_prom
 import requests
 
 router = APIRouter(prefix="/api")
@@ -79,10 +79,11 @@ def get_patient_modules(patient_id: int):
         raise HTTPException(status_code=500, detail=str(e))
     
 
-# external_code abrufen
+# external_code abrufen und schauen ob has proms und croms
 @router.get("/patients/{id}")
 def get_patient_by_id(id: int):
     try:
+        # 1. CROM-Patient holen
         with engine_pg.connect() as conn:
             result = conn.execute(
                 text("SELECT id, external_code FROM croms_patients WHERE id = :id"),
@@ -92,13 +93,36 @@ def get_patient_by_id(id: int):
             if not result:
                 raise HTTPException(status_code=404, detail="Patient not found")
 
-            return {
-                "id": result["id"],
-                "patient_id": result["external_code"]
-            }
+            patient_id = result["id"]
+            external_code = result["external_code"]  # z. B. "P5"
+
+        # 2. PROM prüfen – kommt external_code in pid der personal_data vor?
+        with engine_prom.connect() as prom_conn:
+            prom_check = prom_conn.execute(
+                text("SELECT 1 FROM personal_data WHERE pid = :external_code LIMIT 1"),
+                {"external_code": external_code}
+            ).fetchone()
+            has_proms = prom_check is not None
+
+        # 3. CROM prüfen – kommt external_code in patient_id der Diagnosen vor?
+        with engine_pg.connect() as conn:
+            crom_check = conn.execute(
+                text("SELECT 1 FROM croms_diagnoses WHERE patient_id = :internal_id LIMIT 1"),
+                {"internal_id": patient_id}                
+            ).fetchone()
+            has_croms = crom_check is not None
+
+        # 4. Ergebnis zurückgeben
+        return {
+            "id": patient_id,
+            "patient_id": external_code,
+            "has_croms": has_croms,
+            "has_proms": has_proms
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # external_code abrufen und Module für diesen Patienten
 @router.get("/patients/by-external-code/{external_code}")

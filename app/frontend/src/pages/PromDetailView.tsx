@@ -2,8 +2,13 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, Box } from '@mui/material';
 
-const PromDetailView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+interface PromDetailViewProps {
+  patientId?: string; // optional
+}
+
+const PromDetailView: React.FC<PromDetailViewProps> = ({ patientId }) => {
+  const params = useParams<{ id: string }>();
+  const effectiveId = patientId ?? params.id;
 
   return (
     <Box sx={{ padding: '2rem' }}>
@@ -11,7 +16,7 @@ const PromDetailView: React.FC = () => {
         PROM Detailansicht
       </Typography>
       <Typography variant="body1">
-        Patient:innen-ID: {id}
+        Patient:innen-ID: {effectiveId}
       </Typography>
       <Typography variant="body2" sx={{ marginTop: '1rem', color: 'gray' }}>
         (Hier kommen später Charts, Tabs usw.)
