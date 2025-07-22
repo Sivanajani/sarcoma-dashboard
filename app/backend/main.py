@@ -91,6 +91,8 @@ from routes.prom_avg_completeness import router as prom_avg_completeness_router
 from routes.prom_avg_correctness import router as prom_avg_correctness_router
 from routes.prom_avg_consistency import router as prom_avg_consistency_router
 from routes.prom_patients import router as prom_patients_router
+from routes.prom_eq5d_module import router as eq5d_router
+
 
 # PROM Patienten Routen
 app.include_router(prom_patients_router)
@@ -125,3 +127,5 @@ app.include_router(prom_uniqueness_module)
 #Liste der PROMs Tabellen
 app.include_router(prom_tables_module)
 
+# EQ-5D Routen
+app.include_router(eq5d_router)
