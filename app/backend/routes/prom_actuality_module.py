@@ -27,7 +27,7 @@ def get_eq5d_actuality():
 
 # Aktualität für einen spezifischen EQ5D-Eintrag
 @router.get("/api/proms/eq5d/actuality/{pid}")
-def get_eq5d_actuality_by_pid(pid: int):
+def get_eq5d_actuality_by_pid(pid: str):
     try:
         with engine_prom.connect() as conn:
             result = conn.execute(text("SELECT * FROM eq5d WHERE pid = :pid"), {"pid": pid})
@@ -66,7 +66,7 @@ def get_biopsy_actuality():
 
 # Aktualität für einen spezifischen Biopsy-Eintrag
 @router.get("/api/proms/biopsy/actuality/{pid}")
-def get_biopsy_actuality_by_pid(pid: int):
+def get_biopsy_actuality_by_pid(pid: str):
     try:
         with engine_prom.connect() as conn:
             result = conn.execute(

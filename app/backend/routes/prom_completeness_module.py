@@ -23,7 +23,7 @@ def get_eq5d_completeness():
 
 # Get EQ5D completeness for a specific patient by pid
 @router.get("/api/proms/eq5d/completeness/{pid}")
-def get_eq5d_completeness_by_pid(pid: int):
+def get_eq5d_completeness_by_pid(pid: str):
     try:
         with engine_prom.connect() as conn:
             result = conn.execute(
@@ -56,7 +56,7 @@ def get_biopsy_completeness():
 
 # Get biopsy completeness for a specific patient by pid
 @router.get("/api/proms/biopsy/completeness/{pid}")
-def get_biopsy_completeness_by_pid(pid: int):
+def get_biopsy_completeness_by_pid(pid: str):
     try:
         with engine_prom.connect() as conn:
             result = conn.execute(
@@ -89,7 +89,7 @@ def get_personal_completeness():
 
 # Get personal data completeness for a specific patient by pid
 @router.get("/api/proms/personal/completeness/{pid}")
-def get_personal_completeness_by_pid(pid: int):
+def get_personal_completeness_by_pid(pid: str):
     try:
         with engine_prom.connect() as conn:
             result = conn.execute(

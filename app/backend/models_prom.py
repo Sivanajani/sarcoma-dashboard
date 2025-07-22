@@ -6,7 +6,7 @@ class Eq5d(Base):
 
     row_id = Column(Integer, primary_key=True, index=True)
     date = Column(Date, nullable=True)
-    pid = Column(BigInteger, nullable=False)
+    pid = Column(String, nullable=False)
     institution = Column(Text, nullable=True)
     vorname = Column(Text, nullable=True)
     nachname = Column(Text, nullable=True)
@@ -25,7 +25,7 @@ class Biopsy(Base):
 
     biopsy_row_id = Column(Integer, primary_key=True, index=True)
     biopsy_date = Column(Date, nullable=True)
-    biopsy_pid = Column(BigInteger, nullable=False)
+    biopsy_pid = Column(String, nullable=False)
     biopsy_institution = Column(String, nullable=True)
     biopsy_vorname = Column(String, nullable=True)
     biopsy_nachname = Column(String, nullable=True)

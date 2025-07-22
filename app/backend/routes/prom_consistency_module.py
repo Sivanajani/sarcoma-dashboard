@@ -9,7 +9,7 @@ router = APIRouter()
 
 # Route für Konsistenzcheck EQ5D – einzelne Person
 @router.get("/api/patients/{pid}/consistency/eq5d")
-def get_eq5d_consistency_for_patient(pid: int, db: Session = Depends(get_prom_db)):
+def get_eq5d_consistency_for_patient(pid: str, db: Session = Depends(get_prom_db)):
     record = db.query(Eq5d).filter(Eq5d.pid == pid).order_by(Eq5d.date.desc()).first()
     if not record:
         raise HTTPException(status_code=404, detail="Kein EQ5D-Datensatz für diese PID gefunden")
@@ -33,7 +33,7 @@ def get_eq5d_consistency_all(db: Session = Depends(get_prom_db)):
 
 # Route für Konsistenzcheck Biopsy – einzelne Person
 @router.get("/api/patients/{pid}/consistency/biopsy")
-def get_biopsy_consistency_for_patient(pid: int, db: Session = Depends(get_prom_db)):
+def get_biopsy_consistency_for_patient(pid: str, db: Session = Depends(get_prom_db)):
     record = db.query(Biopsy).filter(Biopsy.biopsy_pid == pid).order_by(Biopsy.biopsy_date.desc()).first()
     if not record:
         raise HTTPException(status_code=404, detail="Kein Biopsy-Datensatz für diese PID gefunden")
