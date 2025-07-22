@@ -64,7 +64,7 @@
     "croms": "CROMs",
     "proms": "PROMs"
   },
-  "title": "Patient {{id}} – Detailansicht",
+  "title": "Detailansicht - Patient: {{pid}}",
   "noModules": "Keine Module vorhanden.",
   "completeness": "Vollständigkeit",
   "correctness": "Inhaltliche Richtigkeit",
@@ -84,7 +84,7 @@
 },
 "databasePage": {
   "title": "Datenbank: CROM-Module",
-  "searchPlaceholder": "Patient-Id (z. B. P1)",
+  "searchPlaceholder": "Patient-Id (z.B. P1856)",
   "searchButton": "Suchen",
   "patientId": "Patienten-ID in der Datenbank",
   "birthDate": "Geburtsdatum",
