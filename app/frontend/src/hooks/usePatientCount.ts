@@ -1,21 +1,46 @@
 import { useEffect, useState } from 'react';
 
+type PatientCounts = {
+  croms: number | null;
+  proms: number | null;
+  combined: number | null;
+};
+
 export const usePatientCount = () => {
-  const [count, setCount] = useState<number | null>(null);
+  const [counts, setCounts] = useState<PatientCounts>({
+    croms: null,
+    proms: null,
+    combined: null,
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/patient-count')
-      .then(response => response.json())
-      .then(data => {
-        setCount(data.patient_count); 
+    const fetchCounts = async () => {
+      try {
+        const [cromsRes, promsRes, combinedRes] = await Promise.all([
+          fetch('http://localhost:8000/api/patient-count'),
+          fetch('http://localhost:8000/api/proms/patient-count'),
+          fetch('http://localhost:8000/api/patients/summary/combined-count'),
+        ]);
+
+        const cromsData = await cromsRes.json();
+        const promsData = await promsRes.json();
+        const combinedData = await combinedRes.json();
+
+        setCounts({
+          croms: cromsData.patient_count ?? null,
+          proms: promsData.patient_count ?? null,
+          combined: combinedData.combined_patient_count ?? null,
+        });
+      } catch (error) {
+        console.error('Fehler beim Laden der Patientenzahlen:', error);
+      } finally {
         setLoading(false);
-      })
-      .catch(error => {
-        console.error('Fehler beim Abrufen der Patientenzahl:', error);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchCounts();
   }, []);
 
-  return { count, loading };
+  return { counts, loading };
 };

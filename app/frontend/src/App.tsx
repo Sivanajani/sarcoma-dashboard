@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import DuplicateNotifier from './components/DuplicateNotifier';
 import DatabasePage from './pages/DatabasePage';
 import ModuleDetailView from './pages/ModuleDetailView';
+import { useRef, useState } from 'react';
 
 
 import {
@@ -18,6 +19,12 @@ import {
 
 function App() {
   const { t } = useTranslation();
+  const [selectedTab, setSelectedTab] = useState<'all' | 'croms' | 'proms'>('all');
+  const tableRef = useRef<HTMLDivElement>(null);
+  const scrollToTable = () => {
+    tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
 
   return (
     <Router>
@@ -35,8 +42,13 @@ function App() {
                     <div className="dashboard-header">
                       <h1>{t('dashboard.title')}</h1>
                     </div>
-                    <Overview />
-                    <PatientQualityTable />
+                    <Overview 
+                      setSelectedTab={setSelectedTab}
+                      scrollToTable={scrollToTable}
+                    />
+                    <div ref={tableRef}>
+                      <PatientQualityTable selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+                    </div>
                   </>
                 }
               />

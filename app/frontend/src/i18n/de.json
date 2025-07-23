@@ -17,21 +17,21 @@
     }
   },
   "dashboard": {
-    "title": "Datenqualitäts-Dashboard",
-    "overview-title": "Übersicht",
-    "kpi": {
-      "total": "Gesamtanzahl",
-      "complete": "≥90 % vollständig",
-      "flags": "Red Flags",
-      "avg": "Ø Vollständigkeit",
-      "tooltip": {
-        "total": "Anzahl aller aktuell registrierten Patient:innen",
-        "complete": "Patient:innen, deren Datensätze zu ≥90% vollständig sind",
-        "flags": "Anzahl auffälliger Fälle mit z.B. multiplen Läsionen oder R2-Status",
-        "avg": "Durchschnittliche Vollständigkeit über alle Module"
-      }
+  "title": "Datenqualitäts-Dashboard",
+  "overview-title": "Übersicht",
+  "kpi": {
+    "total": "Gesamtanzahl Patient:innen",
+    "cromsTotal": "Patient:innen in der CROM-Datenbank",
+    "flags": "Auffällige Fälle",
+    "promsTotal": "Patient:innen in der PROM-Datenbank",
+    "tooltip": {
+      "total": "Anzahl aller einzigartigen Patient:innen in CROM- und PROM-Datenbanken (kombiniert)",
+      "cromsTotal": "Anzahl aktuell registrierter Patient:innen in der CROM-Datenbank",
+      "flags": "Anzahl auffälliger Patient:innen, z. B. mit multiplen Läsionen oder R2-Status",
+      "promsTotal": "Anzahl aktuell registrierter Patient:innen in der PROM-Datenbank"
     }
-  },
+  }
+},
   "lang": {
     "de": "DE"
   },

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
 import { Tabs, Tab, Box, Paper } from '@mui/material';
 import AllPatientsTable from './AllPatientsTable';
 import CromsTable from './CromsTable';
 import PromsTable from './PromsTable';
 import { useTranslation } from 'react-i18next';
 
-const PatientQualityTable: React.FC = () => {
+type Props = {
+  selectedTab: 'all' | 'croms' | 'proms';
+  setSelectedTab: (tab: 'all' | 'croms' | 'proms') => void;
+};
+
+const PatientQualityTable = ({ selectedTab, setSelectedTab }: Props) => {
   const { t } = useTranslation();
-  const [selectedTab, setSelectedTab] = useState<'all' | 'croms' | 'proms'>('all');
 
   return (
     <Paper
@@ -20,7 +23,7 @@ const PatientQualityTable: React.FC = () => {
       }}
     >
       {/* Tabs oben im Container */}
-      <Box sx={{ borderBottom: 0.5, borderColor: 'divider', marginBottom: '0rem' }}>
+      <Box sx={{ borderBottom: 0.5, borderColor: 'divider' }}>
         <Tabs
           value={selectedTab}
           onChange={(_, newValue) => setSelectedTab(newValue)}

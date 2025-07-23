@@ -79,3 +79,18 @@ def lookup_patient(pid: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/patients/summary/combined-count")
+def get_combined_patient_count():
+    with engine_pg.connect() as conn_croms, engine_prom.connect() as conn_prom:
+        # Alle external_codes aus croms_patients
+        croms_result = conn_croms.execute(text("SELECT external_code FROM croms_patients"))
+        croms_codes = {row.external_code for row in croms_result if row.external_code}
+
+        # Alle pid aus proms_personal_data
+        proms_result = conn_prom.execute(text("SELECT pid FROM personal_data"))
+        proms_pids = {row.pid for row in proms_result if row.pid}
+
+        # Kombination beider Sets → automatische Duplikatentfernung
+        combined_ids = croms_codes.union(proms_pids)
+
+        return {"combined_patient_count": len(combined_ids)}
