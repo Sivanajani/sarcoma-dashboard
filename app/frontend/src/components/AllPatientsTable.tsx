@@ -191,7 +191,7 @@ const AllPatientsTable: React.FC = () => {
                   to={
                     p.source === 'proms'
                       ? `/proms/${p.patient_id}`
-                      : `/patients/${p.id}`
+                      : `/patients/${p.patient_id}`
                   }
                   className="patient-link"
                 >

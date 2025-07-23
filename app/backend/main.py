@@ -92,7 +92,10 @@ from routes.prom_avg_correctness import router as prom_avg_correctness_router
 from routes.prom_avg_consistency import router as prom_avg_consistency_router
 from routes.prom_patients import router as prom_patients_router
 from routes.prom_eq5d_module import router as eq5d_router
+from routes import patient_lookup
 
+
+app.include_router(patient_lookup.router)
 
 # PROM Patienten Routen
 app.include_router(prom_patients_router)

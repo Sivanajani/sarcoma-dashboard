@@ -139,7 +139,7 @@ const CromsTable: React.FC = () => {
                 )}
               </td>
               <td>
-                <Link to={`/patients/${p.id}`} className="patient-link">
+                <Link to={`/patients/${p.patient_id}`} className="patient-link">
                   {p.patient_id}
                 </Link>
               </td>

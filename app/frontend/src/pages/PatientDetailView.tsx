@@ -9,26 +9,44 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const PatientDetailView: React.FC = () => {
   const { t } = useTranslation();
   const { patientId } = useParams();
-  const navigate = useNavigate(); // <-- hinzugefügt
+  const navigate = useNavigate(); 
   const [patientInfo, setPatientInfo] = useState<{ id: number; patient_id: string; has_proms?: boolean; has_croms?: boolean } | null>(null);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'PROM' | 'CROM'>('CROM');
 
   useEffect(() => {
-    const fetchPatient = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/${patientId}`);
-        const data = await res.json();
-        setPatientInfo(data);
-        setView(data.has_proms && !data.has_croms ? 'PROM' : 'CROM');
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchPatient = async () => {
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-    if (patientId) fetchPatient();
-  }, [patientId]);
+      // 1. Erst versuchen: CROM-Endpunkt
+      //let res = await fetch(`${baseUrl}/api/patients/${patientId}`);
+      //let res = await fetch(`${baseUrl}/api/patients/by-external-code/${patientId}`);
+      let res = await fetch(`${baseUrl}/api/patient-lookup/${patientId}`);
+      let data;
+
+      if (res.ok) {
+        data = await res.json();
+      } else {
+        // 2. Wenn CROM fehl schlägt → versuch PROM-Endpunkt
+        res = await fetch(`${baseUrl}/api/proms/patient-info/${patientId}`);
+        if (!res.ok) throw new Error("Patient not found in PROMs or CROMs");
+        data = await res.json();
+      }
+
+      setPatientInfo(data);
+      setView(data.has_proms && !data.has_croms ? 'PROM' : 'CROM');
+    } catch (err) {
+      console.error('Fehler beim Laden des Patienten:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (patientId) fetchPatient();
+}, [patientId]);
+
+
 
   if (loading || !patientInfo) return <p>{t('patientDetail.loading')}</p>;
 
