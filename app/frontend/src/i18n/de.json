@@ -109,6 +109,29 @@
   "biopsyTitle": "PROMs Biopsie",
   "biopsyText": "Die Biopsie-Daten werden demnächst als Tabelle angezeigt."
 },
+"eq5dChart": {
+  "startDate": "Startdatum",
+  "endDate": "Enddatum",
+  "reset": "Zurücksetzen",
+  "export": "Exportieren",
+  "exportTitle": "Diagramm exportieren",
+  "exportPlaceholder": "Titel für das Diagramm",
+  "exportConfirm": "Exportieren",
+  "exportCancel": "Abbrechen",
+  "noData": "Keine Daten im gewählten Zeitraum verfügbar.",
+  "line": "Linie",
+  "bar": "Balken",
+  "fields": {
+    "mobilitaet": "Mobilität",
+    "selbstversorgung": "Selbstversorgung",
+    "gewohnte_aktivitaeten": "Aktivitäten",
+    "schmerz": "Schmerz",
+    "angst": "Angst",
+    "vas": "VAS",
+    "belastung": "Belastung",
+    "funktion": "Funktion"
+  }
+},
 "modules": {
   "diagnosis": "Diagnose",
   "pathology": "Pathologie",
