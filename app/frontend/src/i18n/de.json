@@ -103,6 +103,12 @@
   "saveErrorText": "Es gab ein Problem beim Speichern der Änderungen. Bitte versuchen Sie es später erneut.",
   "notFound": "Patient nicht gefunden oder Serverfehler."
 },
+"promDetail": {
+  "eq5dTitle": "EQ-5D Verlauf",
+  "eq5dEmpty": "Keine EQ5D-Daten verfügbar.",
+  "biopsyTitle": "PROMs Biopsie",
+  "biopsyText": "Die Biopsie-Daten werden demnächst als Tabelle angezeigt."
+},
 "modules": {
   "diagnosis": "Diagnose",
   "pathology": "Pathologie",
