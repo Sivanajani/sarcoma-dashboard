@@ -93,7 +93,7 @@ from routes.prom_avg_consistency import router as prom_avg_consistency_router
 from routes.prom_patients import router as prom_patients_router
 from routes.prom_eq5d_module import router as eq5d_router
 from routes import patient_lookup
-
+from routes.prom_biopsy_module import router as prom_biopsy_module
 
 app.include_router(patient_lookup.router)
 
@@ -132,3 +132,6 @@ app.include_router(prom_tables_module)
 
 # EQ-5D Routen
 app.include_router(eq5d_router)
+
+# PROMs Biopsie Routen
+app.include_router(prom_biopsy_module)
