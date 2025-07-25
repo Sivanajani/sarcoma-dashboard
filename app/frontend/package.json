@@ -16,6 +16,7 @@
     "@mui/material": "^7.1.0",
     "@react-keycloak/web": "^3.4.0",
     "axios": "^1.10.0",
+    "date-fns": "^4.1.0",
     "dom-to-image": "^2.6.0",
     "html-to-image": "^1.11.13",
     "i18next": "^25.2.1",

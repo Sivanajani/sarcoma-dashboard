@@ -1,4 +1,3 @@
-# routes/prom_eq5d_module.py
 from fastapi import APIRouter
 from sqlalchemy import text
 from db.engine import engine_prom
