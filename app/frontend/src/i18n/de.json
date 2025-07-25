@@ -108,7 +108,14 @@
   "eq5dEmpty": "Keine EQ5D-Daten verfügbar.",
   "biopsyTitle": "PROMs Biopsie",
   "biopsyText": "Die Biopsie-Daten werden demnächst als Tabelle angezeigt.",
-  "biopsyEmpty": "Keine Biopsie-Einträge vorhanden."
+  "biopsyEmpty": "Keine Biopsie-Einträge vorhanden.",
+  "biopsyChartTitle": "Biopsie-Metriken im Vergleich",
+  "biopsyChart": {
+    "teamraum": "Team & Raum",
+    "organisation": "Organisation",
+    "vas": "VAS",
+    "schmerz": "Schmerz"
+  }
 },
 "eq5dChart": {
   "startDate": "Startdatum",

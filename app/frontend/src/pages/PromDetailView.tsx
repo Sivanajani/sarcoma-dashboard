@@ -4,6 +4,8 @@ import { Typography, Box, Paper } from '@mui/material';
 import Eq5dChart from '../components/Eq5dChart';
 import { useTranslation } from 'react-i18next';
 import BiopsyDetail from '../components/BiopsyDetail';
+import BiopsyRadarChart from "../components/BiopsyRadarChart";
+
 
 interface PromDetailViewProps {
   patientId?: string;
@@ -101,6 +103,13 @@ const PromDetailView: React.FC<PromDetailViewProps> = ({ patientId }) => {
             {t('promDetail.biopsyEmpty')}
           </Typography>
         </Paper>
+      )}
+      
+      {biopsyData.length > 0 && (
+        <>
+          <h2 className="overview-title">{t('promDetail.biopsyChartTitle')}</h2>
+          <BiopsyRadarChart entries={biopsyData} />
+        </>
       )}
     </Box>
   );
