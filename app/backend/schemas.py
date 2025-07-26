@@ -2,6 +2,9 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import date
 from typing import List
+from typing import Optional
+from pydantic import validator
+
 
 
 # --- Pathalogy ---
@@ -282,4 +285,96 @@ class SarcomaBoardRead(SarcomaBoardBase):
 
 
 class SarcomaBoardUpdate(SarcomaBoardBase):
+    pass
+
+
+# --- PROM EQ5D ---
+class Eq5dBase(BaseModel):
+    date: date
+    pid: str
+    institution: Optional[str] = None
+    vorname: Optional[str] = None
+    nachname: Optional[str] = None
+    mobilitaet: Optional[int] = None
+    selbstversorgung: Optional[int] = None
+    gewohnte_aktivitaeten: Optional[int] = None
+    schmerz: Optional[int] = None
+    angst: Optional[int] = None
+    questions: Optional[str] = None
+    vas: Optional[int] = None
+    belastung: Optional[int] = None
+    funktion: Optional[int] = None
+
+class Eq5dRead(Eq5dBase):
+    row_id: int
+
+    class Config:
+        orm_mode = True
+
+class Eq5dUpdate(Eq5dBase):
+    pass
+
+# --- PROM Biopsy ---
+class PromsBiopsyBase(BaseModel):
+    biopsy_date: Optional[date] = None
+    biopsy_pid: str
+    biopsy_institution: Optional[str] = None
+    biopsy_vorname: Optional[str] = None
+    biopsy_nachname: Optional[str] = None
+    biopsy_email: Optional[str] = None
+    biopsy_notwendigkeit: Optional[bool] = None
+    biopsy_angst: Optional[bool] = None
+    biopsy_erklaerung: Optional[bool] = None
+    biopsy_verstehen: Optional[bool] = None
+    biopsy_schmerz_wie_erwartet: Optional[str] = None
+    biopsy_schmerz: Optional[int] = None
+    biopsy_medikamente: Optional[bool] = None
+    biopsy_beobachtungszeitraum: Optional[str] = None
+    biopsy_blutende_wunde: Optional[bool] = None
+    biopsy_probleme_wunde: Optional[bool] = None
+    biopsy_schmerzkontrolle: Optional[bool] = None
+    biopsy_team_raum: Optional[int] = None
+    biopsy_organisation: Optional[int] = None
+    biopsy_eqvas: Optional[int] = None
+    biopsy_questions: Optional[str] = None
+
+class PromsBiopsyRead(PromsBiopsyBase):
+    biopsy_row_id: int
+
+    class Config:
+        orm_mode = True
+
+class PromsBiopsyUpdate(PromsBiopsyBase):
+    pass
+
+# --- PROM Personal Data ---
+class PersonalDataBase(BaseModel):
+    institution: Optional[str] = None
+    pid: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    date_birth: Optional[date] = None
+    gender: Optional[str] = None
+    street: Optional[str] = None
+    house_nr: Optional[str] = None
+    post_code: Optional[str] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
+    insurance_company: Optional[str] = None
+    insurance_class: Optional[str] = None
+    insurance_number: Optional[str] = None
+    ahv: Optional[str] = None
+    consent: Optional[bool] = None
+
+
+class PersonalDataRead(PersonalDataBase):
+    row_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class PersonalDataUpdate(PersonalDataBase):
     pass
