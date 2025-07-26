@@ -54,7 +54,7 @@ const PromDatabase = () => {
 
  const handleSave = async (entryKey: string) => {
   const dataToSave = editedData[entryKey];
-  const moduleName = entryKey.split("-")[0]; // z. B. 'eq5d'
+  const moduleName = entryKey.split("-")[0];
   const rowId = dataToSave?.row_id;
 
   if (!rowId) {
@@ -151,25 +151,26 @@ const PromDatabase = () => {
                           <div className="edit-form">
                             {(() => {
                                 const currentKey = `${moduleName}-${index}`;
-                                return Object.entries(editedData[currentKey] || {}).map(([key, value]) => (
-                                    <div key={key}>
-                                        <label>{key.replace(/_/g, ' ')}:</label>
-                                        <EditableField
-                                            value={value}
-                                            onChange={(newVal) =>
-                                                setEditedData((prev) => ({
-                                                    ...prev,
-                                                    [currentKey]: {
-                                                        ...prev[currentKey],
-                                                        [key]: newVal
-                                                    }
-                                                }))
-                                            }
-                                        />
-                                    </div>
+                                return Object.entries(editedData[currentKey] || {})
+                                .filter(([key]) => key !== 'pid' && key !== 'row_id') // ← diese Zeile ist neu
+                                .map(([key, value]) => (
+                                  <div key={key}>
+                                    <label>{key.replace(/_/g, ' ')}:</label>
+                                    <EditableField
+                                      value={value}
+                                      onChange={(newVal) =>
+                                        setEditedData((prev) => ({
+                                          ...prev,
+                                          [currentKey]: {
+                                            ...prev[currentKey],
+                                            [key]: newVal
+                                          }
+                                        }))
+                                      }
+                                    />
+                                  </div>
                                 ));
                             })()}
-
 
                             <button onClick={() => handleSave(`${moduleName}-${index}`)}>
                               {t("databasePage.save")}

@@ -101,7 +101,21 @@
   "saveSuccessText": "Die Änderungen für das Modul \"{{module}}\" wurden erfolgreich gespeichert.",
   "saveErrorTitle": "Fehler beim Speichern",
   "saveErrorText": "Es gab ein Problem beim Speichern der Änderungen. Bitte versuchen Sie es später erneut.",
-  "notFound": "Patient nicht gefunden oder Serverfehler."
+  "notFound": "Patient nicht gefunden oder Serverfehler.",
+  "date": "Datum",
+  "pid": "Patienten-ID",
+  "institution": "Institution",
+  "vorname": "Vorname",
+  "nachname": "Nachname",
+  "mobilitaet": "Mobilität",
+  "selbstversorgung": "Selbstversorgung",
+  "gewohnte_aktivitaeten": "Aktivitäten",
+  "schmerz": "Schmerz",
+  "angst": "Angst",
+  "questions": "Fragen",
+  "vas": "VAS",
+  "belastung": "Belastung",
+  "funktion": "Funktion"
 },
 "promDetail": {
   "eq5dTitle": "EQ-5D Verlauf",

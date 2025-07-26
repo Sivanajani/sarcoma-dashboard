@@ -316,7 +316,7 @@ class Eq5dUpdate(Eq5dBase):
 
 # --- PROM Biopsy ---
 class PromsBiopsyBase(BaseModel):
-    biopsy_date: Optional[date] = None
+    biopsy_date: date
     biopsy_pid: str
     biopsy_institution: Optional[str] = None
     biopsy_vorname: Optional[str] = None

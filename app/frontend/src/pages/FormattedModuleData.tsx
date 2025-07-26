@@ -38,7 +38,7 @@ const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data }) => {
     <div style={{ padding: '0.5rem 0' }}>
       {Object.entries(data).map(([key, value]) => (
         <div key={key} style={{ marginBottom: '0.5rem' }}>
-          <strong>{key.replace(/_/g, ' ')}:</strong> {renderValue(value)}
+          <strong>{t(`databasePage.${key}`, { defaultValue: key.replace(/_/g, ' ') })}:</strong> {renderValue(value)}
         </div>
       ))}
     </div>
