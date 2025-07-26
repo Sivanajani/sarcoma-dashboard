@@ -154,7 +154,14 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
         );
     }
     return null;
-};
+  };
+  
+  const maxY = Math.max(
+    ...filteredEntries.flatMap(entry =>
+      selectedFields.map(key => Number(entry[key] ?? 0))
+    )
+  );
+  const roundedMaxY = Math.ceil(maxY / 10) * 10 || 5;
 
   return (
     <Box sx={{ backgroundColor: '#fafafa', borderRadius: 2, p: 3, boxShadow: 1 }}>
@@ -240,7 +247,7 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
               <PolarGrid />
               <PolarAngleAxis dataKey="date" />
-              <PolarRadiusAxis domain={[0, 100]} />
+              <PolarRadiusAxis domain={[0, roundedMaxY]} />
               <Tooltip content={<CustomTooltip fieldLabels={fieldLabels} />} />
               <Legend formatter={(value) => fieldLabels[value as keyof BiopsyEntry]} />
               {selectedFields.map((key) => (
