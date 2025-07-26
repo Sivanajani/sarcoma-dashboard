@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 interface FormattedModuleDataProps {
   data: Record<string, any>;
+   moduleName?: string;
 }
 
-const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data }) => {
+const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data, moduleName }) => {
   const { t } = useTranslation();
 
   const renderValue = (value: any): React.ReactNode => {
@@ -36,11 +37,20 @@ const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data }) => {
 
   return (
     <div style={{ padding: '0.5rem 0' }}>
-      {Object.entries(data).map(([key, value]) => (
-        <div key={key} style={{ marginBottom: '0.5rem' }}>
-          <strong>{t(`databasePage.${key}`, { defaultValue: key.replace(/_/g, ' ') })}:</strong> {renderValue(value)}
-        </div>
-      ))}
+      {Object.entries(data).map(([key, value]) => {
+        const baseKey = moduleName ? `${moduleName}.${key}` : `databasePage.${key}`;
+        return (
+          <div key={key} style={{ marginBottom: '0.5rem' }}>
+            <strong>
+              {t(baseKey, {
+                defaultValue: t(`databasePage.${key}`, {
+                  defaultValue: key.replace(/_/g, ' ')
+                })
+              })}:
+            </strong> {renderValue(value)}
+          </div>
+        );
+      })}
     </div>
   );
 };

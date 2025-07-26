@@ -20,8 +20,11 @@ const PromDatabase = () => {
 
   const handleSearch = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/eq5d/by-pid/${pid}`);
-      setModuleData({ eq5d: res.data });
+      const [eq5dRes, biopsyRes] = await Promise.all([
+        axios.get(`http://localhost:8000/api/eq5d/by-pid/${pid}`),
+        axios.get(`http://localhost:8000/api/biopsy/by-pid/${pid}`)
+      ]);
+      setModuleData({ eq5d: eq5dRes.data, biopsy: biopsyRes.data });
       setError('');
       setOpenModules(new Set());
       setEditModules(new Set());
@@ -55,7 +58,7 @@ const PromDatabase = () => {
  const handleSave = async (entryKey: string) => {
   const dataToSave = editedData[entryKey];
   const moduleName = entryKey.split("-")[0];
-  const rowId = dataToSave?.row_id;
+  const rowId = dataToSave?.row_id ?? dataToSave?.biopsy_row_id;
 
   if (!rowId) {
     Swal.fire({
@@ -177,7 +180,7 @@ const PromDatabase = () => {
                             </button>
                           </div>
                         ) : (
-                          <FormattedModuleData data={entry as Record<string, any>} />
+                          <FormattedModuleData data={entry as Record<string, any>} moduleName={`${moduleName}Fields`} />
                         )}
                       </div>
                     ))
