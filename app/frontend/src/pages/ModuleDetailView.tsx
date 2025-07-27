@@ -17,6 +17,7 @@ const ModuleDetailView: React.FC = () => {
           `${import.meta.env.VITE_API_BASE_URL}/api/patients/by-external-code/${externalCode}/${module}/details`
         );
         const json = await res.json();
+        console.log("MODULDETAIL-DATA:", json);
         setData(json);
       } catch (err) {
         console.error(err);

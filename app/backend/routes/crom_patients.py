@@ -197,25 +197,43 @@ def get_patients_diagnosis_detail(patient_id: str):
                 raise HTTPException(status_code=404, detail="Diagnose nicht gefunden")
             field_values = dict(row._mapping)
 
-        # Endpunkte abrufen
         base_url = "http://localhost:8000"
+
+        # Correctness
         try:
-            correctness = requests.get(f"{base_url}/api/patients/{patient_id}/correctness/diagnosis").json()["field_results"]
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/diagnosis"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
         except:
             correctness = {}
 
+        # Consistency
         try:
-            consistency = requests.get(f"{base_url}/api/patients/{patient_id}/consistency/diagnosis").json()["rule_results"]
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/diagnosis"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
         except:
             consistency = {}
 
+        # Actuality
         try:
-            actuality = requests.get(f"{base_url}/api/patients/{patient_id}/actuality/diagnosis").json()["details"]
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/diagnosis"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
         except:
             actuality = {}
 
+        # Completeness (bereits in fertiger Struktur)
         try:
-            completeness = requests.get(f"{base_url}/patients/{patient_id}/completeness/diagnosis").json()
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/diagnosis"
+            ).json()
         except:
             completeness = {}
 
@@ -231,3 +249,4 @@ def get_patients_diagnosis_detail(patient_id: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
