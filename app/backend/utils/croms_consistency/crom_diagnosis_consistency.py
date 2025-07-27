@@ -26,15 +26,13 @@ def check_consistency_diagnosis(entry):
     death_reason = normalize(entry.get("death_reason"))
     last_status = normalize(entry.get("last_status"))
 
-    return {
+    result = {
         "region_side_coupling": (
             (not region and not side) or (bool(region) and bool(side))
         ),
-
         "additional_region_side_coupling": (
             (not add_region and not add_side) or (bool(add_region) and bool(add_side))
         ),
-
         "ecog_vs_death": (
             None if last_status not in DECEASED_STATUSES
             else ecog in ["", "0", None]
@@ -44,3 +42,11 @@ def check_consistency_diagnosis(entry):
             (death_reason in VALID_DEATH_REASONS and last_status in DECEASED_STATUSES)
         ),
     }
+
+    failed = [k for k, v in result.items() if v is False]
+    if failed:
+        result["summary"] = f"Inkonsistenz bei: {', '.join(failed)}"
+    else:
+        result["summary"] = "Alle Konsistenzregeln erfüllt."
+
+    return result
