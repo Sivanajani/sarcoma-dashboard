@@ -115,15 +115,36 @@ const PromDatabase = () => {
     <div>
       <h2>{t("databasePage.promTitle")}</h2>
 
+      {/* Suchleiste */}
       <div className="search-bar">
         <input
           type="text"
           placeholder={t("databasePage.searchPlaceholder")}
+          style={{
+            backgroundColor: '#f9f9f9',
+            color: '#213547',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            padding: '10px 14px',
+            fontSize: '1rem',
+            width: '280px' }}
           value={pid}
           onChange={(e) => setPid(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
-        <button onClick={handleSearch}>
+        <button
+          onClick={handleSearch}
+          style={{
+            backgroundColor: '#4da6ff',
+            color: '#fff',
+            padding: '10px 18px',
+            fontSize: '1rem',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
+          }}
+        >
           {t("databasePage.searchButton")}
         </button>
       </div>
@@ -135,7 +156,7 @@ const PromDatabase = () => {
           {Object.entries(moduleData).map(([moduleName, entries]) => (
             <div key={moduleName} className="module-card">
               <div className="module-header" onClick={() => toggleModuleOpen(moduleName)}>
-                <h4>{t(`modules.${moduleName}`, { defaultValue: moduleName })}</h4>
+                <h4>{t(`modules.${moduleName}`, { defaultValue: moduleName.replace(/_/g, ' ') })}</h4>
                 {openModules.has(moduleName) ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </div>
 
@@ -155,7 +176,7 @@ const PromDatabase = () => {
                             {(() => {
                                 const currentKey = `${moduleName}-${index}`;
                                 return Object.entries(editedData[currentKey] || {})
-                                .filter(([key]) => key !== 'pid' && key !== 'row_id') // ← diese Zeile ist neu
+                                .filter(([key]) => key !== 'pid' && key !== 'row_id')
                                 .map(([key, value]) => (
                                   <div key={key}>
                                     <label>{key.replace(/_/g, ' ')}:</label>
