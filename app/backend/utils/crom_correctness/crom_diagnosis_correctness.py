@@ -2,7 +2,7 @@ from utils.crom_correctness.crom_reference_data import REFERENCE_DATA
 from utils.crom_correctness.crom_shared_rules import is_allowed_value, is_valid_date
 
 def validate_diagnosis_correctness(entry: dict, birth_date: str = None) -> dict:
-    return {
+    result = {
         "tumor_anatomic_region": is_allowed_value(entry.get("tumor_anatomic_region"), REFERENCE_DATA["anatomic_regions"]),
         "tumor_anatomic_lesion_side": is_allowed_value(entry.get("tumor_anatomic_lesion_side"), REFERENCE_DATA["lesion_sides"]),
         "tumor_syndromes": is_allowed_value(entry.get("tumor_syndromes"), REFERENCE_DATA["tumor_syndromes"]),
@@ -19,3 +19,17 @@ def validate_diagnosis_correctness(entry: dict, birth_date: str = None) -> dict:
         "other_diagnosis": None,
         "patient_history": None,
     }
+
+    # Liste aller Fehler sammeln
+    failed_fields = [
+        f" {key} ist ungültig"
+        for key, value in result.items()
+        if value is False  # Nur True/False prüfen, None ignorieren
+    ]
+
+    if failed_fields:
+        result["summary"] = " | ".join(failed_fields)
+    else:
+        result["summary"] = " Alle prüfbaren Felder sind korrekt."
+
+    return result
