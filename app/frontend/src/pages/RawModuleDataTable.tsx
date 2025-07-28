@@ -3,6 +3,8 @@ import './RawModuleDataTable.css';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
+import EditableField from '../components/EditableField';
+
 
 interface RawModuleDataTableProps {
   moduleData: Record<string, any>;
@@ -82,37 +84,35 @@ const RawModuleDataTable: React.FC<RawModuleDataTableProps> = ({ moduleData, mod
             return (
               <tr key={key}>
                 <td className="label-cell">
-                  {t(`databasePage.${key}`, { defaultValue: key.replace(/_/g, ' ') })}
+                  {t(`${moduleName}.${key}`, {
+                    defaultValue: t(`databasePage.${key}`, {
+                      defaultValue: key.replace(/_/g, ' ')
+                    })
+                  })}
                 </td>
+
                 
                 <td className="field-value">
                   {isEditing ? (
-                    Array.isArray(value) ? (
-                      <input
-                        type="text"
-                        value={value?.join(', ') ?? ''}
-                        onChange={(e) => handleChange(key, e.target.value.split(',').map(v => v.trim()))}                              
-                        style={{ width: '100%', color: '#222' }}      
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        value={value ?? ''}
-                        onChange={(e) => handleChange(key, e.target.value)}        
-                        style={{ width: '100%', color: '#222' }}
-                      />
-                    )
-                  ) : Array.isArray(value) ? (
-                    <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
-                      {value.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
+                    <EditableField value={value} onChange={(val) => handleChange(key, val)} />
                   ) : (
-                    value ?? '–'
+                    <>
+                      {Array.isArray(value) ? (
+                        <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+                          {value.map((item, idx) => (
+                            <li key={idx}>{String(item)}</li>
+                          ))}
+                        </ul>
+                      ) : typeof value === 'boolean' ? (
+                        t(value ? 'yes' : 'no')
+                      ) : value === null || value === '' ? (
+                        <i style={{ color: '#999' }}>{t('noDataDash')}</i>
+                      ) : (
+                        String(value)
+                        )}
+                      </>
                   )}
                 </td>
-
               </tr>
             );
           })}
