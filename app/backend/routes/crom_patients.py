@@ -240,6 +240,7 @@ def get_patients_diagnosis_detail(patient_id: str):
         return {
             "module": "diagnosis",
             "patient_id": patient_id,
+            "module_data": field_values,
             "field_values": field_values,
             "correctness": correctness,
             "consistency": consistency,

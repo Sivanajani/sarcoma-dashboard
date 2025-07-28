@@ -1,0 +1,21 @@
+.raw-module-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.raw-module-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+.raw-module-table .field-name {
+  font-weight: 500;
+  color: #444;
+  width: 35%;
+}
+
+.raw-module-table .field-value {
+  color: #222;
+}
