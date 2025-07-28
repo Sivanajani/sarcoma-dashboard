@@ -2,12 +2,24 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
+  background-color: #fff;
+}
+
+.raw-module-table tr {
+  border-bottom: 1px solid #eee;
 }
 
 .raw-module-table td {
-  padding: 8px 12px;
+  padding: 0.6rem 1rem;
   border-bottom: 1px solid #eee;
   vertical-align: top;
+}
+
+.raw-module-table .label-cell {
+  font-weight: 600;
+  color: #333;
+  width: 40%;
+  background-color: #f9f9f9;
 }
 
 .raw-module-table .field-name {
@@ -18,4 +30,14 @@
 
 .raw-module-table .field-value {
   color: #222;
+}
+
+
+.raw-module-table ul {
+  list-style-type: disc;
+  margin: 0;
+  padding-left: 1.5rem;
+}
+.raw-module-table li {
+  margin-bottom: 2px;
 }

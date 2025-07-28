@@ -83,7 +83,21 @@ const CromDatabase = () => {
     if (!confirmed.isConfirmed) return;
 
     try {
-      const endpoint = `http://localhost:8000/api/${moduleName.replace(/_/g, '-')}/${dataToSave.id}`;
+      const endpointMap: Record<string, string> = {
+        diagnosis: 'diagnoses',
+        surgery: 'surgery',
+        pathology: 'pathology',
+        radiology_exam: 'radiology-exams',
+        radiology_therapy: 'radiology-therapy',
+        sarcoma_board: 'sarcoma-board',
+        systemic_therapy: 'systemic-therapy',
+        hyperthermia_therapies: 'hyperthermia-therapies',
+        hyperthermia: 'hyperthermia-therapies',
+        patient: 'patient'
+      };
+
+      const mappedName = endpointMap[moduleName] || moduleName;
+      const endpoint = `http://localhost:8000/api/${mappedName}/${dataToSave.id}`;
       await axios.put(endpoint, cleanedData);
 
       const newSet = new Set(editModules);
@@ -109,7 +123,6 @@ const CromDatabase = () => {
     <div>
       <h2>{t("databasePage.cromTitle")}</h2>
 
-      {/* Suchleiste */}
       <div className="search-bar">
         <input
           type="text"
