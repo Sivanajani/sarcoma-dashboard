@@ -43,7 +43,7 @@ const ModuleDetailView: React.FC = () => {
     
 
     {/* Einmalige Datenansicht des Moduls */}
-    <h4 className="overview-title">{t("moduleDetail.dataTableTitle", { defaultValue: "Daten aus dem Modul" })}</h4>
+
     <RawModuleDataTable moduleData={data.module_data} moduleName={module || ''} />
 
 

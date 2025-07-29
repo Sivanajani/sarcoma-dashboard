@@ -86,6 +86,7 @@
   "title": "Datenbank: CROM-Module",
   "cromTitle": "CROM - Datenbank",
   "promTitle": "PROM - Datenbank",
+  "moduleDataTitle": "Daten aus dem Modul",
   "searchPlaceholder": "Patient-Id (z.B. P1856)",
   "searchButton": "Suchen",
   "patientId": "Patienten-ID in der Datenbank",
