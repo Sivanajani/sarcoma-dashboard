@@ -15,34 +15,41 @@ def check_consistency_systemic_therapy(entry):
     bone_protocol = normalize(entry.get("bone_protocol"))
     softtissue_protocol = normalize(entry.get("softtissue_protocol"))
 
-    # Regel 1: treatment_line > 1 → cycle_start_date muss gesetzt sein
+    # Regel 1
     if treatment_line is not None and isinstance(treatment_line, int) and treatment_line > 1:
         results["treatment_line_requires_start_date"] = bool(cycle_start_date)
     else:
-        results["treatment_line_requires_start_date"] = True  # Regel nicht relevant
+        results["treatment_line_requires_start_date"] = True
 
-    # Regel 2: hyperthermia_status gesetzt → reason oder comments sollten gesetzt sein
+    # Regel 2
     if hyperthermia_status:
         results["hyperthermia_needs_reason_or_comment"] = bool(reason or comments)
     else:
-        results["hyperthermia_needs_reason_or_comment"] = True  # irrelevant
+        results["hyperthermia_needs_reason_or_comment"] = True
 
-    # Regel 3: discontinuation_reason gesetzt → cycle_end_date muss gesetzt sein
+    # Regel 3
     if discontinuation_reason:
         results["discontinuation_needs_end_date"] = bool(cycle_end_date)
     else:
-        results["discontinuation_needs_end_date"] = True  # irrelevant
+        results["discontinuation_needs_end_date"] = True
 
-    # Regel 4: was_rct_concomittant = true → clinical_trial_inclusion muss gesetzt sein
+    # Regel 4
     if was_rct is True:
         results["rct_needs_trial_inclusion"] = bool(trial_inclusion)
     else:
-        results["rct_needs_trial_inclusion"] = True  # irrelevant
+        results["rct_needs_trial_inclusion"] = True
 
-    # Regel 5: bone/soft tissue protocol gesetzt → reason muss gesetzt sein
+    # Regel 5
     if bone_protocol or softtissue_protocol:
         results["protocol_needs_reason"] = bool(reason)
     else:
-        results["protocol_needs_reason"] = True  # irrelevant
+        results["protocol_needs_reason"] = True
+
+    # Zusammenfassung
+    failed = [k for k, v in results.items() if v is False]
+    results["summary"] = (
+        f"Inkonsistenz bei: {', '.join(failed)}"
+        if failed else "Alle Konsistenzregeln erfüllt."
+    )
 
     return results

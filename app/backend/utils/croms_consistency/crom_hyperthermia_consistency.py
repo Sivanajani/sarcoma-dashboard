@@ -35,4 +35,10 @@ def check_consistency_hyperthermia(entry):
         ),
     }
 
+    failed = [k for k, v in results.items() if v is False]
+    if failed:
+        results["summary"] = f"Inkonsistenz bei: {', '.join(failed)}"
+    else:
+        results["summary"] = "Alle Konsistenzregeln erfüllt."
+
     return results

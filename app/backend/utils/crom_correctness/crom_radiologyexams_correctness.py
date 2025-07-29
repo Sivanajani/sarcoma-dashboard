@@ -7,23 +7,41 @@ from utils.crom_correctness.crom_shared_rules import (
 )
 
 def validate_radiology_exam_correctness(entry: dict, birth_date: str = None) -> dict:
-    return {
-        "exam_date": is_valid_date(entry.get("exam_date"), birth_date),
-        "exam_type": is_allowed_value(entry.get("exam_type"), REFERENCE_DATA["imaging_type"]),
-        "imaging_timing": is_allowed_value(entry.get("imaging_timing"), REFERENCE_DATA["imaging_timing"]),
-        "imaging_type": is_allowed_value(entry.get("imaging_type"), REFERENCE_DATA["imaging_type"]),
+    try:
+        result = {
+            "exam_date": is_valid_date(entry.get("exam_date"), birth_date),
+            "exam_type": is_allowed_value(entry.get("exam_type"), REFERENCE_DATA["imaging_type"]),
+            "imaging_timing": is_allowed_value(entry.get("imaging_timing"), REFERENCE_DATA["imaging_timing"]),
+            "imaging_type": is_allowed_value(entry.get("imaging_type"), REFERENCE_DATA["imaging_type"]),
 
-        "largest_lesion_size_in_mm": is_valid_int_in_range(entry.get("largest_lesion_size_in_mm"), min_value=1, max_value=300),
-        "medium_lesion_size_in_mm": is_valid_int_in_range(entry.get("medium_lesion_size_in_mm"), min_value=1, max_value=150),
-        "smallest_lesion_size_in_mm": is_valid_int_in_range(entry.get("smallest_lesion_size_in_mm"), min_value=1, max_value=50),
+            "largest_lesion_size_in_mm": is_valid_int_in_range(entry.get("largest_lesion_size_in_mm"), min_value=1, max_value=300),
+            "medium_lesion_size_in_mm": is_valid_int_in_range(entry.get("medium_lesion_size_in_mm"), min_value=1, max_value=150),
+            "smallest_lesion_size_in_mm": is_valid_int_in_range(entry.get("smallest_lesion_size_in_mm"), min_value=1, max_value=50),
 
-        "location_of_lesion": is_fuzzy_biological_barrier_value(entry.get("location_of_lesion"), REFERENCE_DATA["location_of_lesion"]),
+            "location_of_lesion": is_fuzzy_biological_barrier_value(entry.get("location_of_lesion"), REFERENCE_DATA["location_of_lesion"]),
 
-        "pet_response": is_allowed_value(entry.get("pet_response"), REFERENCE_DATA["response"]),
-        "recist_response": is_allowed_value(entry.get("recist_response"), REFERENCE_DATA["response"]),
-        "choi_response": is_allowed_value(entry.get("choi_response"), REFERENCE_DATA["response"]),
-        "irecist_response": is_allowed_value(entry.get("irecist_response"), REFERENCE_DATA["response"]),
+            "pet_response": is_allowed_value(entry.get("pet_response"), REFERENCE_DATA["response"]),
+            "recist_response": is_allowed_value(entry.get("recist_response"), REFERENCE_DATA["response"]),
+            "choi_response": is_allowed_value(entry.get("choi_response"), REFERENCE_DATA["response"]),
+            "irecist_response": is_allowed_value(entry.get("irecist_response"), REFERENCE_DATA["response"]),
 
-        "metastasis_presence": isinstance(entry.get("metastasis_presence"), bool) and entry.get("metastasis_presence") is not None,
+            "metastasis_presence": isinstance(entry.get("metastasis_presence"), bool) and entry.get("metastasis_presence") is not None,            
+        }
 
-    }
+        # Fehlerzusammenfassung erzeugen
+        failed_fields = [
+            f" {key} ist ungültig"
+            for key, value in result.items()
+            if value is False
+        ]
+
+        result["summary"] = (
+            " | ".join(failed_fields)
+            if failed_fields else " Alle prüfbaren Felder sind korrekt."
+        )
+
+        return result
+
+    except Exception as e:
+        print(f"[ERROR] RadiologyExam correctness validation failed: {e}")
+        return {"summary": "Validierung fehlgeschlagen"}

@@ -14,9 +14,6 @@ def parse_disciplines(value):
                 return [v.strip() for v in value.strip("{}").split(",") if v.strip()]
     return []
 
-
-
-
 def check_consistency_surgery(entry):
     amputation = normalize(entry.get("amputation"))
     anatomic_region = normalize(entry.get("anatomic_region"))
@@ -32,8 +29,7 @@ def check_consistency_surgery(entry):
 
     disciplines = parse_disciplines(entry.get("participated_disciplines"))
 
-
-    return {
+    results = {
         "amputation_needs_region": (
             True if not amputation or amputation == "keine"
             else bool(anatomic_region)
@@ -56,3 +52,11 @@ def check_consistency_surgery(entry):
             True if len(disciplines) < 2 else bool(resection)
         ),
     }
+
+    failed = [k for k, v in results.items() if v is False]
+    results["summary"] = (
+        f"Inkonsistenz bei: {', '.join(failed)}"
+        if failed else "Alle Konsistenzregeln erfüllt."
+    )
+
+    return results

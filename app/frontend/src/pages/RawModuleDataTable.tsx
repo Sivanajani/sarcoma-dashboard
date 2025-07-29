@@ -89,8 +89,7 @@ const RawModuleDataTable: React.FC<RawModuleDataTableProps> = ({ moduleData, mod
     radiology_therapy: 'radiology-therapy',
     sarcoma_board: 'sarcoma-board',
     systemic_therapy: 'systemic-therapy',
-    hyperthermia_therapies: 'hyperthermia-therapies',
-    hyperthermia: 'hyperthermia-therapies',
+    hyperthermia_therapy: 'hyperthermia-therapies',
     patient: 'patient'
   };
 

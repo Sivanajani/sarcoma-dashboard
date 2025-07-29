@@ -1,16 +1,13 @@
 from utils.croms_consistency.crom_consistency_rules import normalize
 from datetime import datetime
 
-
 def parse_date(date_str):
     try:
         return datetime.fromisoformat(date_str)
     except Exception:
         return None
 
-
 def check_consistency_radiology_therapy(entry):
-
     dose = entry.get("total_dose_in_gy")
     fractions = entry.get("given_fractions")
 
@@ -20,16 +17,26 @@ def check_consistency_radiology_therapy(entry):
     hyperthermia = normalize(entry.get("hyperthermia_status"))
     indication = normalize(entry.get("indication"))
 
-    return {
+    results = {
         "dose_fraction_consistency": (
-            (dose is not None and fractions is not None) or (dose is None and fractions is None)
+            (dose is not None and fractions is not None)
+            or (dose is None and fractions is None)
         ),
 
         "volume_consistency": (
-            (ptv is not None and gtv is not None) or (ptv is None and gtv is None)
+            (ptv is not None and gtv is not None)
+            or (ptv is None and gtv is None)
         ),
 
         "hyperthermia_needs_indication": (
             True if not hyperthermia else bool(indication)
         ),
     }
+
+    failed = [k for k, v in results.items() if v is False]
+    results["summary"] = (
+        f"Inkonsistenz bei: {', '.join(failed)}"
+        if failed else "Alle Konsistenzregeln erfüllt."
+    )
+
+    return results

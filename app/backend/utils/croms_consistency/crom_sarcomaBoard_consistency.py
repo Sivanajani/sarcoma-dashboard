@@ -2,7 +2,6 @@ from utils.croms_consistency.crom_consistency_rules import normalize
 
 JA_VALUES = {"ja", "yes", "oui", "sí"}
 
-
 def check_consistency_sarcoma_board(entry):
     results = {}
 
@@ -26,6 +25,13 @@ def check_consistency_sarcoma_board(entry):
     # Regel 3: current_ecog gesetzt → mind. ein Status (before oder after) muss vorhanden sein
     results["ecog_status_context"] = (
         True if not ecog else bool(status_before or status_after)
+    )
+
+    # Zusammenfassung
+    failed = [k for k, v in results.items() if v is False]
+    results["summary"] = (
+        f"Inkonsistenz bei: {', '.join(failed)}"
+        if failed else "Alle Konsistenzregeln erfüllt."
     )
 
     return results

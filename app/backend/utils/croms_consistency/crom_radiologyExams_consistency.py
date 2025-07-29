@@ -1,6 +1,5 @@
 from utils.croms_consistency.crom_consistency_rules import normalize
 
-
 def check_consistency_radiology_exam(entry):
     exam_date = entry.get("exam_date")  
     imaging_type = normalize(entry.get("imaging_type"))
@@ -17,7 +16,7 @@ def check_consistency_radiology_exam(entry):
     choi = normalize(entry.get("choi_response"))
     irecist = normalize(entry.get("irecist_response"))
 
-    return {
+    results = {
         "size_logic_consistent": (
             True if largest is None
             else medium is not None and smallest is not None
@@ -48,3 +47,11 @@ def check_consistency_radiology_exam(entry):
             else bool(recist)
         ),
     }
+
+    failed = [k for k, v in results.items() if v is False]
+    results["summary"] = (
+        f"Inkonsistenz bei: {', '.join(failed)}"
+        if failed else "Alle Konsistenzregeln erfüllt."
+    )
+
+    return results

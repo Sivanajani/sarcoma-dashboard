@@ -1,6 +1,5 @@
 from utils.croms_consistency.crom_consistency_rules import normalize
 
-
 def map_status(value):
     val = normalize(value)
     if val in {"ja", "yes", "durchgeführt"}:
@@ -10,7 +9,6 @@ def map_status(value):
     elif val in {"ausstehend", "pending"}:
         return "ausstehend"
     return val  
-
 
 def check_consistency_pathology(entry):
     final_report_date = entry.get("final_report_date")
@@ -34,7 +32,7 @@ def check_consistency_pathology(entry):
     grading = normalize(entry.get("diagnostic_grading"))
     necrosis = normalize(entry.get("extent_of_necrosis"))
 
-    return {
+    results = {
         "final_after_first_report": (
             False if final_report_date and not first_report_date
             else (
@@ -42,33 +40,36 @@ def check_consistency_pathology(entry):
                 or first_report_date <= final_report_date
             )
         ),
-
         "ihc_result_needs_performed": (
             True if not ihc_result
             else ihc_status in {"durchgeführt", "ausstehend"}
         ),
-
         "fish_result_needs_performed": (
             True if not fish_result
             else fish_status == "durchgeführt"
         ),
-
         "rna_result_needs_performed": (
             True if not rna_result
             else rna_status in {"durchgeführt", "ausstehend"}
         ),
-
         "dna_result_needs_performed": (
             True if not dna_result
             else dna_status in {"durchgeführt", "ausstehend"}
         ),
-
         "distance_needs_barrier": (
             True if not distance or distance == 0
             else bool(barrier)
         ),
         "grading_vs_necrosis": (
-            True if grading not in {"G3","g3", "maligne unklares grading"}
+            True if grading not in {"G3", "g3", "maligne unklares grading"}
             else bool(necrosis)
         ),
     }
+
+    failed = [k for k, v in results.items() if v is False]
+    if failed:
+        results["summary"] = f"Inkonsistenz bei: {', '.join(failed)}"
+    else:
+        results["summary"] = "Alle Konsistenzregeln erfüllt."
+
+    return results

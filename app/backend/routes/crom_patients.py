@@ -76,8 +76,7 @@ def get_patient_modules(patient_id: int):
 
     except Exception as e:
         print(f"Fehler beim Abrufen von Modulen für Patient {patient_id}:", e)
-        raise HTTPException(status_code=500, detail=str(e))
-    
+        raise HTTPException(status_code=500, detail=str(e))    
 
 # external_code abrufen und schauen ob has proms und croms
 @router.get("/patients/{id}")
@@ -165,7 +164,6 @@ def update_crom_module(module: str, id: int, data: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @router.get("/patients/by-external-code/{external_code}/diagnosis/details")
 def get_diagnosis_detail_by_external_code(external_code: str):
     try:
@@ -182,7 +180,6 @@ def get_diagnosis_detail_by_external_code(external_code: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @router.get("/patients/{patient_id}/diagnosis/details")
 def get_patients_diagnosis_detail(patient_id: str):
@@ -251,3 +248,591 @@ def get_patients_diagnosis_detail(patient_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/patients/by-external-code/{external_code}/sarcoma_board/details")
+def get_sarcoma_board_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_sarcoma_board_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/sarcoma_board/details")
+def get_sarcoma_board_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_sarcoma_boards WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="SarcomaBoard nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/sarcoma-board"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/sarcoma-board"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/sarcomaBoard"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/sarcoma_board"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "sarcoma_board",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/by-external-code/{external_code}/radiology_exam/details")
+def get_radiology_exam_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_radiology_exam_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/radiology_exam/details")
+def get_radiology_exam_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_radiology_exams WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="RadiologyExam nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/radiologyExams"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/radiology_exam"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/radiologyExam"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/radiology_exam"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "radiology_exam",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/by-external-code/{external_code}/pathology/details")
+def get_pathology_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_pathology_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/pathology/details")
+def get_pathology_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_pathologies WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Pathology nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/pathologies"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/pathology"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/pathology"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/pathology"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "pathology",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/by-external-code/{external_code}/surgery/details")
+def get_surgery_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_surgery_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/surgery/details")
+def get_surgery_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_surgeries WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Surgery nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/surgery"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/surgery"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/surgery"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/surgery"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "surgery",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/by-external-code/{external_code}/systemic_therapy/details")
+def get_systemic_therapy_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_systemic_therapy_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/systemic_therapy/details")
+def get_systemic_therapy_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_systemic_therapies WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Systemic Therapy nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/systemic-therapy"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/systemic_therapy"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/systemicTherapy"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/systemic_therapy"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "systemic_therapy",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/by-external-code/{external_code}/radiology_therapy/details")
+def get_radiology_therapy_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_radiology_therapy_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/{patient_id}/radiology_therapy/details")
+def get_radiology_therapy_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_radiology_therapies WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Radiology Therapy nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/radiology-therapy"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/radiology_therapy"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/radiologyTherapy"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/radiology_therapy"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "radiology_therapy",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/patients/by-external-code/{external_code}/hyperthermia_therapy/details")
+def get_hyperthermia_therapy_detail_by_external_code(external_code: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT id FROM croms_patients WHERE external_code = :code"),
+                {"code": external_code}
+            ).mappings().fetchone()
+
+            if not result:
+                raise HTTPException(status_code=404, detail="Patient nicht gefunden")
+
+            return get_hyperthermia_therapy_detail(result["id"])
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/patients/{patient_id}/hyperthermia_therapy/details")
+def get_hyperthermia_therapy_detail(patient_id: str):
+    try:
+        with engine_pg.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM croms_hyperthermia_therapies WHERE patient_id = :pid"),
+                {"pid": patient_id}
+            )
+            row = result.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Hyperthermie nicht gefunden")
+            field_values = dict(row._mapping)
+
+        base_url = "http://localhost:8000"
+
+        # Correctness
+        try:
+            correctness_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/correctness/hyperthermia"
+            ).json()
+            correctness = correctness_response["field_results"]
+            correctness["correctness_score"] = correctness_response.get("percent")
+        except:
+            correctness = {}
+
+        # Consistency
+        try:
+            consistency_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/consistency/hyperthermia"
+            ).json()
+            consistency = consistency_response["rule_results"]
+            consistency["consistency_score"] = consistency_response.get("percent")
+        except:
+            consistency = {}
+
+        # Actuality
+        try:
+            actuality_response = requests.get(
+                f"{base_url}/api/patients/{patient_id}/actuality/hyperthermia"
+            ).json()
+            actuality = actuality_response.get("details", {})
+            actuality["actuality_score"] = actuality_response.get("actuality_score")
+        except:
+            actuality = {}
+
+        # Completeness
+        try:
+            completeness = requests.get(
+                f"{base_url}/patients/{patient_id}/completeness/hyperthermia_therapy"
+            ).json()
+        except:
+            completeness = {}
+
+        return {
+            "module": "hyperthermia_therapy",
+            "patient_id": patient_id,
+            "module_data": field_values,
+            "field_values": field_values,
+            "correctness": correctness,
+            "consistency": consistency,
+            "actuality": actuality,
+            "completeness": completeness
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
