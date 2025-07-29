@@ -356,8 +356,19 @@
 "moduleDetail": {
     "loadError": "Fehler beim Laden der Moduldaten.",
     "patient": "Patient",
-    "noData": "Keine Daten verfügbar."
+    "noData": "Keine Daten verfügbar.",
+    "summary": "Zusammenfassung",
+    "fieldsFilled": "Felder ausgefüllt",
+    "missingFields": "Fehlende Felder",
+     "daysSinceUpdate": "Tage seit letzter Aktualisierung"
 },
+"consistencyRules": {
+  "region_side_coupling": "Tumoranatomische Region und Läsionsseite müssen gemeinsam angegeben oder beide leer sein.",
+  "additional_region_side_coupling": "Zusätzliche Region und zusätzliche Läsionsseite müssen gemeinsam angegeben oder beide leer sein.",
+  "ecog_vs_death": "Bei verstorbenen Patient:innen muss ECOG leer oder 0 sein.",
+  "death_reason_vs_last_status": "Todesursache und letzter Status stimmen nicht überein."
+},
+
 "yes": "Ja",
 "no": "Nein",
 "noDataDash": "–"
