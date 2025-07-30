@@ -32,6 +32,7 @@ type Props = {
 
 const defaultColors = ['#8884d8', '#82ca9d', '#ffc658', '#ff6b6b'];
 
+
 const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
   const { t } = useTranslation();
   const chartRef = useRef<HTMLDivElement>(null);
@@ -53,6 +54,27 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
     biopsy_eqvas: t('promDetail.biopsyChart.vas'),
     biopsy_schmerz: t('promDetail.biopsyChart.schmerz'),
   };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ background: '#fff', border: '1px solid #ccc', padding: 10 }}>
+        <p style={{ margin: 0 }}>{label}</p>
+        {payload.map((entry: any, index: number) => {
+          const translatedName = fieldLabels[entry.name as keyof BiopsyEntry] ?? entry.name;
+          return (
+            <p key={index} style={{ color: entry.color, margin: 0 }}>
+              {`${translatedName} : ${entry.value}`}
+            </p>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return null;
+};
+
 
   const [selectedFields, setSelectedFields] = useState<(keyof BiopsyEntry)[]>(fieldKeys);
   const [chartType, setChartType] = useState<'line' | 'bar' | 'radar'>('radar');
@@ -247,7 +269,8 @@ const radarDataMulti = selectedFields.map((key) => {
   <PolarGrid />
   <PolarAngleAxis dataKey="dimension" />
   <PolarRadiusAxis domain={[0, roundedMaxY]} />
-  <Tooltip />
+  <Tooltip content={<CustomTooltip />} />
+
   <Legend />
   {filteredEntries.map((entry, index) => {
     const dateLabel = new Date(entry.biopsy_date).toLocaleDateString("de-CH", {
@@ -274,7 +297,7 @@ const radarDataMulti = selectedFields.map((key) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis domain={[0, 5]} allowDecimals={false} />
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
               <Legend formatter={(value) => fieldLabels[value as keyof BiopsyEntry]} />
               {selectedFields.map((key) => (
                 <Line
@@ -291,7 +314,7 @@ const radarDataMulti = selectedFields.map((key) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis domain={[0, 5]} allowDecimals={false} />
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
               <Legend formatter={(value) => fieldLabels[value as keyof BiopsyEntry]} />
               {selectedFields.map((key) => (
                 <Bar
