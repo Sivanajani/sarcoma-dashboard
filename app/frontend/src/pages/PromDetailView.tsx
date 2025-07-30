@@ -81,6 +81,10 @@ const PromDetailView: React.FC<PromDetailViewProps> = ({ patientId }) => {
       fetchBiopsyData();
     }
   }, [effectiveId]); 
+  
+  const sortedBiopsyData = [...biopsyData].sort((a, b) => 
+    new Date(b.biopsy_date).getTime() - new Date(a.biopsy_date).getTime()
+  );
 
   return (
     <Box>
@@ -130,45 +134,30 @@ const PromDetailView: React.FC<PromDetailViewProps> = ({ patientId }) => {
               ))}
             </Box>
           </Box>
-
         ) : (
           <Typography variant="body2" color="text.secondary">
             {t('promDetail.eq5dEmpty')}
           </Typography>
         )}
       </Paper>
-
+      
       <h2 className="overview-title">{t('promDetail.biopsyTitle')}</h2>
       {biopsyData.length > 0 ? (
-        <Box
-  sx={{
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 2,
-    justifyContent: 'flex-start',
-  }}
->
-  {biopsyData.map((entry, idx) => (
-    <Box
-      key={idx}
-      sx={{
-        flex: '1 1 300px',
-        minWidth: '300px',
-        maxWidth: '400px',
-      }}
-    >
-      <BiopsyAccordionCard
-        entry={entry}
-        onSaved={async () => {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/biopsy/by-external-code/${effectiveId}`);
-          const json = await res.json();
-          setBiopsyData(json);
-        }}
-      />
-    </Box>
-  ))}
-</Box>
-
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'flex-start'}}>
+          {sortedBiopsyData.map((entry, idx) => (
+            <Box key={idx} sx={{ flex: '1 1 300px', minWidth: '300px', maxWidth: '400px'}}>
+              <BiopsyAccordionCard
+                entry={entry}
+                defaultOpen={idx === 0} //
+                onSaved={async () => {
+                  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/biopsy/by-external-code/${effectiveId}`);
+                  const json = await res.json();
+                  setBiopsyData(json);
+                }}
+              />
+            </Box>
+          ))}
+        </Box>
       ) : (
         <Paper elevation={1} sx={{ padding: 2 }}>
           <Typography variant="body2" color="text.secondary">

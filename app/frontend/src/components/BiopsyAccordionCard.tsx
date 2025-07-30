@@ -10,11 +10,12 @@ import { useTranslation } from 'react-i18next';
 interface BiopsyAccordionCardProps {
   entry: Record<string, any>;
   onSaved?: () => void;
+  defaultOpen?: boolean;
 }
 
-const BiopsyAccordionCard: React.FC<BiopsyAccordionCardProps> = ({ entry, onSaved }) => {
+const BiopsyAccordionCard: React.FC<BiopsyAccordionCardProps> = ({ entry, onSaved, defaultOpen  }) => {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen ?? false);
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState({ ...entry });
 
@@ -84,7 +85,7 @@ const BiopsyAccordionCard: React.FC<BiopsyAccordionCardProps> = ({ entry, onSave
           {editMode ? (
             <>
               {Object.entries(editedData)
-                .filter(([key]) => key !== 'pid' && key !== 'biopsy_row_id')
+                .filter(([key]) => key !== 'biopsy_pid' && key !== 'biopsy_row_id')
                 .map(([key, value]) => (
                   <div key={key} style={{ marginBottom: '0.5rem' }}>                    
                     <label style={{ fontWeight: 'bold', color: '#000' }}>
