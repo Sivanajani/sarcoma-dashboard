@@ -2,6 +2,8 @@ import React, { useState, useRef, useMemo } from 'react';
 import {
   LineChart, Line,
   BarChart, Bar,
+  RadarChart, Radar,
+  PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
@@ -14,6 +16,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { toPng } from 'html-to-image';
 import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 interface Eq5dEntry {
   date: string;
@@ -40,7 +43,6 @@ const defaultColors = [
 const Eq5dChart: React.FC<Props> = ({ data }) => {
   const { t } = useTranslation();
 
-  // Key-Label-Mapping per useMemo, um t() bei Sprachwechsel zu aktualisieren
   const fieldLabels: Record<keyof Eq5dEntry, string> = useMemo(() => ({
     mobilitaet: t('eq5dChart.fields.mobilitaet'),
     selbstversorgung: t('eq5dChart.fields.selbstversorgung'),
@@ -50,12 +52,12 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
     vas: t('eq5dChart.fields.vas'),
     belastung: t('eq5dChart.fields.belastung'),
     funktion: t('eq5dChart.fields.funktion'),
-    date: '', // wird nie angezeigt, aber für Type-Safety
+    date: '',
   }), [t]);
 
   const fieldKeys = Object.keys(fieldLabels).filter(k => k !== 'date') as (keyof Eq5dEntry)[];
   const [selectedFields, setSelectedFields] = useState<(keyof Eq5dEntry)[]>(fieldKeys);
-  const [chartType, setChartType] = useState<'line' | 'bar'>('line');
+  const [chartType, setChartType] = useState<'line' | 'bar' | 'radar'>('line');
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
   const [fieldColors, setFieldColors] = useState<Record<string, string>>(
@@ -81,13 +83,29 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
   };
 
   const chartData = data.map(entry => ({ ...entry }));
-
   const filteredData = chartData.filter(entry => {
     const date = new Date(entry.date);
     const afterStart = startDate ? date >= new Date(startDate) : true;
     const beforeEnd = endDate ? date <= new Date(endDate) : true;
     return afterStart && beforeEnd;
   });
+
+  const latestEntry = filteredData.length > 0 ? filteredData[filteredData.length - 1] : null;
+  const radarData = latestEntry
+    ? selectedFields.map((key) => ({
+        dimension: fieldLabels[key],
+        value: latestEntry[key] ?? 0,
+      }))
+    : [];
+  
+    const radarDataMulti = selectedFields.map((key) => {
+  const entry: any = { dimension: fieldLabels[key] };
+  filteredData.forEach(d => {
+    const label = format(new Date(d.date), "dd.MM");
+    entry[label] = d[key];
+  });
+  return entry;
+});
 
   const exportChartAsImage = async () => {
     const exportDialogTitle = t('eq5dChart.exportTitle');
@@ -135,7 +153,6 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
           link.download = filename;
           link.href = dataUrl;
           link.click();
-
           setExportTitle('');
           setFieldColors(
             Object.fromEntries(fieldKeys.map((key, i) => [key, defaultColors[i % defaultColors.length]]))
@@ -209,6 +226,7 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
           >
             <ToggleButton value="line">{t('eq5dChart.line')}</ToggleButton>
             <ToggleButton value="bar">{t('eq5dChart.bar')}</ToggleButton>
+            <ToggleButton value="radar">Radar</ToggleButton>
           </ToggleButtonGroup>
           <Button variant="outlined" size="small" onClick={resetChart}>
             {t('eq5dChart.reset')}
@@ -227,7 +245,39 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
           </Typography>
         )}
         <ResponsiveContainer width="100%" height={400}>
-          {chartType === 'line' ? (
+          {chartType === 'radar' ? (
+            radarData.length > 0 ? (
+            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarDataMulti}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="dimension" />
+              <PolarRadiusAxis domain={[0, 10]} />
+              <Tooltip />
+              {filteredData.map((entry, index) => {
+                const label = format(new Date(entry.date), "dd.MM");
+                const color = defaultColors[index % defaultColors.length];
+                return (
+                <Radar
+                  key={label}
+                  name={`${label}`}
+                  dataKey={label}
+                  stroke={color}
+                  fill={color}
+                  fillOpacity={0.3}
+                />
+              );
+              })}
+              <Legend />
+            </RadarChart>
+
+              ) : (
+              <Box sx={{ p: 2 }}>
+                <Typography variant="body2" color="text.secondary">
+                  {t('eq5dChart.noData')}
+                  </Typography>
+              </Box>
+            )
+
+          ) : chartType === 'line' ? (
             <LineChart data={filteredData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />

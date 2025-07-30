@@ -83,12 +83,18 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
     return afterStart && beforeEnd;
   });
 
-  const chartData = filteredEntries.map(entry => ({
-    date: new Date(entry.biopsy_date).toLocaleDateString("de-CH", { day: '2-digit', month: '2-digit' }),
-    ...Object.fromEntries(
-      selectedFields.map(key => [key, entry[key] ?? 0])
-    )
-  }));
+const radarDataMulti = selectedFields.map((key) => {
+  const entry: any = { dimension: fieldLabels[key] };
+  filteredEntries.forEach((d) => {
+    const dateLabel = new Date(d.biopsy_date).toLocaleDateString("de-CH", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+    entry[dateLabel] = d[key] ?? 0;
+  });
+  return entry;
+});
+
 
   const exportChartAsImage = async () => {
     const { value: formValues } = await Swal.fire({
@@ -134,27 +140,7 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
       }, 200);
     }
   };
-  
-  const CustomTooltip = ({ active, payload, label, fieldLabels }: any) => {
-    if (active && payload && payload.length) {
-        return (
-        <div style={{
-            background: '#fff',
-            border: '1px solid #ccc',
-            padding: '10px',
-            borderRadius: '5px'
-        }}>
-            <p><strong>{label}</strong></p>
-            {payload.map((entry: any, index: number) => (
-            <p key={index} style={{ color: entry.color, margin: 0 }}>
-                {fieldLabels[entry.dataKey] ?? entry.dataKey}: {entry.value}
-            </p>
-        ))}
-        </div>
-        );
-    }
-    return null;
-  };
+
   
   const maxY = Math.max(
     ...filteredEntries.flatMap(entry =>
@@ -162,6 +148,19 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
     )
   );
   const roundedMaxY = Math.ceil(maxY / 10) * 10 || 5;
+
+  const chartData = filteredEntries.map(entry => {
+  const dateLabel = new Date(entry.biopsy_date).toLocaleDateString("de-CH", {
+    day: "2-digit",
+    month: "2-digit",
+  });
+  const result: any = { date: dateLabel };
+  selectedFields.forEach(key => {
+    result[key] = entry[key] ?? 0;
+  });
+  return result;
+});
+
 
   return (
     <Box sx={{ backgroundColor: '#fafafa', borderRadius: 2, p: 3, boxShadow: 1 }}>
@@ -244,23 +243,32 @@ const BiopsyChartRadar: React.FC<Props> = ({ entries }) => {
         )}
         <ResponsiveContainer width="100%" height={400}>
           {chartType === 'radar' ? (
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="date" />
-              <PolarRadiusAxis domain={[0, roundedMaxY]} />
-              <Tooltip content={<CustomTooltip fieldLabels={fieldLabels} />} />
-              <Legend formatter={(value) => fieldLabels[value as keyof BiopsyEntry]} />
-              {selectedFields.map((key) => (
-                <Radar
-                  key={key}
-                  name={fieldLabels[key]}
-                  dataKey={key}
-                  stroke={fieldColors[key]}
-                  fill={fieldColors[key]}
-                  fillOpacity={0.6}
-                />
-              ))}
-            </RadarChart>
+            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarDataMulti}>
+  <PolarGrid />
+  <PolarAngleAxis dataKey="dimension" />
+  <PolarRadiusAxis domain={[0, roundedMaxY]} />
+  <Tooltip />
+  <Legend />
+  {filteredEntries.map((entry, index) => {
+    const dateLabel = new Date(entry.biopsy_date).toLocaleDateString("de-CH", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+    const color = fieldColors[dateLabel] || defaultColors[index % defaultColors.length];
+
+    return (
+      <Radar
+        key={dateLabel}
+        name={dateLabel}
+        dataKey={dateLabel}
+        stroke={color}
+        fill={color}
+        fillOpacity={0.3}
+      />
+    );
+  })}
+</RadarChart>
+
           ) : chartType === 'line' ? (
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
