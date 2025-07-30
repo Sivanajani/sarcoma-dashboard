@@ -5,7 +5,7 @@ import Eq5dChart from '../components/Eq5dChart';
 import { useTranslation } from 'react-i18next';
 import BiopsyDetail from '../components/BiopsyDetail';
 import BiopsyRadarChart from "../components/BiopsyRadarChart";
-
+import Eq5dAccordionCard from '../components/Eq5dAccordionCard';
 
 interface PromDetailViewProps {
   patientId?: string;
@@ -86,7 +86,50 @@ const PromDetailView: React.FC<PromDetailViewProps> = ({ patientId }) => {
       <h2 className="overview-title">{t('promDetail.eq5dTitle')}</h2>
       <Paper elevation={2} sx={{ padding: 3, mb: 6 }}>
         {eq5dData.length > 0 ? (
-          <Eq5dChart data={eq5dData} />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+              mt: 2,
+            }}
+          >
+            {/* Chart oben */}
+            <Box sx={{ width: '100%' }}>
+              <Eq5dChart data={eq5dData} />
+            </Box>
+            
+            {/* Karten darunter – nebeneinander */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 2,
+                justifyContent: 'flex-start',
+              }}
+            >
+              {eq5dData.map((entry, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    flex: '1 1 300px',
+                    minWidth: '300px',
+                    maxWidth: '400px',
+                  }}
+                >
+                  <Eq5dAccordionCard
+                    entry={entry}
+                    onSaved={async () => {
+                      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/eq5d/by-external-code/${effectiveId}`);
+                      const json = await res.json();
+                      setEq5dData(json);
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+
         ) : (
           <Typography variant="body2" color="text.secondary">
             {t('promDetail.eq5dEmpty')}
