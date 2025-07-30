@@ -28,16 +28,19 @@ def check_consistency_diagnosis(entry):
 
     result = {
         "region_side_coupling": (
-            (not region and not side) or (bool(region) and bool(side))
+            None if not region and not side else
+            bool(region) and bool(side)
         ),
         "additional_region_side_coupling": (
-            (not add_region and not add_side) or (bool(add_region) and bool(add_side))
+            None if not add_region and not add_side else
+            bool(add_region) and bool(add_side)
         ),
         "ecog_vs_death": (
-            None if last_status not in DECEASED_STATUSES
+            None if not last_status or last_status not in DECEASED_STATUSES
             else ecog in ["", "0", None]
         ),
         "death_reason_vs_last_status": (
+            None if not death_reason and not last_status else
             (death_reason in IGNORED_DEATH_REASONS and last_status not in DECEASED_STATUSES) or
             (death_reason in VALID_DEATH_REASONS and last_status in DECEASED_STATUSES)
         ),

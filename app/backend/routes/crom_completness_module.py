@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException
 from db.engine import engine_pg
 from sqlalchemy import text
 
-# Regeln importieren (optional auch aus zentraler Datei auslagern)
 from .crom_avg_completeness import get_available_modules  
 from utils.croms_completeness_rules import completeness_rules
 
@@ -17,6 +16,7 @@ def get_patient_module_metrics(patient_id: int):
 
             for module_name, (table, patient_col, fields) in completeness_rules.items():
                 field_names = [f if isinstance(f, str) else f["key"] for f in fields]
+    
 
                 result = conn.execute(
                     text(f"SELECT {', '.join(field_names)} FROM {table} WHERE {patient_col} = :pid LIMIT 1"),
@@ -73,6 +73,16 @@ def get_module_completeness(patient_id: int, module_name: str):
 
             table, patient_col, fields = completeness_rules[module_name]
             field_names = [f if isinstance(f, str) else f["key"] for f in fields]
+
+            extra_fields_by_module = {
+                "diagnosis": ["death_reason"],
+                "pathology": ["ihc_performed_status", "fish_performed_status", "rna_performed_status", "dna_performed_status"]
+            }
+            
+            extra_fields = extra_fields_by_module.get(module_name, [])
+            field_names = list(set(field_names + extra_fields))
+
+
 
             result = conn.execute(
                 text(f"SELECT {', '.join(field_names)} FROM {table} WHERE {patient_col} = :pid LIMIT 1"),

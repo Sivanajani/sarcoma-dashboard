@@ -172,7 +172,7 @@ def compute_correctness_result(entry: dict, validation_fn, birth_date: str = Non
     relevant_fields = {
         key: value
         for key, value in result.items()
-        if entry.get(key) not in [None, "", [], {}] and value is not None
+        if key != "summary" and entry.get(key) not in [None, "", [], {}] and value is not None
     }
 
     correct_count = sum(1 for v in relevant_fields.values() if v is True)

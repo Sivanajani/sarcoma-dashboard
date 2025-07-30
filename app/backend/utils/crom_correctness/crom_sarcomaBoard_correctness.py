@@ -15,7 +15,11 @@ def validate_sarcoma_board_correctness(entry: dict, birth_date: str = None) -> d
             "whoops_surgery_institution_name": is_allowed_value(entry.get("whoops_surgery_institution_name"), REFERENCE_DATA["disciplines"]),
             "status_after_follow_up": is_allowed_value(entry.get("status_after_follow_up"), REFERENCE_DATA["status_list"]),
             "treatment_before_follow_up": is_allowed_value(entry.get("treatment_before_follow_up"), REFERENCE_DATA["therapy_forms"]),
-            "current_ecog": entry.get("current_ecog") in REFERENCE_DATA["ecog_values"],
+            "current_ecog": (
+                int(entry.get("current_ecog")) in REFERENCE_DATA["ecog_values"]
+                if str(entry.get("current_ecog")).isdigit()
+                else False
+            ),
 
             "decision_surgery": is_prefixed_allowed_value(entry.get("decision_surgery"), REFERENCE_DATA["yes_no_unknown"]),
             "decision_radio_therapy": is_prefixed_allowed_value(entry.get("decision_radio_therapy"), REFERENCE_DATA["yes_no_unknown"]),

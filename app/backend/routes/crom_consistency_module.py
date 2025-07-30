@@ -23,7 +23,7 @@ def compute_consistency_result(entry: dict, validation_fn, module_name: str = ""
     relevant_rules = {
         key: value
         for key, value in result.items()
-        if value is not None
+        if key != "summary" and isinstance(value, bool)
     }
 
     passed_rules = sum(1 for v in relevant_rules.values() if v is True)
