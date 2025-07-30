@@ -97,15 +97,15 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
         value: latestEntry[key] ?? 0,
       }))
     : [];
-  
+    
     const radarDataMulti = selectedFields.map((key) => {
-  const entry: any = { dimension: fieldLabels[key] };
-  filteredData.forEach(d => {
-    const label = format(new Date(d.date), "dd.MM");
-    entry[label] = d[key];
-  });
-  return entry;
-});
+      const entry: any = { dimension: fieldLabels[key] };
+      filteredData.forEach(d => {
+        const label = format(new Date(d.date), "dd.MM.yyyy");
+        entry[label] = d[key];
+      });
+      return entry;
+    });
 
   const exportChartAsImage = async () => {
     const exportDialogTitle = t('eq5dChart.exportTitle');
@@ -253,7 +253,7 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
               <PolarRadiusAxis domain={[0, 10]} />
               <Tooltip />
               {filteredData.map((entry, index) => {
-                const label = format(new Date(entry.date), "dd.MM");
+                const label = format(new Date(entry.date), "dd.MM.yyyy");
                 const color = defaultColors[index % defaultColors.length];
                 return (
                 <Radar

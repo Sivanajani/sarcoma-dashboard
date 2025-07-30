@@ -36,26 +36,30 @@ const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data, moduleN
     }
   };
 
-  return (
-    <Box sx={{ padding: '0.5rem 0', color: 'text.primary' }}>
-      {Object.entries(data).map(([key, value]) => {
-        const baseKey = moduleName ? `${moduleName}.${key}` : `databasePage.${key}`;
-        return (
-          <Box key={key} sx={{ marginBottom: '0.5rem', color: 'text.primary' }}>
-            <strong>
-              {t(baseKey, {
-                defaultValue: t(`databasePage.${key}`, {
-                  defaultValue: key.replace(/_/g, ' ')
-                })
-              })}
-              :
-            </strong>{' '}
-            {renderValue(value)}
-          </Box>
-        );
-      })}
-    </Box>
-  );
+  const filteredEntries = Object.entries(data).filter(
+  ([key]) => !['vorname', 'nachname', 'biopsy_vorname', 'biopsy_nachname', 'biopsy_email'].includes(key) );
+
+return (
+  <Box sx={{ padding: '0.5rem 0', color: 'text.primary' }}>
+    {filteredEntries.map(([key, value]) => {
+      const baseKey = moduleName ? `${moduleName}.${key}` : `databasePage.${key}`;
+      return (
+        <Box key={key} sx={{ marginBottom: '0.5rem', color: 'text.primary' }}>
+          <strong>
+            {t(baseKey, {
+              defaultValue: t(`databasePage.${key}`, {
+                defaultValue: key.replace(/_/g, ' ')
+              })
+            })}
+            :
+          </strong>{' '}
+          {renderValue(value)}
+        </Box>
+      );
+    })}
+  </Box>
+);
+
 };
 
 export default FormattedModuleData;

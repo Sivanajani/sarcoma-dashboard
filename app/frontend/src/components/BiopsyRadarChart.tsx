@@ -111,6 +111,7 @@ const radarDataMulti = selectedFields.map((key) => {
     const dateLabel = new Date(d.biopsy_date).toLocaleDateString("de-CH", {
       day: "2-digit",
       month: "2-digit",
+      year: "numeric"
     });
     entry[dateLabel] = d[key] ?? 0;
   });
@@ -175,6 +176,7 @@ const radarDataMulti = selectedFields.map((key) => {
   const dateLabel = new Date(entry.biopsy_date).toLocaleDateString("de-CH", {
     day: "2-digit",
     month: "2-digit",
+    year: "numeric"
   });
   const result: any = { date: dateLabel };
   selectedFields.forEach(key => {
@@ -276,6 +278,7 @@ const radarDataMulti = selectedFields.map((key) => {
     const dateLabel = new Date(entry.biopsy_date).toLocaleDateString("de-CH", {
       day: "2-digit",
       month: "2-digit",
+      year: "numeric"
     });
     const color = fieldColors[dateLabel] || defaultColors[index % defaultColors.length];
 

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { t } from 'i18next';
-import { TextField, Select, MenuItem, Button, Box, IconButton } from '@mui/material';
+import { TextField, InputAdornment, Select, MenuItem, Button, Box, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 type EditableFieldProps = {
   value: any;
@@ -10,6 +11,8 @@ type EditableFieldProps = {
 };
 
 const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   if (typeof value === 'boolean') {
     return (
       <Select
@@ -66,16 +69,27 @@ const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
 
   const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (typeof value === 'string' && isoDateRegex.test(value)) {
-    return (
-      <TextField
-        type="date"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        fullWidth
-        size="small"
-      />
-    );
-  }
+  return (
+    <TextField
+      type="date"
+      inputRef={inputRef}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      fullWidth
+      size="small"
+      InputLabelProps={{ shrink: true }}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton onClick={() => inputRef.current?.showPicker()} size="small">
+              <CalendarTodayIcon fontSize="small" />
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
+}
 
   return (
     <TextField

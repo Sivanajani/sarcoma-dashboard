@@ -84,13 +84,19 @@ const Eq5dAccordionCard: React.FC<Eq5dAccordionCardProps> = ({ entry, onSaved })
           {editMode ? (
             <>
               {Object.entries(editedData)
-                .filter(([key]) => key !== 'pid' && key !== 'eq5d_row_id')
+                .filter(([key]) =>
+                  key !== 'pid' &&
+                  key !== 'eq5d_row_id' &&
+                  key !== 'vorname' &&
+                  key !== 'nachname'
+                )
                 .map(([key, value]) => (
                   <div key={key} style={{ marginBottom: '0.5rem' }}>
                     <label style={{ fontWeight: 'bold' }}>{key.replace(/_/g, ' ')}:</label>
-                    <EditableField value={value} onChange={(val) => handleChange(key, val)} />
+                    <EditableField value={value} onChange={(val) => handleChange(key, val)} />                      
                   </div>
                 ))}
+
               <button
                 onClick={handleSave}
                 style={{

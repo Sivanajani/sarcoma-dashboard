@@ -84,18 +84,23 @@ const BiopsyAccordionCard: React.FC<BiopsyAccordionCardProps> = ({ entry, onSave
         <Box mt={2}>
           {editMode ? (
             <>
-              {Object.entries(editedData)
-                .filter(([key]) => key !== 'biopsy_pid' && key !== 'biopsy_row_id')
+            {Object.entries(editedData)
+                .filter(([key]) =>
+                    key !== 'biopsy_pid' &&
+                    key !== 'biopsy_row_id' &&
+                    key !== 'biopsy_vorname' &&
+                    key !== 'biopsy_nachname' &&
+                    key !== 'biopsy_email'
+                )
                 .map(([key, value]) => (
-                  <div key={key} style={{ marginBottom: '0.5rem' }}>                    
-                    <label style={{ fontWeight: 'bold', color: '#000' }}>
-                        {t(`databasePage.${key}`, { defaultValue: key.replace(/_/g, ' ') })}:
-                    </label>
-
-
-                    <EditableField value={value} onChange={(val) => handleChange(key, val)} />
-                  </div>
+                    <div key={key} style={{ marginBottom: '0.5rem' }}>
+                        <label style={{ fontWeight: 'bold', color: '#000' }}>
+                            {t(`databasePage.${key}`, { defaultValue: key.replace(/_/g, ' ') })}:
+                        </label>
+                        <EditableField value={value} onChange={(val) => handleChange(key, val)} />                        
+                    </div>
                 ))}
+
               <button
                 onClick={handleSave}
                 style={{
