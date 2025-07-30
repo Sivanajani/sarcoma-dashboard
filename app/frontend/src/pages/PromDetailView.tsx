@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 import { Typography, Box, Paper } from '@mui/material';
 import Eq5dChart from '../components/Eq5dChart';
 import { useTranslation } from 'react-i18next';
-import BiopsyDetail from '../components/BiopsyDetail';
 import BiopsyRadarChart from "../components/BiopsyRadarChart";
 import Eq5dAccordionCard from '../components/Eq5dAccordionCard';
+import BiopsyAccordionCard from '../components/BiopsyAccordionCard';
+
 
 interface PromDetailViewProps {
   patientId?: string;
@@ -139,7 +140,35 @@ const PromDetailView: React.FC<PromDetailViewProps> = ({ patientId }) => {
 
       <h2 className="overview-title">{t('promDetail.biopsyTitle')}</h2>
       {biopsyData.length > 0 ? (
-        <BiopsyDetail data={biopsyData} />
+        <Box
+  sx={{
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 2,
+    justifyContent: 'flex-start',
+  }}
+>
+  {biopsyData.map((entry, idx) => (
+    <Box
+      key={idx}
+      sx={{
+        flex: '1 1 300px',
+        minWidth: '300px',
+        maxWidth: '400px',
+      }}
+    >
+      <BiopsyAccordionCard
+        entry={entry}
+        onSaved={async () => {
+          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/biopsy/by-external-code/${effectiveId}`);
+          const json = await res.json();
+          setBiopsyData(json);
+        }}
+      />
+    </Box>
+  ))}
+</Box>
+
       ) : (
         <Paper elevation={1} sx={{ padding: 2 }}>
           <Typography variant="body2" color="text.secondary">

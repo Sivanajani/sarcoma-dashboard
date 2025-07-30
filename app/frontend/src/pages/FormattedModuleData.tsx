@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material'; 
 
 interface FormattedModuleDataProps {
   data: Record<string, any>;
-   moduleName?: string;
+  moduleName?: string;
 }
 
 const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data, moduleName }) => {
@@ -20,38 +21,40 @@ const FormattedModuleData: React.FC<FormattedModuleDataProps> = ({ data, moduleN
       );
     } else if (typeof value === 'object' && value !== null) {
       return (
-        <div style={{ marginLeft: '1rem', marginTop: '0.5rem' }}>
+        <Box sx={{ ml: 2, mt: 1 }}>
           {Object.entries(value).map(([k, v]) => (
-            <div key={k}><strong>{k}:</strong> {renderValue(v)}</div>
+            <Box key={k}><strong>{k}:</strong> {renderValue(v)}</Box>
           ))}
-        </div>
+        </Box>
       );
     } else if (typeof value === 'boolean') {
       return value ? t('yes') : t('no');
     } else {
       return value === null || value === '' 
-      ? <i style={{ color: '#999' }}>{t('noDataDash')}</i>
-      : String(value);
+        ? <i style={{ color: '#999' }}>{t('noDataDash')}</i>
+        : String(value);
     }
   };
 
   return (
-    <div style={{ padding: '0.5rem 0' }}>
+    <Box sx={{ padding: '0.5rem 0', color: 'text.primary' }}>
       {Object.entries(data).map(([key, value]) => {
         const baseKey = moduleName ? `${moduleName}.${key}` : `databasePage.${key}`;
         return (
-          <div key={key} style={{ marginBottom: '0.5rem' }}>
+          <Box key={key} sx={{ marginBottom: '0.5rem', color: 'text.primary' }}>
             <strong>
               {t(baseKey, {
                 defaultValue: t(`databasePage.${key}`, {
                   defaultValue: key.replace(/_/g, ' ')
                 })
-              })}:
-            </strong> {renderValue(value)}
-          </div>
+              })}
+              :
+            </strong>{' '}
+            {renderValue(value)}
+          </Box>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

@@ -1,5 +1,8 @@
-import { t } from 'i18next';
 import React from 'react';
+import { t } from 'i18next';
+import { TextField, Select, MenuItem, Button, Box, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 type EditableFieldProps = {
   value: any;
@@ -9,105 +12,79 @@ type EditableFieldProps = {
 const EditableField: React.FC<EditableFieldProps> = ({ value, onChange }) => {
   if (typeof value === 'boolean') {
     return (
-      <select
+      <Select
         value={value ? 'true' : 'false'}
         onChange={(e) => onChange(e.target.value === 'true')}
-        style={inputStyle}
+        fullWidth
+        size="small"
       >
-        <option value="true">{t('yes')}</option>
-        <option value="false">{t('no')}</option>
-      </select>
+        <MenuItem value="true">{t('yes')}</MenuItem>
+        <MenuItem value="false">{t('no')}</MenuItem>
+      </Select>
     );
   }
 
   if (Array.isArray(value)) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         {value.map((val, index) => (
-          <div key={index} style={{ display: 'flex', gap: '4px' }}>
-            <input
-              type="text"
+          <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <TextField
               value={val}
               onChange={(e) => {
                 const updated = [...value];
                 updated[index] = e.target.value;
                 onChange(updated);
               }}
-              style={inputStyle}
+              size="small"
+              fullWidth
             />
-            <button
+            <IconButton
               onClick={() => {
                 const updated = value.filter((_: any, i: number) => i !== index);
                 onChange(updated);
               }}
-              style={removeButtonStyle}
+              color="error"
               title={t('editableField.removeField')}
             >
-              {t('noDataDash')}
-            </button>
-          </div>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
         ))}
-        <button
+        <Button
           onClick={() => onChange([...value, ''])}
-          style={addButtonStyle}
-          title={t('editableField.addField')}
+          variant="outlined"
+          startIcon={<AddIcon />}
+          size="small"
+          sx={{ width: 'fit-content' }}
         >
-          + Feld
-        </button>
-      </div>
+          {t('editableField.addField')}
+        </Button>
+      </Box>
     );
   }
 
-  // Datumsauswahl (falls ISO-Datum)
   const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (typeof value === 'string' && isoDateRegex.test(value)) {
     return (
-      <input
+      <TextField
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        style={inputStyle}
+        fullWidth
+        size="small"
       />
     );
   }
 
-  // Standard-Textfeld
   return (
-    <input
-      type="text"
+    <TextField
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value)}
-      style={inputStyle}
+      fullWidth
+      size="small"
     />
   );
-};
-
-// Style-Objekte
-const inputStyle = {
-  width: '100%',
-  padding: '6px',
-  borderRadius: '4px',
-  border: '1px solid #ccc'
-};
-
-const addButtonStyle = {
-  backgroundColor: '#4da6ff',
-  color: 'white',
-  border: 'none',
-  padding: '4px 10px',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  marginTop: '4px',
-  width: 'fit-content'
-};
-
-const removeButtonStyle = {
-  backgroundColor: '#ff6666',
-  color: 'white',
-  border: 'none',
-  padding: '0 10px',
-  borderRadius: '4px',
-  cursor: 'pointer'
 };
 
 export default EditableField;
