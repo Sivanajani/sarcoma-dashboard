@@ -27,6 +27,20 @@ services:
       - postgres-prom-data:/var/lib/postgresql/data
     ports:
       - "5433:5432"  
+  
+  db_meta:
+    image: postgres:15
+    container_name: postgres-meta
+    restart: always
+    environment:
+      POSTGRES_USER: metaadmin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: dashboard_meta
+    volumes:
+      - ./db/meta_init.sql:/docker-entrypoint-initdb.d/meta_init.sql
+      - postgres-meta-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
 
 
   backend:
@@ -87,3 +101,4 @@ volumes:
   postgres-data:
   pgadmin-data:
   postgres-prom-data:
+  postgres-meta-data:

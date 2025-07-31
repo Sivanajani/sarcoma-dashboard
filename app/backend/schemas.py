@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import date
+from datetime import date, datetime
 from typing import List
 from typing import Optional
-from pydantic import validator
+from pydantic import EmailStr
 
 
 
@@ -378,3 +378,27 @@ class PersonalDataRead(PersonalDataBase):
 
 class PersonalDataUpdate(PersonalDataBase):
     pass
+
+
+# --- Alert Schema (Meta-Datenbank) ---
+
+class AlertBase(BaseModel):
+    user_id: str
+    patient_external_code: Optional[str] = None
+    module: str
+    metric: str
+    threshold: float
+    condition: str
+    email: EmailStr
+    frequency: Optional[str] = "daily"
+    active: Optional[bool] = True
+
+class AlertCreate(AlertBase):
+    pass
+
+class AlertRead(AlertBase):
+    id: int
+    last_triggered: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True

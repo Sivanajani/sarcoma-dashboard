@@ -14,3 +14,8 @@ PROM_DB_URL = os.getenv(
 )
 engine_prom = create_engine(PROM_DB_URL)
 
+META_DB_URL = os.getenv(
+    "META_DB_URL",
+    "postgresql://metaadmin:admin123@postgres-meta:5432/dashboard_meta"
+)
+engine_meta = create_engine(META_DB_URL)
