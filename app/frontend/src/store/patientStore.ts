@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type PatientQuality = {
+export type PatientFlagQuality = {
   id?: number;
   patient_id: string | number;
   completeness?: number;
@@ -12,9 +12,9 @@ export type PatientQuality = {
 };
 
 type PatientStore = {
-  patients: PatientQuality[];
+  patients: PatientFlagQuality[];
   loaded: boolean;
-  setPatients: (data: PatientQuality[]) => void;
+  setPatients: (data: PatientFlagQuality[]) => void;
   setLoaded: (loaded: boolean) => void;
   reset: () => void;
 };

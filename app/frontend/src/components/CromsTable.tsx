@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
+import { usePatientStore } from '../store/patientStore';
 
 export type PatientQuality = {
   id: number;
@@ -27,52 +28,12 @@ const getColorClass = (value?: number): string => {
 
 const CromsTable: React.FC = () => {
   const { t } = useTranslation();
-  const [patients, setPatients] = useState<PatientQuality[]>([]);
+  const { patients } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const [baseRes, overviewRes, correctnessRes, consistencyRes, actualityRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/correctness-overview`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/actuality-overview`)
-        ]);
+  const cromPatients = patients.filter((p) => p.source === 'croms');
 
-        const baseData = await baseRes.json();
-        const overviewData = await overviewRes.json();
-        const correctnessData = await correctnessRes.json();
-        const consistencyData = await consistencyRes.json();
-        const actualityData = await actualityRes.json();
-
-        const combined: PatientQuality[] = baseData.map((p: any) => {
-          const correctness = correctnessData.find((q: any) => q.patient_id === p.id);
-          const quality = overviewData.find((q: any) => q.patient_id === p.id);
-          const consistency = consistencyData.find((q: any) => q.patient_id === p.id);
-          const actuality = actualityData.find((q: any) => q.patient_id === p.id);
-          return {
-            id: p.id,
-            patient_id: p.patient_id,
-            completeness: quality?.average_completeness !== undefined ? Math.round(quality.average_completeness * 100) : undefined,
-            correctness: correctness?.average_correctness !== undefined ? Math.round(correctness.average_correctness) : undefined,
-            consistency: consistency?.average_consistency !== undefined ? Math.round(consistency.average_consistency) : undefined,
-            actuality: actuality?.average_actuality !== undefined ? Math.round(actuality.average_actuality) : undefined,
-            flag: quality?.flag ?? undefined,
-          };
-        });
-
-        setPatients(combined);
-      } catch (err) {
-        console.error('Fehler beim Laden der Patienten:', err);
-      }
-    };
-
-    fetchPatients();
-  }, []);
-
-  const filteredPatients = patients.filter((p) =>
+  const filteredPatients = cromPatients.filter((p) =>
     p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 

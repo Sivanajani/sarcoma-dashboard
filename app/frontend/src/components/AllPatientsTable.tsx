@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
+import { usePatientStore } from '../store/patientStore';
+
 
 export type PatientQuality = {
   id?: number;
@@ -28,14 +30,15 @@ const getColorClass = (value?: number): string => {
 
 const AllPatientsTable: React.FC = () => {
   const { t } = useTranslation();
-  const [patients, setPatients] = useState<PatientQuality[]>([]);
+  const { patients, setPatients, loaded, setLoaded } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
 
   useEffect(() => {
+    if (loaded) return;
+
     const fetchPatients = async () => {
-      try {
-        // CROM-Daten
+      try {        
         const [baseRes, overviewRes, correctnessRes, consistencyRes, actualityRes] = await Promise.all([
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/completeness-overview`),
@@ -43,7 +46,6 @@ const AllPatientsTable: React.FC = () => {
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/actuality-overview`)
         ]);
-
 
         const baseData = await baseRes.json();
         const overviewData = await overviewRes.json();
@@ -132,13 +134,14 @@ const AllPatientsTable: React.FC = () => {
         });
 
         setPatients(Object.values(patientMap));
+        setLoaded(true);
       } catch (err) {
         console.error('Fehler beim Laden der Patienten:', err);
       }
     };
 
     fetchPatients();
-  }, []);
+  }, [loaded]);
 
   const filteredPatients = patients.filter((p) =>
     p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())

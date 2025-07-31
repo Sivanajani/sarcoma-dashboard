@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
@@ -7,13 +7,7 @@ import { Link } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-
-type PromPatientQuality = {
-  patient_id: number;
-  completeness?: number;
-  actuality?: number;
-  flag?: 'red' | 'yellow' | 'green';
-};
+import { usePatientStore } from '../store/patientStore';
 
 const getColorClass = (value?: number): string => {
   if (value === undefined) return '';
@@ -24,43 +18,13 @@ const getColorClass = (value?: number): string => {
 
 const PromsTable: React.FC = () => {
   const { t } = useTranslation();
-  const [patients, setPatients] = useState<PromPatientQuality[]>([]);
+  const { patients } = usePatientStore(); // Zustand statt lokale API
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const [baseRes, completenessRes, actualityRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/patients`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/completeness/average`),
-          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/proms/actuality-overview`)
-        ]);
+  // Nur PROM-Patient:innen filtern
+  const promPatients = patients.filter((p) => p.source === 'proms');
 
-        const baseData = await baseRes.json();
-        const completenessData = await completenessRes.json();
-        const actualityData = await actualityRes.json();
-
-        const combined: PromPatientQuality[] = baseData.map((p: any) => {
-          const completeness = completenessData.find((q: any) => q.patient_id === p.patient_id);
-          const actuality = actualityData.find((q: any) => q.patient_id === p.patient_id);
-          return {
-            patient_id: p.patient_id,
-            completeness: completeness?.average_completeness,
-            actuality: actuality?.average_actuality,
-            flag: completeness?.flag,
-          };
-        });
-
-        setPatients(combined);
-      } catch (err) {
-        console.error('Fehler beim Laden der PROM-Patienten:', err);
-      }
-    };
-
-    fetchPatients();
-  }, []);
-
-  const filteredPatients = patients.filter((p) =>
+  const filteredPatients = promPatients.filter((p) =>
     p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
