@@ -15,17 +15,6 @@ def get_available_modules(conn, pid):
     }
 
 
-def determine_flag(modules: list[dict]) -> str | None:
-    has_red = any(m.get("completeness", 100) < 40 for m in modules)
-    has_yellow = any(40 <= m.get("completeness", 100) < 75 for m in modules)
-
-    if has_red:
-        return "red"
-    elif has_yellow:
-        return "yellow"
-    return None
-
-
 @router.get("/api/patients/completeness-overview")
 def get_completeness_overview():
     try:
@@ -88,14 +77,12 @@ def get_completeness_overview():
                             "completeness": round(score * 100, 2)
                         })
 
-                avg_score = round(total_score / module_count, 2) if module_count else 0.0
-                flag = determine_flag(module_metrics)
+                avg_score = round(total_score / module_count, 2) if module_count else 0.0                
 
                 result_list.append({
                     "patient_id": pid,
                     "average_completeness": avg_score,
-                    "modules_checked": module_count,
-                    "flag": flag
+                    "modules_checked": module_count
                 })
 
             return result_list

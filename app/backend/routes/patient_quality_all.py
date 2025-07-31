@@ -123,5 +123,33 @@ async def get_all_quality_data():
                 except Exception as e:
                     print(f"[PROM] Fehler bei Patient {pid}, Modul {module}: {e}")
                     continue
+        
+        # 5. Summary-Flag berechnen
+        for patient_id, data in result.items():
+            flags = []
+            
+            # Sammle alle Modul-Flags aus CROMs
+            for module_data in data.get("croms", {}).values():
+                flag = module_data.get("flag")
+                if flag:
+                    flags.append(flag)
+
+            # Sammle alle Modul-Flags aus PROMs
+            for module_data in data.get("proms", {}).values():
+                flag = module_data.get("flag")
+                if flag:
+                    flags.append(flag)
+            
+            red_count = flags.count("red flag")
+            yellow_count = flags.count("yellow flag")
+            
+            if red_count >= 1 or yellow_count > 2:
+                summary_flag = "red flag"
+            elif yellow_count >= 1:
+                summary_flag = "yellow flag"
+            else:
+                summary_flag = "ok"
+            result[patient_id]["summary_flag"] = summary_flag
+
 
         return result

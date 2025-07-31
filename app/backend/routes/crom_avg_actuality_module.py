@@ -14,16 +14,6 @@ from utils.crom_actuality.crom_radiologyExam_actuality import calculate_radiolog
 router = APIRouter(prefix="/api")
 
 
-def determine_flag(scores: list[float]) -> str | None:
-    has_red = any(score < 40 for score in scores)
-    has_yellow = any(40 <= score < 75 for score in scores)
-    if has_red:
-        return "red"
-    elif has_yellow:
-        return "yellow"
-    return "green"
-
-
 @router.get("/patients/actuality-overview")
 def get_avgactuality_overview():
     try:
@@ -63,14 +53,12 @@ def get_avgactuality_overview():
                     except Exception as e:
                         continue
 
-                avg_score = round(sum(scores) / len(scores), 2) if scores else 0.0
-                flag = determine_flag(scores)
+                avg_score = round(sum(scores) / len(scores), 2) if scores else 0.0            
 
                 result_list.append({
                     "patient_id": pid,
                     "average_actuality": avg_score,
-                    "modules_checked": len(scores),
-                    "flag": flag
+                    "modules_checked": len(scores)                
                 })
 
             return result_list

@@ -16,16 +16,6 @@ from utils.crom_correctness.crom_reference_data import REFERENCE_DATA
 router = APIRouter(prefix="/api")
 
 
-def determine_flag(scores: list[float]) -> str | None:
-    has_red = any(score < 40 for score in scores)
-    has_yellow = any(40 <= score < 75 for score in scores)
-    if has_red:
-        return "red"
-    elif has_yellow:
-        return "yellow"
-    return "green"
-
-
 @router.get("/patients/correctness-overview")
 def get_avgcorrectness_overview():
     try:
@@ -67,13 +57,11 @@ def get_avgcorrectness_overview():
                         continue
 
                 avg_score = round(sum(scores) / len(scores), 2) if scores else 0.0
-                flag = determine_flag(scores)
 
                 result_list.append({
                     "patient_id": pid,
                     "average_correctness": avg_score,
-                    "modules_checked": len(scores),
-                    "flag": flag
+                    "modules_checked": len(scores)
                 })
 
             return result_list

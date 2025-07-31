@@ -31,6 +31,7 @@ const AllPatientsTable: React.FC = () => {
   const [patients, setPatients] = useState<PatientQuality[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
+
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -42,6 +43,7 @@ const AllPatientsTable: React.FC = () => {
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/consistency-overview`),
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patients/actuality-overview`)
         ]);
+
 
         const baseData = await baseRes.json();
         const overviewData = await overviewRes.json();
@@ -108,6 +110,24 @@ const AllPatientsTable: React.FC = () => {
             };
           } else {
             patientMap[p.patient_id] = { ...p };
+          }
+        });
+
+        // Summary-Flags holen
+        const summaryRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patient-quality/all`);
+        const summaryData = await summaryRes.json();
+        
+        // Flags anhand von summaryData setzen
+        Object.keys(patientMap).forEach((pid) => {
+          const summary = summaryData[pid];
+          if (summary) {
+            if (summary.summary_flag === 'red flag') {
+              patientMap[pid].flag = 'red';
+            } else if (summary.summary_flag === 'yellow flag') {
+              patientMap[pid].flag = 'yellow';
+            } else {
+              patientMap[pid].flag = undefined;
+            }
           }
         });
 

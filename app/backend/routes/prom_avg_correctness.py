@@ -7,15 +7,6 @@ from utils.prom_correctness.biopsy_correctness import check_biopsy_correctness
 
 router = APIRouter(prefix="/api")
 
-def determine_flag(scores: list[float]) -> str | None:
-    has_red = any(score < 40 for score in scores)
-    has_yellow = any(40 <= score < 75 for score in scores)
-    if has_red:
-        return "red"
-    elif has_yellow:
-        return "yellow"
-    return "green"
-
 @router.get("/proms/correctness-overview")
 def get_avg_prom_correctness(db: Session = Depends(get_prom_db)):
     try:
@@ -44,13 +35,11 @@ def get_avg_prom_correctness(db: Session = Depends(get_prom_db)):
                     scores.append(result["percent"])
 
             avg_score = round(sum(scores) / len(scores), 2) if scores else 0.0
-            flag = determine_flag(scores)
 
             result_list.append({
                 "pid": pid,
                 "average_correctness": avg_score,
-                "modules_checked": len(scores),
-                "flag": flag
+                "modules_checked": len(scores)
             })
 
         return result_list
