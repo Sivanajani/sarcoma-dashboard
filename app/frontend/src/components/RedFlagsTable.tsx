@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import Tooltip from '@mui/material/Tooltip';
 import { usePatientStore } from '../store/patientStore';
 
 const getColorClass = (value?: number): string => {
@@ -16,21 +15,20 @@ const getColorClass = (value?: number): string => {
   return 'red';
 };
 
-const PromsTable: React.FC = () => {
+const RedFlagsTable: React.FC = () => {
   const { t } = useTranslation();
-  const { patients } = usePatientStore(); // Zustand statt lokale API
+  const { patients } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Nur PROM-Patient:innen filtern
-  const promPatients = patients.filter((p) => p.source === 'proms' || p.source === 'croms+proms');
+  const redFlaggedPatients = patients.filter((p) => p.flag === 'red');
 
-  const filteredPatients = promPatients.filter((p) =>
+  const filteredPatients = redFlaggedPatients.filter((p) =>
     p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="patient-quality-table">
-      <h2 className="overview-title">{t('patientTable.titleProms')}</h2>
+      <h2 className="overview-title">{t('patientTable.titleRedFlags')}</h2>
 
       <TextField
         placeholder={t('patientTable.search')}
@@ -70,35 +68,63 @@ const PromsTable: React.FC = () => {
             <th></th>
             <th>{t('patientTable.headers.id')}</th>
             <th>{t('patientTable.headers.completeness')}</th>
-            <th>{t('patientTable.headers.actuality')}</th>
+            <th>{t('patientTable.headers.correctness')}</th>
+            <th>{t('patientTable.headers.consistency')}</th>
+            <th>{t('patientTable.headers.actuality')}</th>            
           </tr>
         </thead>
         <tbody>
           {filteredPatients.map((p) => (
             <tr key={p.patient_id}>
               <td className="flag-cell">
-                {p.flag === 'red' && (
-                  <Tooltip title={t('patientTable.tooltips.redFlag')}>
-                    <ReportProblemIcon color="error" />
-                  </Tooltip>
-                )}
-                {p.flag === 'yellow' && (
-                  <Tooltip title={t('patientTable.tooltips.yellowFlag')}>
-                    <WarningAmberIcon color="warning" />
-                  </Tooltip>
-                )}
+                <Tooltip title={t('patientTable.tooltips.redFlag')}>
+                  <ReportProblemIcon color="error" />
+                </Tooltip>
               </td>
-              <td>
-                <Link to={`/proms/${p.patient_id}`} className="patient-link">
-                  {p.patient_id}
-                </Link>
-              </td>
+                <td>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '4px' }}>
+                    <Link to={`/patients/${p.patient_id}`} className="patient-link">
+                      {p.patient_id}
+                    </Link>
+                    <span
+                      style={{
+                        backgroundColor:
+                          p.source === 'croms+proms'
+                            ? '#cadff0ff'
+                            : p.source === 'croms'
+                            ? '#f0e8d9ff'
+                            : '#fce4ec',
+                        color:
+                          p.source === 'croms+proms'
+                            ? '#1565c0'
+                            : p.source === 'croms'
+                            ? '#ef6c00'
+                            : '#df4768ff',
+                        padding: '2px 6px',
+                        fontSize: '0.7rem',
+                        borderRadius: '12px',
+                        fontWeight: 'bold',
+                        display: 'inline-block'
+                      }}
+                    >
+                      {p.source === 'croms+proms'
+                        ? 'CROM + PROM'
+                        : p.source?.toUpperCase()}
+                    </span>
+                  </div>
+                </td>
               <td className={`value ${getColorClass(p.completeness)}`}>
                 {p.completeness !== undefined ? `${p.completeness}%` : '–'}
               </td>
+              <td className={`value ${getColorClass(p.correctness)}`}>
+                {p.correctness !== undefined ? `${p.correctness}%` : '–'}
+              </td>
+              <td className={`value ${getColorClass(p.consistency)}`}>
+                {p.consistency !== undefined ? `${p.consistency}%` : '–'}
+              </td>
               <td className={`value ${getColorClass(p.actuality)}`}>
                 {p.actuality !== undefined ? `${p.actuality}%` : '–'}
-              </td>
+              </td>             
             </tr>
           ))}
         </tbody>
@@ -107,4 +133,4 @@ const PromsTable: React.FC = () => {
   );
 };
 
-export default PromsTable;
+export default RedFlagsTable;

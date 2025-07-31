@@ -39,6 +39,7 @@
   "title": "Patientenübersicht - Datenqualität",
   "titleCroms": "CROMs - Datenqualität",
   "titleProms": "PROMs - Datenqualität",
+  "titleRedFlags": "Alle Red Flags (PROM & CROM)",
   "search": "Suche nach Patient:in...",
   "headers": {
     "id": "Patient ID",
@@ -52,7 +53,8 @@
   "tabs": {
     "all": "Alle Patient:innen",
     "croms": "Crom's",
-    "proms": "Prom's"
+    "proms": "Prom's",
+    "redflags": "Patient:innen mit Red Flag's"
   },
   "tooltips": {
     "redFlag": "Kritisch unvollständiges Modul",
@@ -62,7 +64,8 @@
 "patientDetail": {
   "tabs": {
     "croms": "CROMs",
-    "proms": "PROMs"
+    "proms": "PROMs",
+    "redFlags": "Patient:innen mit Red Flag's"
   },
   "title": "Detailansicht - Patient: {{pid}}",
   "noModules": "Keine Module vorhanden.",

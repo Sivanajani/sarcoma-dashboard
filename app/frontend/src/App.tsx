@@ -19,7 +19,7 @@ import {
 
 function App() {
   const { t } = useTranslation();
-  const [selectedTab, setSelectedTab] = useState<'all' | 'croms' | 'proms'>('all');
+  const [selectedTab, setSelectedTab] = useState<'redflags' | 'all' | 'croms' | 'proms'>('all');
   const tableRef = useRef<HTMLDivElement>(null);
   const scrollToTable = () => {
     tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });

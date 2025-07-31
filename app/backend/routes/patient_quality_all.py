@@ -150,6 +150,13 @@ async def get_all_quality_data():
             else:
                 summary_flag = "ok"
             result[patient_id]["summary_flag"] = summary_flag
+        
+        # 6. Gesamtanzahl Red Flags berechnen
+        red_flag_count = sum(1 for data in result.values() if data.get("summary_flag") == "red flag")
 
-
-        return result
+        return {
+            "patients": result,
+            "red_flag_total": red_flag_count
+        }
+    
+    return result

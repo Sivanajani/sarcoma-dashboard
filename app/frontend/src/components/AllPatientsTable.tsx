@@ -30,7 +30,7 @@ const getColorClass = (value?: number): string => {
 
 const AllPatientsTable: React.FC = () => {
   const { t } = useTranslation();
-  const { patients, setPatients, loaded, setLoaded } = usePatientStore();
+  const { patients, setPatients, loaded, setLoaded, setRedFlagTotal  } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
 
@@ -118,10 +118,11 @@ const AllPatientsTable: React.FC = () => {
         // Summary-Flags holen
         const summaryRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/patient-quality/all`);
         const summaryData = await summaryRes.json();
+        const patientsSummary = summaryData.patients;
         
         // Flags anhand von summaryData setzen
         Object.keys(patientMap).forEach((pid) => {
-          const summary = summaryData[pid];
+          const summary = patientsSummary[pid];
           if (summary) {
             if (summary.summary_flag === 'red flag') {
               patientMap[pid].flag = 'red';
@@ -134,7 +135,9 @@ const AllPatientsTable: React.FC = () => {
         });
 
         setPatients(Object.values(patientMap));
+        setRedFlagTotal(summaryData.red_flag_total);
         setLoaded(true);
+        
       } catch (err) {
         console.error('Fehler beim Laden der Patienten:', err);
       }

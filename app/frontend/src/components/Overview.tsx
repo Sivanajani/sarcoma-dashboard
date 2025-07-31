@@ -2,9 +2,10 @@ import KpiCard from './KpiCard';
 import GroupIcon from '@mui/icons-material/Group';
 import { useTranslation } from 'react-i18next';
 import { usePatientCount } from '../hooks/usePatientCount';
+import { usePatientStore } from '../store/patientStore';
 
 type OverviewProps = {
-  setSelectedTab: (tab: 'all' | 'croms' | 'proms') => void;
+  setSelectedTab: (tab: 'redflags' |'all' | 'croms' | 'proms') => void;
   scrollToTable: () => void;
 };
 
@@ -12,11 +13,25 @@ type OverviewProps = {
 const Overview: React.FC<OverviewProps> = ({ setSelectedTab, scrollToTable }) => {
   const { t } = useTranslation();
   const { counts, loading } = usePatientCount();
+  const { redFlagTotal, loaded } = usePatientStore();
 
   return (
     <section className="overview">
       <h2 className="overview-title">{t('dashboard.overview-title')}</h2>
       <div className="kpi-container">
+
+        <KpiCard
+          icon={<GroupIcon />}
+          label={t('dashboard.kpi.flags')}
+          value={loaded ? redFlagTotal : '...'}
+          tooltip={t('dashboard.kpi.tooltip.flags')}
+          color="#ffc107"
+          onClick={() => {
+            setSelectedTab('redflags');
+            scrollToTable();
+          }}
+        />
+
         <KpiCard
           icon={<GroupIcon />}
           label={t('dashboard.kpi.total')}
@@ -51,15 +66,6 @@ const Overview: React.FC<OverviewProps> = ({ setSelectedTab, scrollToTable }) =>
             setSelectedTab('proms');
             scrollToTable();
           }}
-        />
-
-        <KpiCard
-          icon={<GroupIcon />}
-          label={t('dashboard.kpi.flags')}
-          value={'n/a'}
-          tooltip={t('dashboard.kpi.tooltip.flags')}
-          color="#ffc107"
-          onClick={() => {}}
         />
       </div>
     </section>

@@ -31,7 +31,7 @@ const CromsTable: React.FC = () => {
   const { patients } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const cromPatients = patients.filter((p) => p.source === 'croms');
+  const cromPatients = patients.filter((p) => p.source === 'croms' || p.source === 'croms+proms');
 
   const filteredPatients = cromPatients.filter((p) =>
     p.patient_id.toString().toLowerCase().includes(searchTerm.toLowerCase())
