@@ -1,5 +1,3 @@
-# Datei: routes/patient_lookup.py
-
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
 from db.engine import engine_pg, engine_prom

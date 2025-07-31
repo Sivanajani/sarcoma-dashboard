@@ -20,6 +20,7 @@ from routes.crom_pathology_module import router as crom_pathology_router
 from routes.crom_hyperthermiaTherapies_module import router as crom_hyperthermia_therapies_router
 from routes.crom_patient_module import router as crom_patient_router
 from routes.crom_sarcomaBoard_module import router as crom_sarcoma_board_router
+from routes.patient_quality_all import router as quality_router
 
 app = FastAPI()
 
@@ -135,3 +136,6 @@ app.include_router(eq5d_router)
 
 # PROMs Biopsie Routen
 app.include_router(prom_biopsy_module)
+
+# Quality für alle CROM/PROM MODULEN 
+app.include_router(quality_router)
