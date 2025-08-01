@@ -4,6 +4,7 @@
     "dashboard": "Dashboard",
     "forms": "Datenbank",
     "patients": "Patient:innen",
+    "alerts": "Alarm",
     "redflags": "Red Flags",
     "settings": "Einstellungen"
   },

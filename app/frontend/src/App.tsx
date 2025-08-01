@@ -9,6 +9,7 @@ import DuplicateNotifier from './components/DuplicateNotifier';
 import DatabasePage from './pages/DatabasePage';
 import ModuleDetailView from './pages/ModuleDetailView';
 import { useRef, useState } from 'react';
+import AlertsPage from './pages/AlertsPage';
 
 
 import {
@@ -68,6 +69,10 @@ function App() {
               <Route
                 path="/forms"
                 element={<DatabasePage />}
+              />
+              <Route
+                path="/alerts"
+                element={<AlertsPage />}
               />
             </Routes>
           </main>
