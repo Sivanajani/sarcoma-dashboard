@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float, Text, Datetime
+from sqlalchemy import Column, Integer, String, Boolean, Float, Text, DateTime
 from db.session import Base
 
 class Alert(Base):
@@ -14,4 +14,4 @@ class Alert(Base):
     email = Column(Text, nullable=False)
     frequency = Column(Text, nullable=True, default="daily")
     active = Column(Boolean, nullable=True, default=True)
-    last_triggered = Column(Datetime, nullable=True)  
+    last_triggered = Column(DateTime, nullable=True)  

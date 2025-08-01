@@ -8,6 +8,7 @@ import keycloak from './keycloak';
 keycloak.init({ onLoad: 'login-required' }).then((authenticated) => {
   if (authenticated) {
     console.log('Keycloak authentication successful');
+    console.log('Access Token:', keycloak.token);
 
     createRoot(document.getElementById('root')!).render(
       <StrictMode>

@@ -1,5 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
+from fastapi.openapi.models import OAuthFlowPassword
+from fastapi.security import OAuth2
+from typing import Optional
+from fastapi.openapi.utils import get_openapi
+
 from routes.crom_avg_completeness import router as crom_completeness_router
 from routes.crom_completness_module import router as crom_module_metrics_router
 from routes.crom_tables import router as crom_tables_router
@@ -22,7 +29,51 @@ from routes.crom_patient_module import router as crom_patient_router
 from routes.crom_sarcomaBoard_module import router as crom_sarcoma_board_router
 from routes.patient_quality_all import router as quality_router
 
-app = FastAPI()
+class OAuth2PasswordBearerWithCookie(OAuth2):
+    def __init__(self, tokenUrl: str):
+        flows = OAuthFlowsModel(password=OAuthFlowPassword(tokenUrl=tokenUrl))
+        super().__init__(flows=flows)
+
+oauth2_scheme = OAuth2PasswordBearerWithCookie(
+    tokenUrl="http://localhost:8080/realms/sarcoma-dashboard/protocol/openid-connect/token"
+)
+
+
+app = FastAPI(
+    title="Sarcoma Dashboard API",
+    version="1.0.0",
+    description="API für das Datenqualitäts-Dashboard (CROMs, PROMs, Meta-Alerts)",
+    dependencies=[],
+    openapi_tags=[
+        {"name": "CROMs", "description": "CROM-Datenzugriff"},
+        {"name": "PROMs", "description": "PROM-Datenzugriff"},
+        {"name": "Meta", "description": "Meta-Tabellen & Alerts"},
+    ]
+)
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    openapi_schema["components"]["securitySchemes"] = {
+        "OAuth2PasswordBearer": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+        }
+    }
+    openapi_schema["security"] = [{"OAuth2PasswordBearer": []}]
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
+
 
 # CORS Middleware aktivieren
 app.add_middleware(
@@ -139,3 +190,17 @@ app.include_router(prom_biopsy_module)
 
 # Quality für alle CROM/PROM MODULEN 
 app.include_router(quality_router)
+
+
+# Routen für META DB und alerts
+
+from routes.meta_data import router as meta_debug  
+from routes.alerts import router as alert
+
+#Liste der Tabellen, einfacher Test für DB Meta
+app.include_router(meta_debug)
+
+app.include_router(alert)
+
+from routes.user_info import router as user_info_router
+app.include_router(user_info_router)
