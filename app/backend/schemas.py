@@ -39,7 +39,7 @@ class PathologyRead(PathologyBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Für Updates (PUT)
@@ -63,7 +63,7 @@ class RadiologyExamRead(RadiologyExamBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class RadiologyExamUpdate(RadiologyExamBase):
@@ -91,7 +91,7 @@ class SystemicTherapyRead(SystemicTherapyBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class SystemicTherapyUpdate(SystemicTherapyBase):
@@ -122,7 +122,7 @@ class SurgeryRead(SurgeryBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class SurgeryUpdate(SurgeryBase):
@@ -150,7 +150,7 @@ class DiagnosisRead(DiagnosisBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class DiagnosisUpdate(DiagnosisBase):
@@ -180,7 +180,7 @@ class RadiologyTherapyRead(RadiologyTherapyBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class RadiologyTherapyUpdate(RadiologyTherapyBase):
@@ -205,7 +205,7 @@ class HyperthermiaTherapyRead(HyperthermiaTherapyBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class HyperthermiaTherapyUpdate(HyperthermiaTherapyBase):
@@ -239,7 +239,7 @@ class CROMPatientRead(CROMPatientBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CROMPatientUpdate(CROMPatientBase):
@@ -281,7 +281,7 @@ class SarcomaBoardRead(SarcomaBoardBase):
     patient_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class SarcomaBoardUpdate(SarcomaBoardBase):
@@ -309,7 +309,7 @@ class Eq5dRead(Eq5dBase):
     row_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Eq5dUpdate(Eq5dBase):
     pass
@@ -342,7 +342,7 @@ class PromsBiopsyRead(PromsBiopsyBase):
     biopsy_row_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PromsBiopsyUpdate(PromsBiopsyBase):
     pass
@@ -373,7 +373,7 @@ class PersonalDataRead(PersonalDataBase):
     row_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class PersonalDataUpdate(PersonalDataBase):
