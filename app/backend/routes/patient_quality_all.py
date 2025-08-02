@@ -160,3 +160,100 @@ async def get_all_quality_data():
         }
     
     return result
+
+
+CROM_MODULE_NAME_MAP = {
+    "diagnosis": "diagnoses",
+    "radiology_exam": "radiology_exams",
+    "radiology_therapy": "radiology_therapies",
+    "systemic_therapy": "systemic_therapies",
+    "surgery": "surgeries",
+    "sarcoma_board": "sarcoma_boards",
+    "pathology": "pathologies",
+    "hyperthermia_therapy": "hyperthermia_therapies",
+}
+
+
+@router.get("/patient-quality/{external_code}")
+async def get_quality_by_patient(external_code: str):
+    base_url = "http://localhost:8000"
+    async with httpx.AsyncClient() as client:
+        result = {
+            "patient_id": external_code,
+            "croms": {},
+            "proms": {}
+        }
+
+        # CROM-Patient abrufen
+        crom_patients_resp = await client.get(f"{base_url}/api/patients")
+        crom_patients = crom_patients_resp.json()
+        crom_patient = next((p for p in crom_patients if p["patient_id"] == external_code), None)
+        if crom_patient:
+            result["crom_id"] = crom_patient["id"]
+            for module in CROM_MODULES:
+                try:
+                    url = f"{base_url}/api/patients/by-external-code/{external_code}/{module}/details"
+                    module_resp = await client.get(url)
+                    if module_resp.status_code == 200:
+                        data = module_resp.json()
+                        scores = [
+                            data.get("completeness", {}).get("completeness_score"),
+                            data.get("correctness", {}).get("correctness_score"),
+                            data.get("consistency", {}).get("consistency_score"),
+                            data.get("actuality", {}).get("actuality_score")
+                        ]
+                        if any(scores):
+                            mapped_name = CROM_MODULE_NAME_MAP.get(module, module)
+                            result["croms"][mapped_name] = {
+                                "completeness": scores[0],
+                                "correctness": scores[1],
+                                "consistency": scores[2],
+                                "actuality": scores[3],
+                                "flag": calculate_flag(scores)
+                            }
+                except Exception as e:
+                    print(f"[CROM] Fehler bei Modul {module}: {e}")
+
+        # 🧩 PROM-Patient abrufen
+        prom_patients_resp = await client.get(f"{base_url}/api/proms/patients")
+        prom_patients = prom_patients_resp.json()
+        prom_patient = next((p for p in prom_patients if p["patient_id"] == external_code), None)
+        if prom_patient:
+            result["prom_id"] = prom_patient["id"]
+            for module, paths in PROM_MODULES.items():
+                try:
+                    comp_url = base_url + paths["completeness"].format(pid=external_code)
+                    act_url = base_url + paths["actuality"].format(pid=external_code)
+
+                    comp_resp = await client.get(comp_url)
+                    comp_data = comp_resp.json()
+                    comp_values = [entry["completeness_percent"] for entry in comp_data if "completeness_percent" in entry]
+                    avg_comp = round(sum(comp_values) / len(comp_values), 2) if comp_values else None
+
+                    act_resp = await client.get(act_url)
+                    act_data = act_resp.json()
+                    act_score = act_data.get("aktualitaet_status", {}).get("aktualitaet_prozent")
+
+                    scores = [avg_comp, act_score]
+                    if any(scores):
+                        result["proms"][module] = {
+                            "completeness": avg_comp,
+                            "actuality": act_score,
+                            "flag": calculate_flag(scores)
+                        }
+
+                except Exception as e:
+                    print(f"[PROM] Fehler bei Modul {module}: {e}")
+
+        # ✅ summary_flag berechnen
+        flags = [m["flag"] for m in result["croms"].values()] + [m["flag"] for m in result["proms"].values()]
+        red = flags.count("red flag")
+        yellow = flags.count("yellow flag")
+        if red >= 1 or yellow > 2:
+            result["summary_flag"] = "red flag"
+        elif yellow >= 1:
+            result["summary_flag"] = "yellow flag"
+        else:
+            result["summary_flag"] = "ok"
+
+        return result

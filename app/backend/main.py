@@ -29,6 +29,8 @@ from routes.crom_patient_module import router as crom_patient_router
 from routes.crom_sarcomaBoard_module import router as crom_sarcoma_board_router
 from routes.patient_quality_all import router as quality_router
 
+from scheduler.alert_scheduler import start_alert_scheduler
+
 class OAuth2PasswordBearerWithCookie(OAuth2):
     def __init__(self, tokenUrl: str):
         flows = OAuthFlowsModel(password=OAuthFlowPassword(tokenUrl=tokenUrl))
@@ -83,6 +85,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+start_alert_scheduler()
 
 # Datenbankverbindung für Module
 app.include_router(crom_pathology_router)
