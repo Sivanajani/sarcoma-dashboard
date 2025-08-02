@@ -3,7 +3,7 @@ FROM python:3.11-slim
 WORKDIR /app
 COPY . .
 
-RUN pip install fastapi uvicorn sqlalchemy psycopg2-binary pymysql requests httpx pydantic[email] python-jose[cryptography] apscheduler
+RUN pip install fastapi uvicorn sqlalchemy psycopg2-binary pymysql requests httpx pydantic[email] python-jose[cryptography] apscheduler python-dotenv
 
 
 
