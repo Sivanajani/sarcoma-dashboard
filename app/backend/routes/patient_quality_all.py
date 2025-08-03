@@ -1,5 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import httpx
+
+from sqlalchemy.orm import Session
+from db.session import get_db, get_prom_db  
+from models_prom import PersonalData  
+from models import CROMPatient 
 
 router = APIRouter(prefix="/api")
 
@@ -257,3 +262,26 @@ async def get_quality_by_patient(external_code: str):
             result["summary_flag"] = "ok"
 
         return result
+
+
+
+@router.get("/patient-ids/all")
+def get_all_patient_ids(
+    db_prom: Session = Depends(get_prom_db),
+    db_crom: Session = Depends(get_db)
+):
+    # PROM-Patient:innen (PID)
+    prom_patients = db_prom.query(PersonalData.pid).all()
+    prom_ids = [row.pid for row in prom_patients]
+
+    # CROM-Patient:innen (external_code)
+    crom_patients = db_crom.query(CROMPatient.external_code).all()
+    crom_ids = [row.external_code for row in crom_patients]
+
+    return {
+        "prom_ids": prom_ids,
+        "crom_ids": crom_ids,
+        "total_prom": len(prom_ids),
+        "total_crom": len(crom_ids),
+        "all_patient_ids": prom_ids + crom_ids
+    }

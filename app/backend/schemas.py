@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import date, datetime
 from typing import List
 from typing import Optional
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
 
 
 
@@ -385,10 +385,17 @@ class PersonalDataUpdate(PersonalDataBase):
 class AlertBase(BaseModel):
     user_id: str
     patient_external_code: Optional[str] = None
+
+    source: Optional[str] = None         
     module: str
-    metric: str
-    threshold: float
-    condition: str
+
+    metric: Optional[str] = None         
+    threshold: Optional[float] = None    
+    field: Optional[str] = None          
+    condition: str                       
+    value: Optional[str] = None          
+    message: Optional[str] = None        
+
     email: EmailStr
     frequency: Optional[str] = "daily"
     active: Optional[bool] = True
@@ -400,6 +407,7 @@ class AlertRead(AlertBase):
     id: int
     last_triggered: Optional[datetime] = None
 
-    model_config ={
+    model_config = {
         "from_attributes": True
     }
+

@@ -49,3 +49,25 @@ class Biopsy(Base):
     biopsy_eqvas = Column(Integer, nullable=True)
     biopsy_questions = Column(String, nullable=True)
 
+class PersonalData(Base):
+    __tablename__ = "personal_data"
+
+    row_id = Column(Integer, primary_key=True, index=True)
+    institution = Column(Text, nullable=True)
+    pid = Column(String, nullable=False, index=True)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    date_birth = Column(Date, nullable=True)
+    gender = Column(String, nullable=True)
+    street = Column(String, nullable=True)
+    house_nr = Column(String, nullable=True)
+    post_code = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    phone_number = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    insurance_company = Column(String, nullable=True)
+    insurance_class = Column(String, nullable=True)
+    insurance_number = Column(String, nullable=True)
+    ahv = Column(String, nullable=True)
+    consent = Column(Boolean, nullable=True)
