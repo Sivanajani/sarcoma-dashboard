@@ -22,6 +22,13 @@ FLAG_SEVERITY = {
     "red flag": 2
 }
 
+FLAG_LABELS = {
+    0: "ok",
+    1: "yellow flag",
+    2: "red flag"
+}
+
+
 # Mail-Versand
 def send_email_alert(to_email: str, subject: str, content: str):
     msg = EmailMessage()
@@ -71,10 +78,27 @@ async def process_alerts():
                 source = alert.source or "croms"
                 submodule = alert.module[len(source) + 1:] if alert.module.startswith(source + "_") else alert.module
 
+                # Alert-Typ 1: Metrik-Check
+                if alert.metric == "summary_flag":
+                    raw_summary_flag = data.get("summary_flag", "ok")
+                    metric_value = FLAG_SEVERITY.get(raw_summary_flag.lower(), -1)
+
+                    if check_alert_condition(metric_value, alert.threshold, alert.condition):
+                        subject = f"[Alert] Patient {alert.patient_external_code}: Summary Flag = {raw_summary_flag}"
+                        body = (
+                            f"Die Zusammenfassungsbewertung (summary_flag) wurde ausgelöst:\n\n"
+                            f"Patient: {alert.patient_external_code}\n"
+                            f"Summary Flag: {raw_summary_flag} ({metric_value})\n"
+                            f"Bedingung: {alert.condition} {FLAG_LABELS.get(alert.threshold, alert.threshold)}\n"
+                            f"Meldung: {alert.message or 'Kein spezifischer Hinweis'}"
+                        )
+                        send_email_alert(alert.email, subject, body)
+                        alert.last_triggered = datetime.utcnow()
+                        db.commit()
+                        continue
+
                 if source not in data:
                     print(f"Quelle {source} nicht im Patientendatensatz")
-                    print(f"Modul-Check → Source: {source}, Submodule: {submodule}")
-                    print(f"Verfügbare Module: {list(data[source].keys())}")
                     continue            
 
                 module_data = data[source].get(submodule)
@@ -91,15 +115,27 @@ async def process_alerts():
                         metric_value = module_data.get(alert.metric)
 
                     if check_alert_condition(metric_value, alert.threshold, alert.condition):
-                        subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – {alert.metric} {alert.condition} {alert.threshold}"
-                        body = (
-                            f"Der Schwellenwert wurde überschritten:\n\n"
-                            f"Patient: {alert.patient_external_code}\n"
-                            f"Modul: {submodule}\n"
-                            f"Metrik: {alert.metric}\n"
-                            f"Aktueller Wert: {metric_value}\n"
-                            f"Bedingung: {alert.condition} {alert.threshold}\n"
-                        )
+                        if alert.metric == "flag":
+                            subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – {alert.metric} = {raw_flag}"
+                            body =(
+                                f"Ein Qualitäts-Flag wurde ausgelöst:\n\n"
+                                f"Patient: {alert.patient_external_code}\n"
+                                f"Modul: {submodule}\n"
+                                f"Metrik: {alert.metric}\n"
+                                f"Aktueller Flag: {raw_flag} ({metric_value})\n"
+                                f"Bedingung: {alert.condition} {FLAG_LABELS.get(alert.threshold, alert.threshold)}\n"
+                                f"Meldung: {alert.message or 'Kein spezifischer Hinweis'}"
+                            )
+                        else:
+                            subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – {alert.metric} {alert.condition} {alert.threshold}"
+                            body = (
+                                f"Der Schwellenwert wurde überschritten:\n\n"
+                                f"Patient: {alert.patient_external_code}\n"
+                                f"Modul: {submodule}\n"
+                                f"Metrik: {alert.metric}\n"
+                                f"Aktueller Wert: {metric_value}\n"
+                                f"Bedingung: {alert.condition} {alert.threshold}\n"
+                            )
                         send_email_alert(alert.email, subject, body)
                         alert.last_triggered = datetime.utcnow()
                         db.commit()
@@ -151,7 +187,7 @@ async def process_alerts():
                             field_value = entry.get(alert.field)
                             print(f"Prüfe {alert.field} in Datensatz vom {entry.get('date')} → {field_value}")
                             
-                            # missing-Fall
+                            # Type 2: missing-Fall, Missing Feld
                             if alert.condition in ["missing", "is_null", "null", "is_null_if"] and (field_value is None or field_value == ""):
                                 subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – Feld {alert.field} fehlt"
                                 body = (
@@ -167,26 +203,62 @@ async def process_alerts():
                                 db.commit()
                                 break  
                             
-                            # Vergleichsfall ==
-                            elif alert.condition == "==" and field_value is not None and str(field_value).lower() == str(alert.value).lower():
-                                subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – {alert.field} == {alert.value}"
-                                body = (
-                                    f"Ein Wert wurde erkannt:\n\n"
-                                    f"Patient: {alert.patient_external_code}\n"
-                                    f"Modul: {submodule}\n"
-                                    f"Feld: {alert.field}\n"
-                                    f"Datum: {entry.get('date')}\n"
-                                    f"Aktueller Wert: {field_value}\n"
-                                    f"Bedingung: {alert.condition} {alert.value}\n"
-                                    f"Meldung: {alert.message or 'Kein spezifischer Hinweis'}"
-                                )
-                                send_email_alert(alert.email, subject, body)
-                                alert.last_triggered = datetime.utcnow()
-                                db.commit()
-                                break  
-
-
+                            # Typ 3: Vergleichsfall Zahl oder Text
+                            elif alert.condition in ["==", "!=", "contains", "starts_with", "ends_with", "<", "<=", ">", ">="]:
+                                try:
+                                    # Zahl-Vergleich
+                                    if alert.condition in ["<", "<=", ">", ">="]:
+                                        field_value_num = float(field_value)
+                                        threshold_num = float(alert.value)
+                                        if check_alert_condition(field_value_num, threshold_num, alert.condition):
+                                            subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – {alert.field} {alert.condition} {alert.value}"
+                                            body = (
+                                                f"Ein numerischer Schwellenwert wurde erreicht:\n\n"
+                                                f"Patient: {alert.patient_external_code}\n"
+                                                f"Modul: {submodule}\n"
+                                                f"Feld: {alert.field}\n"
+                                                f"Datum: {entry.get('date')}\n"
+                                                f"Aktueller Wert: {field_value_num}\n"
+                                                f"Bedingung: {alert.condition} {alert.value}\n"
+                                                f"Meldung: {alert.message or 'Kein spezifischer Hinweis'}"
+                                            )
+                                            send_email_alert(alert.email, subject, body)
+                                            alert.last_triggered = datetime.utcnow()
+                                            db.commit()
+                                            break
+                                    
+                                    # String-Vergleich
+                                    else:
+                                        field_str = str(field_value).lower()
+                                        target_str = str(alert.value).lower()
+                                        
+                                        match = (
+                                            (alert.condition == "==" and field_str == target_str) or
+                                            (alert.condition == "!=" and field_str != target_str) or
+                                            (alert.condition == "contains" and target_str in field_str) or
+                                            (alert.condition == "starts_with" and field_str.startswith(target_str)) or
+                                            (alert.condition == "ends_with" and field_str.endswith(target_str))
+                                        )
+                                        
+                                        if match:
+                                            subject = f"[Alert] Patient {alert.patient_external_code}: {submodule} – {alert.field} {alert.condition} {alert.value}"
+                                            body = (
+                                                f"Ein textbasierter Abgleich wurde erkannt:\n\n"
+                                                f"Patient: {alert.patient_external_code}\n"
+                                                f"Modul: {submodule}\n"
+                                                f"Feld: {alert.field}\n"
+                                                f"Datum: {entry.get('date')}\n"
+                                                f"Aktueller Wert: {field_value}\n"
+                                                f"Bedingung: {alert.condition} {alert.value}\n"
+                                                f"Meldung: {alert.message or 'Kein spezifischer Hinweis'}"
+                                            )
+                                            send_email_alert(alert.email, subject, body)
+                                            alert.last_triggered = datetime.utcnow()
+                                            db.commit()
+                                            break
+                                except Exception as e:
+                                    print(f"Fehler beim String-/Zahlvergleich für Alert {alert.id}: {e}")
+                    
             except Exception as e:
                 print(f"Fehler bei Alert {alert.id}: {e}")
-
         db.close()
