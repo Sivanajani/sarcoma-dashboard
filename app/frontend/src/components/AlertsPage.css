@@ -1,0 +1,48 @@
+.alerts-table-container {
+  margin-top: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.alerts-table-container h2 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #213547;
+  padding-left: 0.25rem;
+}
+
+.alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.alerts-table th,
+.alerts-table td {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+  color: #212121;
+}
+
+.alerts-table th {
+  color: #555;
+  font-weight: 600;
+}
+
+.alerts-table tbody tr:hover {
+  background-color: #f4f1ed;
+}
+
+.status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.module-chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+}

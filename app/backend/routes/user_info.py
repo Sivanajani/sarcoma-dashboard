@@ -3,7 +3,7 @@ from auth.keycloak import get_current_user_payload
 
 router = APIRouter()
 
-@router.get("/me")
+@router.get("/api/me")
 def get_me(user: dict = Depends(get_current_user_payload)):
     return {
         "user_id": user.get("sub"),
