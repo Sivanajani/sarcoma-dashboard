@@ -436,7 +436,10 @@
   "numberValue": "Zahlenwert",
   "fieldTypeText": "Text (z. B. Diagnose, Status)",
   "fieldTypeNumber": "Zahl (z. B. Tumorgrösse, Alter)",
-  "fieldTypeBoolean": "Ja/Nein (z. B. Metasen vorhanden, ja/nein)"
+  "fieldTypeBoolean": "Ja/Nein (z. B. Metasen vorhanden, ja/nein)",
+  "fieldValueCheck": "Feldwert-Vergleich",
+  "allPatients": "Alle Patient:innen",
+  "optionalMessage": "Optionale Nachricht (wird angezeigt, wenn der Alert ausgelöst wird)"
 },
 
 "yes": "Ja",
