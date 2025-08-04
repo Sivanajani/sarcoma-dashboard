@@ -16,7 +16,7 @@ type Props = {
 
 const AlertForm = ({ onSuccess }: Props) => {
     const { t } = useTranslation();
-
+    
     const moduleOptionsMap = {
         croms: [
             { value: 'diagnoses', label: t(`modules.diagnosis`) },
@@ -33,7 +33,7 @@ const AlertForm = ({ onSuccess }: Props) => {
             { value: 'proms_proms_biopsy', label: t(`promDetail.biopsyTitle`) },
         ],
     };
-
+    
     const conditionOptions = [
         { value: '==', label: t(`addAlerts.conditionEquals`) },
         { value: '!=', label: t(`addAlerts.conditionNotEquals`)},
@@ -58,15 +58,19 @@ const AlertForm = ({ onSuccess }: Props) => {
     const [patientIds, setPatientIds] = useState<string[]>([]);
     const [selectedPatient, setSelectedPatient] = useState('');
     const [selectedModule, setSelectedModule] = useState('');
-    const [alertType, setAlertType] = useState<'flag' | 'field_check'>('flag');
+    const [alertType, setAlertType] = useState<'flag' | 'field_check' | 'field_value_check'>('flag');
 
     const [metric, setMetric] = useState('');
     const [threshold, setThreshold] = useState<number>(60);
     const [condition, setCondition] = useState('');
-    const [,setValue] = useState<string | boolean>('');
 
     const [fields, setFields] = useState<string[]>([]);
     const [selectedFields, setSelectedFields] = useState<string[]>([]);
+
+    const [fieldType, setFieldType] = useState<'text' | 'number' | 'boolean' | ''>('');
+    const [selectedField, setSelectedField] = useState('');
+    const [value, setValue] = useState<string | boolean | number>('');
+
 
     // Feldliste laden
     useEffect(() => {
@@ -139,6 +143,33 @@ const AlertForm = ({ onSuccess }: Props) => {
         return;
         }
 
+        if (alertType === 'field_value_check') {
+            const payload = {
+                source,
+                patient_external_code: selectedPatient,
+                module: selectedModule,
+                metric: null,
+                threshold: 1,
+                condition,
+                field: selectedField,
+                value,
+                email: auth.tokenParsed?.email || '',
+                frequency: 'daily',
+                active: true,
+            };
+
+  try {
+    await axios.post('http://localhost:8000/alerts', payload, {
+      headers: { Authorization: `Bearer ${auth.token}` },
+    });
+    if (onSuccess) onSuccess();
+  } catch (error) {
+    console.error('Fehler beim Erstellen des Vergleichs-Alerts', error);
+  }
+  return;
+}
+
+
         // Standard "flag"-Alert
         const payload: any = {
         source,
@@ -170,55 +201,58 @@ const AlertForm = ({ onSuccess }: Props) => {
 
         <Box display="flex" gap={2} mb={2}>
             <TextField
-            select
-            fullWidth
-            label={t('addAlerts.source')}
-            value={source}
-            onChange={(e) => setSource(e.target.value as 'croms' | 'proms')}
+                select
+                fullWidth
+                label={t('addAlerts.source')}
+                value={source}
+                onChange={(e) => setSource(e.target.value as 'croms' | 'proms')}
             >
-            <MenuItem value="croms">{t('patientDetail.tabs.croms')}</MenuItem>
-            <MenuItem value="proms">{t('patientDetail.tabs.proms')}</MenuItem>
+                <MenuItem value="croms">{t('patientDetail.tabs.croms')}</MenuItem>
+                <MenuItem value="proms">{t('patientDetail.tabs.proms')}</MenuItem>
             </TextField>
 
             <TextField
-            select
-            fullWidth
-            label={t('sidebar.patients')}
-            value={selectedPatient}
-            onChange={(e) => setSelectedPatient(e.target.value)}
+                select
+                fullWidth
+                label={t('sidebar.patients')}
+                value={selectedPatient}
+                onChange={(e) => setSelectedPatient(e.target.value)}
             >
-            {patientIds.map((id) => (
-                <MenuItem key={id} value={id}>
-                {id}
-                </MenuItem>
-            ))}
+                {patientIds.map((id) => (
+                    <MenuItem key={id} value={id}>
+                        {id}
+                    </MenuItem>
+                ))}
             </TextField>
         </Box>
 
         <Box display="flex" gap={2} mb={2}>
             <TextField
-            select
-            fullWidth
-            label={t('addAlerts.module')}
-            value={selectedModule}
-            onChange={(e) => setSelectedModule(e.target.value)}
+                select
+                fullWidth
+                label={t('addAlerts.module')}
+                value={selectedModule}
+                onChange={(e) => setSelectedModule(e.target.value)}
             >
-            {moduleOptionsMap[source].map((mod) => (
-                <MenuItem key={mod.value} value={mod.value}>
-                {mod.label}
-                </MenuItem>
-            ))}
+                {moduleOptionsMap[source].map((mod) => (
+                    <MenuItem key={mod.value} value={mod.value}>
+                    {mod.label}
+                    </MenuItem>
+                ))}
             </TextField>
 
             <TextField
-            select
-            fullWidth
-            label={t('addAlerts.alertType')}
-            value={alertType}
-            onChange={(e) => setAlertType(e.target.value as 'flag' | 'field_check')}
+                select
+                fullWidth
+                label={t('addAlerts.alertType')}
+                value={alertType}
+                onChange={(e) => 
+                    setAlertType(e.target.value as 'flag' | 'field_check' | 'field_value_check')
+                }
             >
-            <MenuItem value="flag">{t('addAlerts.alertTypeFlag')}</MenuItem>
-            <MenuItem value="field_check">{t('addAlerts.fieldCheck')}</MenuItem>
+                <MenuItem value="flag">{t('addAlerts.alertTypeFlag')}</MenuItem>
+                <MenuItem value="field_check">{t('addAlerts.fieldCheck')}</MenuItem>
+                <MenuItem value="field_value_check">Feldwert-Vergleich</MenuItem>
             </TextField>
         </Box>
 
@@ -301,6 +335,94 @@ const AlertForm = ({ onSuccess }: Props) => {
             </TextField>
             </Box>
         )}
+        
+        {/* UI für field_value_check */}
+        {alertType === 'field_value_check' && (
+            <>
+            <Box display="flex" gap={2} mb={2}>
+                <TextField
+                    select
+                    fullWidth
+                    label={t('addAlerts.fieldType')}
+                    value={fieldType}
+                    onChange={(e) => {
+                        setFieldType(e.target.value as 'text' | 'number' | 'boolean');
+                        setCondition('=='); 
+                        setSelectedField('');
+                        setValue('');
+                    }}
+                >
+                    <MenuItem value="text">{t('addAlerts.fieldTypeText')}</MenuItem>
+                    <MenuItem value="number">{t('addAlerts.fieldTypeNumber')}</MenuItem>
+                    <MenuItem value="boolean">{t('addAlerts.fieldTypeBoolean')}</MenuItem>
+                </TextField>
+                
+                <TextField
+                    select
+                    fullWidth
+                    label="Feld"
+                    value={selectedField}
+                    onChange={(e) => setSelectedField(e.target.value)}
+                >
+                    {fields.map((f) => (
+                        <MenuItem key={f} value={f}>
+                            {t(`databasePage.${f}`, f)}
+                        </MenuItem>
+                    ))}
+                </TextField>
+            </Box>
+            
+            {fieldType === 'number' && (
+                <Box display="flex" gap={2} mb={2}>
+                    <TextField
+                        select
+                        fullWidth
+                        label={t('addAlerts.condition')}
+                        value={condition}
+                        onChange={(e) => setCondition(e.target.value)}
+                    >
+                        <MenuItem value="==">{t('addAlerts.conditionEquals')}</MenuItem>
+                        <MenuItem value="!=">{t('addAlerts.conditionNotEquals')}</MenuItem>
+                        <MenuItem value="<">{t('addAlerts.conditionLessThan')}</MenuItem>
+                        <MenuItem value=">">{t('addAlerts.conditionGreaterThan')}</MenuItem>
+                    </TextField>
+                    
+                    <TextField
+                        fullWidth
+                        label={t('addAlerts.numberValue')}
+                        type="number"
+                        value={value}
+                        onChange={(e) => setValue(Number(e.target.value))}
+                    />
+                </Box>
+            )}
+            
+            {fieldType === 'text' && (
+                <TextField
+                    fullWidth
+                    label={t('addAlerts.textValue')}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    sx={{ mb: 2 }}
+                />
+            )}
+            
+            {fieldType === 'boolean' && (
+                <TextField
+                    select
+                    fullWidth
+                    label={t('addAlerts.booleanValue')}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value === 'true')}
+                    sx={{ mb: 2 }}
+                >
+                    <MenuItem value="true">{t('yes')}</MenuItem>
+                    <MenuItem value="false">{t('no')}</MenuItem>
+                </TextField>
+            )}
+            </>
+        )}
+
 
         <Box mt={2}>
             <Button variant="contained" onClick={handleSubmit}>
