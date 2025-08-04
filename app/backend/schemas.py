@@ -4,6 +4,7 @@ from datetime import date, datetime
 from typing import List
 from typing import Optional
 from pydantic import EmailStr, BaseModel
+from typing import Union
 
 
 
@@ -383,20 +384,18 @@ class PersonalDataUpdate(PersonalDataBase):
 # --- Alert Schema (Meta-Datenbank) ---
 
 class AlertBase(BaseModel):
-    user_id: str
     patient_external_code: Optional[str] = None
 
     source: Optional[str] = None         
-    module: str
+    module: Optional[str] = None
 
     metric: Optional[str] = None         
     threshold: Optional[float] = None    
     field: Optional[str] = None          
-    condition: str                       
-    value: Optional[str] = None          
+    condition: Optional [str] = None                        
+    value: Optional[Union[str, int, float, bool]] = None          
     message: Optional[str] = None        
 
-    email: EmailStr
     frequency: Optional[str] = "daily"
     active: Optional[bool] = True
 

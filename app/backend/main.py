@@ -76,6 +76,22 @@ def custom_openapi():
 app.openapi = custom_openapi
 
 
+from fastapi import Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    print("💥 VALIDATION ERROR bei Request:")
+    print(exc)
+    print("Body-Fehler:", exc.errors())
+    print("Ursprünglicher Body:", await request.body())
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors()},
+    )
+
+
 
 # CORS Middleware aktivieren
 app.add_middleware(

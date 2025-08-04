@@ -10,6 +10,8 @@ import { useAuth } from '../AuthProvider';
 import { format } from 'date-fns';
 import { red, green } from '@mui/material/colors';
 import '../components/AlertsPage.css';
+import AlertForm from '../components/AlertForm';
+
 
 type Alert = {
   id: number;
@@ -29,46 +31,76 @@ type Alert = {
   message?: string | null;
 };
 
+const metricLabels: Record<string, string> = {
+  completeness: 'Vollständigkeit',
+  correctness: 'Inhaltliche Korrektheit',
+  consistency: 'Konsistenz',
+  actuality: 'Aktualität',
+};
+
+const conditionLabels: Record<string, string> = {
+  '==': 'ist gleich',
+  '!=': 'ist ungleich',
+  '<': 'ist kleiner als',
+  '>': 'ist grösser als',
+  'is_null': 'ist leer',
+  'contains': 'enthält',
+  'not_contains': 'enthält nicht',
+};
+
+const moduleLabels: Record<string, string> = {
+  diagnoses: 'Diagnosen',
+  pathology: 'Pathologie',
+  surgery: 'Chirurgie',
+  radiology_exams: 'Radiologie-Untersuchungen',
+  radiology_therapies: 'Radiotherapie',
+  sarcoma_boards: 'Tumorboards',
+  systemic_therapies: 'Systemtherapien',
+  hyperthermia_therapies: 'Hyperthermie',
+  eq5d: 'EQ-5D',
+  proms_proms_biopsy: 'PROM Biopsie',
+};
+
 const formatRule = (a: Alert): string => {
   if (a.message) return a.message;
 
-  const mod = a.module?.toUpperCase?.() || 'Unbekanntes Modul';
-  const fieldText = a.field ? `: ${a.field}` : '';
-  const condMap: Record<string, string> = {
-    'is_null': 'Feld leer',
-    'less_than': 'Wert kleiner als',
-    'greater_than': 'Wert größer als',
-    'equal': 'Wert gleich',
-    'not_equal': 'Wert ungleich',
-    'contains': 'enthält',
-    'not_contains': 'enthält nicht',
-  };
+  const moduleText = moduleLabels[a.module] || a.module;
+  const conditionText = conditionLabels[a.condition] || a.condition;
 
-  const condText = condMap[a.condition] || a.condition;
-  const val = a.value ?? a.threshold;
+  if (a.metric) {
+    const metricText = metricLabels[a.metric] || a.metric;
+    return `${moduleText}: ${metricText} ${conditionText} ${a.threshold}`;
+  }
 
-  return `${mod}${fieldText} → ${condText} ${val ?? ''}`.trim();
+  if (a.field) {
+    const valueText = a.condition === 'is_null' ? '' : ` ${a.value}`;
+    return `${moduleText}: Feld "${a.field}" ${conditionText}${valueText}`;
+  }
+
+  return `${moduleText}: Unklare Regel`;
 };
+
 
 const AlertsPage = () => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const auth = useAuth();
+  
+  const fetchAlerts = async () => {
+    try {
+      if (!auth.token) return;
+      const res = await axios.get<Alert[]>("http://localhost:8000/alerts/me", {
+        headers: { Authorization: `Bearer ${auth.token}` }
+      });
+      setAlerts(res.data);
+    } catch (error) {
+      console.error("Fehler beim Laden der Alerts", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchAlerts = async () => {
-      try {
-        if (!auth.token) return;
-        const res = await axios.get<Alert[]>("http://localhost:8000/alerts/me", {
-          headers: { Authorization: `Bearer ${auth.token}` }
-        });
-        setAlerts(res.data);
-      } catch (error) {
-        console.error("Fehler beim Laden der Alerts", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchAlerts();
   }, [auth.token]);
 
@@ -83,6 +115,10 @@ const AlertsPage = () => {
   return (
     <div className="alerts-table-container">
       <h1>Meine Alerts</h1>
+      
+      <Box mb={4}>
+        <AlertForm onSuccess={fetchAlerts} />
+      </Box>
 
       <table className="alerts-table">
         <thead>

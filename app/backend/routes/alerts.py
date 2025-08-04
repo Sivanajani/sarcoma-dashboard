@@ -1,6 +1,6 @@
 # backend/routes/alerts.py
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from db.session import get_meta_db, get_db
 from models_meta import Alert
@@ -9,6 +9,9 @@ from auth.keycloak import get_current_user_id
 from typing import List
 from sqlalchemy import text
 from alerts.alert_processor import process_alerts
+from auth.keycloak import get_current_user_payload
+import json
+
 
 router = APIRouter()
 
@@ -19,19 +22,37 @@ def get_user_alerts(
 ):
     return db.query(Alert).filter(Alert.user_id == user_id).all()
 
+
+
 @router.post("/alerts", response_model=AlertRead)
 def create_alert(
-    alert: AlertCreate,
+    alert: AlertCreate = Body(...),
     db: Session = Depends(get_meta_db),
-    user_id: str = Depends(get_current_user_id)
+    user: dict = Depends(get_current_user_payload)
 ):
-    new_alert = Alert(**alert.dict(), user_id=user_id)
+    user_id = user.get("sub")
+    email = user.get("email")
+
+    print("User-Payload:", user)
+    print("Alert-Eingabe:", alert.dict())
+
+    if not email:
+        raise HTTPException(status_code=400, detail="E-Mail im Token nicht gefunden.")
+
+    new_alert = Alert(
+        **alert.dict(),
+        user_id=user_id,
+        email=email  # email direkt aus dem Token!
+    )
+    print("Eingegebene Alert-Daten:")
+    print(json.dumps(alert.dict(), indent=2, default=str))
+
     db.add(new_alert)
     db.commit()
     db.refresh(new_alert)
+    print("Neuer Alert nach Commit:", new_alert)
     return new_alert
 
-from collections import defaultdict
 
 
 def check_crom_alerts(db: Session) -> List[dict]:
@@ -99,3 +120,5 @@ def get_raw_crom_alerts(db: Session = Depends(get_db)):
 def trigger_alerts():
     process_alerts()
     return {"status": "Alerts processed"}
+
+
