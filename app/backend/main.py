@@ -224,3 +224,7 @@ app.include_router(alert)
 
 from routes.user_info import router as user_info_router
 app.include_router(user_info_router)
+
+from routes.field_routes import router as field_routes
+
+app.include_router(field_routes)

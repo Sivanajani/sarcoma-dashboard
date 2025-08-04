@@ -50,8 +50,8 @@ const conditionLabels: Record<string, string> = {
 
 const moduleLabels: Record<string, string> = {
   diagnoses: 'Diagnosen',
-  pathology: 'Pathologie',
-  surgery: 'Chirurgie',
+  pathologies: 'Pathologie',
+  surgeries: 'Chirurgie',
   radiology_exams: 'Radiologie-Untersuchungen',
   radiology_therapies: 'Radiotherapie',
   sarcoma_boards: 'Tumorboards',
@@ -82,7 +82,7 @@ const formatRule = (a: Alert): string => {
     const metricText = metricLabels[a.metric] || a.metric;
     return `${moduleText}: ${metricText} ${conditionText} ${a.threshold}`;
   }
-  
+
   if (a.field) {
     const valueText = a.condition === 'is_null' ? '' : ` ${a.value}`;
     return `${moduleText}: Feld "${a.field}" ${conditionText}${valueText}`;
