@@ -200,11 +200,11 @@ const AlertForm = ({ onSuccess }: Props) => {
             {metric === 'flag' || metric === 'summary_flag' ? (
             <>
                 <TextField
-                select
-                fullWidth
-                label="Flagge"
-                value={threshold}
-                onChange={(e) => setThreshold(Number(e.target.value))}
+                    select
+                    fullWidth
+                    label="Flagge"
+                    value={threshold}
+                    onChange={(e) => setThreshold(Number(e.target.value))}
                 >
                 <MenuItem value={2}>Red Flag</MenuItem>
                 <MenuItem value={1}>Yellow Flag</MenuItem>
@@ -213,25 +213,26 @@ const AlertForm = ({ onSuccess }: Props) => {
             ) : (
             <>
                 <TextField
-                select
-                fullWidth
-                label="Bedingung"
-                value={condition}
-                onChange={(e) => setCondition(e.target.value)}
+                    select
+                    fullWidth
+                    label="Bedingung"
+                    value={condition}
+                    onChange={(e) => setCondition(e.target.value)}
                 >
-                {['<', '<=', '==', '!=', '>=', '>'].map((c) => (
-                    <MenuItem key={c} value={c}>
-                    {c}
-                    </MenuItem>
-                ))}
+                    {conditionOptions.map((c) => (
+                        <MenuItem key={c.value} value={c.value}>
+                            {c.label}
+                        </MenuItem>
+                    ))}
                 </TextField>
 
+
                 <TextField
-                fullWidth
-                label="Schwellenwert"
-                type="number"
-                value={threshold}
-                onChange={(e) => setThreshold(Number(e.target.value))}
+                    fullWidth
+                    label="Schwellenwert"
+                    type="number"
+                    value={threshold}
+                    onChange={(e) => setThreshold(Number(e.target.value))}
                 />
             </>
             )}

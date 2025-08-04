@@ -61,17 +61,28 @@ const moduleLabels: Record<string, string> = {
   proms_proms_biopsy: 'PROM Biopsie',
 };
 
+const flagLabels: Record<number, string> = {
+  1: 'gelbe Flagge',
+  2: 'rote Flagge',
+};
+
+
 const formatRule = (a: Alert): string => {
   if (a.message) return a.message;
 
   const moduleText = moduleLabels[a.module] || a.module;
   const conditionText = conditionLabels[a.condition] || a.condition;
 
+  if (a.field === 'flag' && typeof a.value === 'number') {
+    const flagText = flagLabels[a.value] || a.value;
+    return `${moduleText}: Flagge ${conditionText} ${flagText}`;
+  }
+
   if (a.metric) {
     const metricText = metricLabels[a.metric] || a.metric;
     return `${moduleText}: ${metricText} ${conditionText} ${a.threshold}`;
   }
-
+  
   if (a.field) {
     const valueText = a.condition === 'is_null' ? '' : ` ${a.value}`;
     return `${moduleText}: Feld "${a.field}" ${conditionText}${valueText}`;
