@@ -42,6 +42,8 @@ const metricOptions = [
     { value: 'correctness', label: 'Inhaltliche Korrektheit' },
     { value: 'consistency', label: 'Konsistenz' },
     { value: 'actuality', label: 'Aktualität' },
+    { value: 'flag', label: 'Modul-Flag (Rot/Gelb)' },
+    { value: 'summary_flag', label: 'Patienten-Flag (Rot/Gelb)' },
 ];
 
 type Props = {
@@ -85,18 +87,30 @@ const AlertForm = ({ onSuccess }: Props) => {
       source,
       patient_external_code: selectedPatient,
       module: selectedModule,
+      metric,
+      email: auth.tokenParsed?.email || '',
+      frequency: 'daily',
+      active: true,
       condition,
     };
 
     if (alertType === 'flag') {
-      payload.metric = metric;
-      payload.threshold = threshold;
-    } else if (alertType === 'field_check') {
+        if (metric === 'flag' || metric === 'summary_flag') {
+            payload.condition = '==';
+            payload.threshold = threshold;
+        } else {
+            payload.condition = condition;
+            payload.threshold = threshold;
+        }
+    }
+
+    if (alertType == "field_check"){
+      payload.condition  = condition ;
       payload.field = field;
-      if (condition !== 'is_null') {
+      if (condition !== "is_null"){
         payload.value = value;
       }
-    }
+    } 
 
     try {
       await axios.post('http://localhost:8000/alerts', payload, {
@@ -163,50 +177,66 @@ const AlertForm = ({ onSuccess }: Props) => {
           value={alertType}
           onChange={(e) => setAlertType(e.target.value as 'flag' | 'field_check')}
         >
-          <MenuItem value="flag">Flag (z. B. Vollständigkeit)</MenuItem>
+          <MenuItem value="flag">Flag oder Datendimsension(z. B. Vollständigkeit)</MenuItem>
           <MenuItem value="field_check">Feld prüfen</MenuItem>
         </TextField>
       </Box>
-
-      {alertType === 'flag' && (
+            {alertType === 'flag' && (
         <Box display="flex" gap={2} mb={2}>
-          <TextField
+            <TextField
             select
             fullWidth
             label="Metrik"
             value={metric}
             onChange={(e) => setMetric(e.target.value)}
-          >
+            >
             {metricOptions.map((m) => (
-              <MenuItem key={m.value} value={m.value}>
+                <MenuItem key={m.value} value={m.value}>
                 {m.label}
-              </MenuItem>
+                </MenuItem>
             ))}
-          </TextField>
+            </TextField>
 
-          <TextField
-            select
-            fullWidth
-            label="Bedingung"
-            value={condition}
-            onChange={(e) => setCondition(e.target.value)}
-          >
-            {['<', '<=', '==', '!=', '>=', '>'].map((c) => (
-              <MenuItem key={c} value={c}>
-                {c}
-              </MenuItem>
-            ))}
-          </TextField>
+            {metric === 'flag' || metric === 'summary_flag' ? (
+            <>
+                <TextField
+                select
+                fullWidth
+                label="Flagge"
+                value={threshold}
+                onChange={(e) => setThreshold(Number(e.target.value))}
+                >
+                <MenuItem value={2}>Red Flag</MenuItem>
+                <MenuItem value={1}>Yellow Flag</MenuItem>
+                </TextField>
+            </>
+            ) : (
+            <>
+                <TextField
+                select
+                fullWidth
+                label="Bedingung"
+                value={condition}
+                onChange={(e) => setCondition(e.target.value)}
+                >
+                {['<', '<=', '==', '!=', '>=', '>'].map((c) => (
+                    <MenuItem key={c} value={c}>
+                    {c}
+                    </MenuItem>
+                ))}
+                </TextField>
 
-          <TextField
-            fullWidth
-            label="Schwellenwert"
-            type="number"
-            value={threshold}
-            onChange={(e) => setThreshold(Number(e.target.value))}
-          />
+                <TextField
+                fullWidth
+                label="Schwellenwert"
+                type="number"
+                value={threshold}
+                onChange={(e) => setThreshold(Number(e.target.value))}
+                />
+            </>
+            )}
         </Box>
-      )}
+        )}
 
       {alertType === 'field_check' && (
         <Box display="flex" gap={2} mb={2}>
