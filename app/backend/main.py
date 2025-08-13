@@ -82,7 +82,7 @@ from fastapi.responses import JSONResponse
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    print("💥 VALIDATION ERROR bei Request:")
+    print("VALIDATION ERROR bei Request:")
     print(exc)
     print("Body-Fehler:", exc.errors())
     print("Ursprünglicher Body:", await request.body())

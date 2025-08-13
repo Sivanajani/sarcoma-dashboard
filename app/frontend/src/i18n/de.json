@@ -45,8 +45,8 @@
   "headers": {
     "id": "Patient ID",
     "completeness": "Vollst.",
-    "correctness": "Korr.",
-    "consistency": "Inh. Richtigk.",
+    "correctness": "Inh. Richtigk.",
+    "consistency": "Konsistenz.",
     "actuality": "Aktualität",
     "uniqueness": "Eindeutigkeit",
     "plausibility": "Plausib."

@@ -219,7 +219,7 @@ async def get_quality_by_patient(external_code: str):
                 except Exception as e:
                     print(f"[CROM] Fehler bei Modul {module}: {e}")
 
-        # 🧩 PROM-Patient abrufen
+        # PROM-Patient abrufen
         prom_patients_resp = await client.get(f"{base_url}/api/proms/patients")
         prom_patients = prom_patients_resp.json()
         prom_patient = next((p for p in prom_patients if p["patient_id"] == external_code), None)
@@ -250,7 +250,7 @@ async def get_quality_by_patient(external_code: str):
                 except Exception as e:
                     print(f"[PROM] Fehler bei Modul {module}: {e}")
 
-        # ✅ summary_flag berechnen
+        # summary_flag berechnen
         flags = [m["flag"] for m in result["croms"].values()] + [m["flag"] for m in result["proms"].values()]
         red = flags.count("red flag")
         yellow = flags.count("yellow flag")

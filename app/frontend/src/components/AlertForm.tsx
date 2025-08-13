@@ -71,6 +71,7 @@ const AlertForm = ({ onSuccess }: Props) => {
     const [selectedField, setSelectedField] = useState('');
     const [value, setValue] = useState<string | boolean | number>('');
     const [message, setMessage] = useState('');
+    const [patientsOpen, setPatientsOpen] = useState(false);
 
 
 
@@ -116,6 +117,14 @@ const AlertForm = ({ onSuccess }: Props) => {
         setValue('');
         }
     }, [alertType]);
+
+    useEffect(() => {
+        if (alertType === 'flag' && (metric === 'flag' || metric === 'summary_flag')) {
+            setCondition('==');
+        }
+    }, [alertType, metric]);
+
+
 
     const handleSubmit = async () => {
         const patientList = selectedPatients.includes('ALL') ? patientIds : selectedPatients;
@@ -188,7 +197,7 @@ const AlertForm = ({ onSuccess }: Props) => {
                 module: selectedModule,
                 metric,
                 threshold,
-                condition,
+                condition: (metric === 'flag' || metric === 'summary_flag') ? '==' : condition,
                 email: auth.tokenParsed?.email || '',
                 frequency: 'daily',
                 active: true,
@@ -223,22 +232,40 @@ const AlertForm = ({ onSuccess }: Props) => {
                     <MenuItem value="croms">{t('patientDetail.tabs.croms')}</MenuItem>
                     <MenuItem value="proms">{t('patientDetail.tabs.proms')}</MenuItem>
                 </TextField>
-
+                
                 <TextField
                     select
                     fullWidth
                     label={t('sidebar.patients')}
                     value={selectedPatients}
                     onChange={(e) => {
-                        const value = e.target.value;
-                        setSelectedPatients(Array.isArray(value) ? value : [value]);
+                        const raw = e.target.value;
+                        const arr = Array.isArray(raw) ? raw : [raw];
+
+                        if (arr.includes('ALL')) {
+                        setSelectedPatients(['ALL']);
+                        setPatientsOpen(false); // Dropdown sofort schließen
+                        } else {
+                        // sicherstellen, dass 'ALL' nicht mit anderen kombiniert wird
+                        const cleaned = arr.filter(v => v !== 'ALL');
+                        setSelectedPatients(cleaned);
+                        }
                     }}
-                    SelectProps={{multiple: true}}
-                >
+                    SelectProps={{
+                        multiple: true,
+                        open: patientsOpen,
+                        onOpen: () => setPatientsOpen(true),
+                        onClose: () => setPatientsOpen(false),
+                    }}
+                    >
                     <MenuItem value="ALL">{t('addAlerts.allPatients')}</MenuItem>
                     {patientIds.map((id) => (
-                        <MenuItem key={id} value={id}>
-                            {id}
+                        <MenuItem
+                        key={id}
+                        value={id}
+                        disabled={selectedPatients.includes('ALL')} // optisch klar: wenn ALL aktiv, andere disabled
+                        >
+                        {id}
                         </MenuItem>
                     ))}
                 </TextField>

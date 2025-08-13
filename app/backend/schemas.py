@@ -54,9 +54,14 @@ class RadiologyExamBase(BaseModel):
     imaging_timing: Optional[str] = None
     imaging_type: Optional[str] = None
     largest_lesion_size_in_mm: Optional[int] = None
+    medium_lesion_size_in_mm: Optional[int] = None
+    smallest_lesion_size_in_mm: Optional[int] = None
     location_of_lesion: Optional[str] = None
     recist_response: Optional[str] = None
-    comment: Optional[str] = None
+    choi_response: Optional[str] = None
+    irecist_response: Optional[str] = None
+    pet_response: Optional[str] = None
+    metastasis_presence: Optional[bool] = None
 
 
 class RadiologyExamRead(RadiologyExamBase):

@@ -18,9 +18,7 @@ const ModuleDetailView: React.FC = () => {
         const res = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/api/patients/by-external-code/${externalCode}/${module}/details`
         );
-        const json = await res.json();
-        console.log("MODULDETAIL-DATA:", json);
-        console.log("module_data:", json.module_data);
+        const json = await res.json();              
         setData(json);
       } catch (err) {
         console.error(err);
@@ -42,11 +40,7 @@ const ModuleDetailView: React.FC = () => {
     <h2> {t(`modules.${module}`, { defaultValue: module })} – {t('moduleDetail.patient')} {externalCode} </h2>
     
 
-    {/* Einmalige Datenansicht des Moduls */}
-
-    <RawModuleDataTable moduleData={data.module_data} moduleName={module || ''} />
-
-
+    {/* Einmalige Datenansicht des Moduls */}    
     <div className="module-cards-container">
       {qualityDimensions.map((dimension) => (
         data[dimension] && (
@@ -60,7 +54,9 @@ const ModuleDetailView: React.FC = () => {
         </div>
       )
       ))}
-      </div>
+    </div>
+    {/* Rohdaten-Tabelle */}
+    <RawModuleDataTable moduleData={data.module_data} moduleName={module || ''} />
   </div>
   );
 };
