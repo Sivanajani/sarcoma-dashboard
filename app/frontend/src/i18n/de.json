@@ -14,6 +14,11 @@
       "logoutSuccess": "Du wurdest erfolgreich abgemeldet."
     }
   },
+  "duplicateNotifier": {
+    "title": "Achtung: Duplikate bei Patient {{id}}",
+    "message": "Es wurden <b>{{count}}</b> doppelte Einträge in folgenden Modulen gefunden:",
+    "ok": "OK"
+  },
   "dashboard": {
   "title": "Datenqualitäts-Dashboard",
   "overview-title": "Übersicht",
@@ -36,30 +41,30 @@
     "fr": "FR"
   },
   "patientTable": {
-  "title": "Patientenübersicht - Datenqualität",
-  "titleCroms": "CROMs - Datenqualität",
-  "titleProms": "PROMs - Datenqualität",
-  "titleRedFlags": "Alle Red Flags (PROM & CROM)",
-  "search": "Suche nach Patient:in...",
-  "headers": {
-    "id": "Patient ID",
-    "completeness": "Vollst.",
-    "correctness": "Inh. Richtigk.",
-    "consistency": "Konsistenz.",
-    "actuality": "Aktualität",
-    "uniqueness": "Eindeutigkeit",
-    "plausibility": "Plausib."
-  },
-  "tabs": {
-    "all": "Alle Patient:innen",
-    "croms": "Crom's",
-    "proms": "Prom's",
-    "redflags": "Patient:innen mit Red Flag's"
-  },
-  "tooltips": {
-    "redFlag": "Kritisch unvollständiges Modul",
-    "yellowFlag": "Auffälliges Modul – sollte geprüft werden"
-  }
+    "title": "Patientenübersicht - Datenqualität",
+    "titleCroms": "CROMs - Datenqualität",
+    "titleProms": "PROMs - Datenqualität",
+    "titleRedFlags": "Alle Red Flags (PROM & CROM)",
+    "search": "Suche nach Patient:in...",
+    "headers": {
+      "id": "Patient ID",
+      "completeness": "Vollst.",
+      "correctness": "Inh. Richtigk.",
+      "consistency": "Konsistenz.",
+      "actuality": "Aktualität",
+      "uniqueness": "Eindeutigkeit",
+      "plausibility": "Plausib."
+    },
+    "tabs": {
+      "all": "Alle Patient:innen",
+      "croms": "Crom's",
+      "proms": "Prom's",
+      "redflags": "Patient:innen mit Red Flag's"
+    },
+    "tooltips": {
+      "redFlag": "Kritisch unvollständiges Modul",
+      "yellowFlag": "Auffälliges Modul – sollte geprüft werden"
+    }
 },
 "patientDetail": {
   "tabs": {

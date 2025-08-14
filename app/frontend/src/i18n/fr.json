@@ -14,6 +14,11 @@
             "logoutSuccess": "Vous vous êtes déconnecté avec succès."
         }
     },
+    "duplicateNotifier": {
+        "title": "Attention : doublons pour le patient {{id}}",
+        "message": "<b>{{count}}</b> doublons ont été trouvés dans les modules suivants :",
+        "ok": "OK"
+    },
     "dashboard": {
         "title": "Tableau de bord de la qualité des données",
         "overview-title": "Aperçu",

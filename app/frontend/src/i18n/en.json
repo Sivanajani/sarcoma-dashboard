@@ -14,6 +14,11 @@
       "logoutSuccess": "You have successfully logged out."
     }
   },
+  "duplicateNotifier": {
+    "title": "Warning: Duplicates for patient {{id}}",
+    "message": "<b>{{count}}</b> duplicate entries were found in the following modules:",
+    "ok": "OK"
+  },
   "dashboard": {
     "title": "Data Quality Dashboard",
     "overview-title": "Overview",
