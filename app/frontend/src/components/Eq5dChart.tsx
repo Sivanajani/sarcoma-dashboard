@@ -17,6 +17,7 @@ import { toPng } from 'html-to-image';
 import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import { parse, isValid } from 'date-fns';
 
 interface Eq5dEntry {
   date: string;
@@ -162,6 +163,9 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
     }
   };
 
+  const tLabel = (name: unknown) =>
+    fieldLabels[(name as keyof Eq5dEntry)] ?? String(name);
+
   return (
     <Box sx={{ backgroundColor: '#fafafa', borderRadius: 2, p: 3, boxShadow: 1 }}>
       {/* Steuerung */}
@@ -250,8 +254,17 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarDataMulti}>
               <PolarGrid />
               <PolarAngleAxis dataKey="dimension" />
-              <PolarRadiusAxis domain={[0, 10]} />
-              <Tooltip />
+              <PolarRadiusAxis domain={[0, 100]} />
+              <Tooltip
+              formatter={(value, name) => {
+                const s = String(name);
+                const parsed = parse(s, 'dd.MM.yyyy', new Date());
+                return [value as number, isValid(parsed) ? format(parsed, 'dd.MM.yyyy') : s];
+              }}
+                labelFormatter={(label) => String(label)}
+              />
+
+              
               {filteredData.map((entry, index) => {
                 const label = format(new Date(entry.date), "dd.MM.yyyy");
                 const color = defaultColors[index % defaultColors.length];
@@ -282,7 +295,13 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis domain={[0, 5]} allowDecimals={false} />
-              <Tooltip />
+              <Tooltip                
+                formatter={(value, name) => [value as number, tLabel(name)]}                
+                labelFormatter={(label) => {
+                  const d = new Date(label as string);
+                  return isNaN(d.getTime()) ? String(label) : format(d, 'dd.MM.yyyy');
+                }}
+              />                          
               <Legend formatter={(value) => fieldLabels[value as keyof Eq5dEntry]} />
               {selectedFields.map(key => (
                 <Line
@@ -299,7 +318,13 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis domain={[0, 5]} allowDecimals={false} />
-              <Tooltip />
+              <Tooltip                
+                formatter={(value, name) => [value as number, tLabel(name)]}                
+                labelFormatter={(label) => {
+                  const d = new Date(label as string);
+                  return isNaN(d.getTime()) ? String(label) : format(d, 'dd.MM.yyyy');
+                }}
+              />
               <Legend formatter={(value) => fieldLabels[value as keyof Eq5dEntry]} />
               {selectedFields.map(key => (
                 <Bar

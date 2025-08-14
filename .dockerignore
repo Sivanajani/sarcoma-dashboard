@@ -2,3 +2,6 @@ node_modules
 dist
 .dockerignore
 Dockerfile
+build
+.git
+.DS_Store

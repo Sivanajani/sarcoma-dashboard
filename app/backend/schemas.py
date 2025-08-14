@@ -407,6 +407,11 @@ class AlertBase(BaseModel):
 class AlertCreate(AlertBase):
     pass
 
+class AlertUpdate(BaseModel):
+    active: Optional[bool] = None
+    frequency: Optional[str] = None
+    message: Optional[str] = None
+
 class AlertRead(AlertBase):
     id: int
     last_triggered: Optional[datetime] = None

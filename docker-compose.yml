@@ -53,6 +53,8 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - PROM_DB_URL=${PROM_DB_URL} 
       - KEYCLOAK_INTERNAL_URL=http://keycloak:8080
+      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
     ports:
       - "8000:8000"
 

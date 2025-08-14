@@ -1,10 +1,8 @@
-# backend/routes/alerts.py
-
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from db.session import get_meta_db, get_db
 from models_meta import Alert
-from schemas import AlertCreate, AlertRead
+from schemas import AlertCreate, AlertRead, AlertUpdate
 from auth.keycloak import get_current_user_id
 from typing import List
 from sqlalchemy import text
@@ -52,7 +50,6 @@ def create_alert(
     db.refresh(new_alert)
     print("Neuer Alert nach Commit:", new_alert)
     return new_alert
-
 
 
 def check_crom_alerts(db: Session) -> List[dict]:
@@ -122,3 +119,42 @@ def trigger_alerts():
     return {"status": "Alerts processed"}
 
 
+
+def _get_user_alert_or_404(db: Session, alert_id: int, user_id: str) -> Alert:
+    alert = db.query(Alert).filter(Alert.id == alert_id, Alert.user_id == user_id).first()
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert nicht gefunden oder keine Berechtigung.")
+    return alert
+
+@router.patch("/alerts/{alert_id}", response_model=AlertRead)
+def update_alert(
+    alert_id: int,
+    patch: AlertUpdate,
+    db: Session = Depends(get_meta_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    alert = _get_user_alert_or_404(db, alert_id, user_id)
+
+    # nur erlaubte Felder patchen
+    if patch.active is not None:
+        alert.active = patch.active
+    if patch.frequency is not None:
+        alert.frequency = patch.frequency
+    if patch.message is not None:
+        alert.message = patch.message
+
+    db.add(alert)
+    db.commit()
+    db.refresh(alert)
+    return alert
+
+@router.delete("/alerts/{alert_id}", status_code=204)
+def delete_alert(
+    alert_id: int,
+    db: Session = Depends(get_meta_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    alert = _get_user_alert_or_404(db, alert_id, user_id)
+    db.delete(alert)
+    db.commit()
+    return  # 204 No Content

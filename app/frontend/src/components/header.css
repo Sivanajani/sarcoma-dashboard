@@ -1,0 +1,39 @@
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  height: 40px; 
+  width: auto;
+  object-fit: contain;
+}
+
+.modern-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 8px 16px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.modern-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+}
+.header-right {
+  margin-left: auto;            
+  display: flex;
+  align-items: center;
+  gap: 8px;                     
+}
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.avatar-placeholder { display: flex; }
+.user-text { display: flex; flex-direction: column; line-height: 1.1; }

@@ -4,13 +4,10 @@
     "dashboard": "Dashboard",
     "forms": "Datenbank",
     "patients": "Patient:innen",
-    "alerts": "Alarm",
-    "redflags": "Red Flags",
-    "settings": "Einstellungen"
+    "alerts": "Alarm"      
   },
   "header": {
     "search": "Suche nach...",
-    "user": "Sivanajani",
     "menu": {
       "userLabel": "Angemeldet als",
       "logout": "Abmelden",
@@ -34,7 +31,9 @@
   }
 },
   "lang": {
-    "de": "DE"
+    "de": "DE",
+    "en": "EN",
+    "fr": "FR"
   },
   "patientTable": {
   "title": "Patientenübersicht - Datenqualität",
@@ -84,7 +83,6 @@
   "duplicatesFound": "Duplikate in den folgenden Modulen gefunden",
   "duplicateInModule": "Duplikat(e) in diesem Modul vorhanden.",
   "moduleCardTooltip": "Klicke, um Detailansicht zu öffnen"
-
 },
 "databasePage": {
   "title": "Datenbank: CROM-Module",
@@ -441,7 +439,35 @@
   "allPatients": "Alle Patient:innen",
   "optionalMessage": "Optionale Nachricht (wird angezeigt, wenn der Alert ausgelöst wird)"
 },
-
+"alertsPage": {
+  "title": "Meine Alerts",
+  "colPatient": "Patient",
+  "colSource": "Quelle",
+  "colModule": "Modul",
+  "colRule": "Regelbeschreibung",
+  "colFrequency": "Frequenz",
+  "colActive": "Aktiv",
+  "colLastTriggered": "Zuletzt ausgelöst",
+  "unknown": "Unbekannt",
+  "ruleFlag": "{{module}}: Flagge {{condition}} {{flag}}",
+  "ruleMetric": "{{module}}: {{metric}} {{condition}} {{threshold}}",
+  "ruleField": "{{module}}: Feld \"{{field}}\" {{condition}} {{value}}",
+  "ruleUnknown": "{{module}}: Unklare Regel",
+  "colActions": "Aktionen",
+  "confirmDeleteTitle": "Alert löschen?",
+  "confirmDelete": "Diesen Alert wirklich löschen?",
+  "deleteSuccess": "Alert gelöscht",
+  "deleteFailedTitle": "Löschen fehlgeschlagen",
+  "deleteFailedText": "Bitte später erneut versuchen.",
+  "delete": "Löschen",
+  "saved": "Gespeichert",
+  "savedSuccessMessage": "Die Alert(s) wurden erfolgreich gespeichert.",
+  "partialSavedTitle": "Teilweise gespeichert",
+  "partialSavedText": "Einige Alerts konnten nicht gespeichert werden.",
+  "error": "Fehler",
+  "savedErrorMessage": "Die Alerts konnten nicht gespeichert werden."
+},
+"cancel": "Abbrechen",
 "yes": "Ja",
 "no": "Nein",
 "noDataDash": "–"

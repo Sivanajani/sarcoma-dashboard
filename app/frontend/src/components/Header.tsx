@@ -1,23 +1,32 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TranslateIcon from '@mui/icons-material/Translate';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SearchIcon from '@mui/icons-material/Search';
-import { Menu, MenuItem, IconButton, InputAdornment, TextField } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import keycloak from '../keycloak';
+import './header.css';
+import logo from '../assets/ssn_network.png';
+
+import { Link } from 'react-router-dom';
 
 
 const Header = () => {
   const { t, i18n } = useTranslation();
-  const [searchTerm, setSearchTerm] = useState('');
   const [langAnchorEl, setLangAnchorEl] = useState<null | HTMLElement>(null);
   const [userAnchorEl, setUserAnchorEl] = useState<null | HTMLElement>(null);
 
+  useEffect(() => {
+    const saved = localStorage.getItem('lang');
+    if (saved && saved !== i18n.language) i18n.changeLanguage(saved);
+  }, []);
+
   const handleLangClick = (e: React.MouseEvent<HTMLElement>) => setLangAnchorEl(e.currentTarget);
   const handleLangClose = () => setLangAnchorEl(null);
-  const changeLanguage = (lng: string) => {
+  const changeLanguage = (lng: 'de' | 'en' | 'fr') => {
     i18n.changeLanguage(lng);
+    localStorage.setItem('lang', lng); 
     handleLangClose();
   };
 
@@ -28,66 +37,41 @@ const Header = () => {
     handleUserClose();
   };
 
-  
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearchSubmit = () => {
-    // Später: Hier echte Suche einbauen
-    alert(`Suche nach: ${searchTerm}`);
-  };
+  const languages: Array<{ code: 'de' | 'en' | 'fr'; label: string }> = [
+    { code: 'de', label: t('lang.de') || 'DE' },
+    { code: 'en', label: t('lang.en') || 'EN' },
+    { code: 'fr', label: t('lang.fr') || 'FR' }
+  ];
 
   return (
     <header className="modern-header">
-      <div className="header-center">
-        <TextField
-        placeholder={t('header.search')}
-        variant="outlined"
-        size="small"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
-        InputProps={{
-          endAdornment: searchTerm && (
-          <InputAdornment position="end">
-            <IconButton onClick={handleSearchSubmit}>
-              <SearchIcon />
-            </IconButton>
-          </InputAdornment>
-          ),
-        }}
-        sx={{
-          minWidth: '300px',
-          backgroundColor: '#f4f1ed',
-          borderRadius: '9999px',
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '9999px',
-            paddingRight: '4px',
-            color: '#000',
-            '& fieldset': {
-              border: 'none',
-            },
-          '&:hover fieldset': {
-            border: 'none',
-          },
-          '&.Mui-focused fieldset': {
-            border: 'none',
-          },
-        },
-        '& input': {
-          color: '#000',
-        },
-      }}/>
-      </div>
+      {/* Logo */}      
+      <div className="header-left">
+        <Link to="/">
+          <img src={logo} alt="SSN Logo" className="header-logo " />
+        </Link>
+      </div >
+
 
       <div className="header-right">
         {/* Sprachumschalter */}
-        <IconButton onClick={handleLangClick} size="large">
+        <IconButton onClick={handleLangClick} size="large" aria-label="change language">
           <TranslateIcon />
         </IconButton>
         <Menu anchorEl={langAnchorEl} open={!!langAnchorEl} onClose={handleLangClose}>
-          <MenuItem onClick={() => changeLanguage('de')}>{t('lang.de')}</MenuItem>
+          {languages.map(({ code, label }) => {
+            const isActive = i18n.language?.startsWith(code);
+            return (
+              <MenuItem key={code} onClick={() => changeLanguage(code)}>
+                {isActive && (
+                  <ListItemIcon>
+                    <CheckIcon fontSize="small" />
+                  </ListItemIcon>
+                )}
+                <ListItemText inset={!isActive}>{label}</ListItemText>
+              </MenuItem>
+            );
+          })}
         </Menu>
 
         {/* Benutzeranzeige */}
@@ -97,21 +81,20 @@ const Header = () => {
           </div>
           <div className="user-text">
             <span className="user-name">
-              {keycloak.tokenParsed?.name || keycloak.tokenParsed?.preferred_username || 'User'}
+              {keycloak.tokenParsed?.name ||
+                keycloak.tokenParsed?.preferred_username ||
+                'User'}
             </span>
-
-            
             <span className="user-role">
               {(keycloak.tokenParsed?.realm_access?.roles || [])
-              .filter((role: string) =>
-                !role.startsWith('default-') &&
-                !role.includes('offline_access') &&
-                !role.includes('uma_authorization')
-              )
-              .join(', ') || 'Keine Rolle'}
+                .filter(
+                  (role: string) =>
+                    !role.startsWith('default-') &&
+                    !role.includes('offline_access') &&
+                    !role.includes('uma_authorization')
+                )
+                .join(', ') || 'Keine Rolle'}
             </span>
-
-
           </div>
           <ExpandMoreIcon fontSize="small" style={{ color: '#555' }} />
         </div>
