@@ -254,7 +254,7 @@ const Eq5dChart: React.FC<Props> = ({ data }) => {
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarDataMulti}>
               <PolarGrid />
               <PolarAngleAxis dataKey="dimension" />
-              <PolarRadiusAxis domain={[0, 100]} />
+              <PolarRadiusAxis domain={[0, 10]} />
               <Tooltip
               formatter={(value, name) => {
                 const s = String(name);
