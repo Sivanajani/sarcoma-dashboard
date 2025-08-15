@@ -46,6 +46,8 @@
         "titleProms": "PROMs - Qualité des données",
         "titleRedFlags": "Toutes les alertes rouges (PROM & CROM)",
         "search": "Rechercher un patient...",
+        "refresh": "Actualiser",
+        "refreshing": "Actualisation…",
         "headers": {
             "id": "ID Patient",
             "completeness": "Complétude",

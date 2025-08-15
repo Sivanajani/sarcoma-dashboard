@@ -18,7 +18,7 @@ const getColorClass = (value?: number): string => {
 
 const PromsTable: React.FC = () => {
   const { t } = useTranslation();
-  const { patients } = usePatientStore(); // Zustand statt lokale API
+  const { patients } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
   // Nur PROM-Patient:innen filtern
