@@ -1,3 +1,43 @@
+/**
+ * PatientQualityTable.tsx (hier als AllPatientsTable exportiert)
+ *
+ * Zweck:
+ * - Übersichtstabelle aller Patient:innen mit Qualitätsmetriken aus PROM- und CROM-Daten
+ * - Kombiniert mehrere Backend-Endpoints in einer Ansicht
+ * - Unterstützt Suche/Filterung nach Patient:innen-ID
+ * - Zeigt Red-/Yellow-Flags als visuelle Indikatoren
+ * - Unterscheidet Quelle: CROM, PROM oder beide (CROM+PROM)
+ *
+ * Datenfluss:
+ * 1. Lädt beim ersten Render:
+ *    - Patientenbasisdaten (CROMs + PROMs)
+ *    - Durchschnittswerte zu Vollständigkeit, Korrektheit, Konsistenz, Aktualität
+ *    - Summary-Flags (gesamtbewertete Qualitätsstufe)
+ * 2. Mapped die Daten pro Patient:innen-ID zusammen
+ * 3. Speichert Ergebnis im zentralen Zustand (`usePatientStore`)
+ *
+ * Besonderheiten:
+ * - Farbcodierung der Werte: grün (≥90%), gelb (≥70%), rot (<70%)
+ * - Internationalisierte Texte (i18next)
+ * - Tooltipps für Flag-Icons
+ * - Responsive Suchleiste mit MUI-Styles
+ * - Navigations-Links zu Detailansichten:
+ *    - `/patients/:id` für CROMs
+ *    - `/proms/:id` für PROMs
+ *
+ * Abhängigkeiten:
+ * - @mui/material, Icons (SearchIcon, WarningAmberIcon, ReportProblemIcon)
+ * - react-router-dom (Link)
+ * - Zustand-Store: usePatientStore
+ * - i18next (useTranslation)
+ *
+ * Props: keine (alle Daten via Store)
+ *
+ * Typische Verwendung:
+ * <AllPatientsTable />
+ */
+
+
 import React, { useEffect, useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';

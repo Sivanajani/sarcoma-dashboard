@@ -1,3 +1,59 @@
+/**
+ * ModuleDetailContent.tsx
+ *
+ * Zweck:
+ * - Detaillierte Darstellung der Qualitätsdimensionen (Vollständigkeit, Korrektheit,
+ *   Konsistenz, Aktualität) für ein einzelnes Modul.
+ * - Visuelle Hervorhebung des Scores und Anzeige fehlender oder fehlerhafter Felder.
+ *
+ * Props:
+ * - `dimension`: Name der Qualitätsdimension (z. B. "completeness", "correctness", "consistency", "actuality").
+ * - `dimensionData`: Datenobjekt für die gewählte Dimension mit Score, Summary und Detailfeldern.
+ * - `moduleData`: Ursprüngliche Rohdaten des Moduls (aktuell nicht direkt verwendet, aber für Erweiterungen vorgesehen).
+ *
+ * Hauptlogik:
+ * - `score` wird dynamisch aus `dimensionData` ermittelt (`<dimension>_score` oder `percent`).
+ * - `getScoreColor`: Weist dem Score eine Farbe zu:
+ *    - Rot (<50 %)
+ *    - Orange (<85 %)
+ *    - Grün (≥85 %)
+ * - `translateField`: Holt Übersetzungen aus `databasePage.<field>`; bei Konsistenz-Regeln aus `consistencyRules.<field>`.
+ *
+ * Anzeige je Dimension:
+ * - **Vollständigkeit (`completeness`)**:
+ *    - Zeigt `fields_filled / fields_total`.
+ *    - Listet fehlende Felder (`missing_fields`) rot markiert auf.
+ * - **Korrektheit (`correctness`)**:
+ *    - Zeigt `summary`.
+ *    - Listet alle Felder mit Wert `false` als fehlerhaft auf.
+ * - **Konsistenz (`consistency`)**:
+ *    - Analog zu Korrektheit, aber mit Übersetzungen aus `consistencyRules`.
+ * - **Aktualität (`actuality`)**:
+ *    - Zeigt `days_since_update`.
+ *
+ * Übersetzungen:
+ * - Alle Labels und Texte werden mit `react-i18next` geladen.
+ *
+ * Styling:
+ * - Score im Titel farbig gemäss Qualitätswert.
+ * - Listen mit fehlenden/fehlerhaften Feldern als `<ul>` mit roter Markierung.
+ *
+ * Beispiel:
+ * ```tsx
+ * <ModuleDetailContent
+ *   dimension="completeness"
+ *   dimensionData={{
+ *     completeness_score: 80,
+ *     fields_filled: 8,
+ *     fields_total: 10,
+ *     missing_fields: ["tumor_size", "diagnosis_date"]
+ *   }}
+ *   moduleData={module}
+ * />
+ * ```
+ */
+
+
 import './ModuleCard.css';
 import { useTranslation } from 'react-i18next';
 

@@ -1,3 +1,51 @@
+/**
+ * CromDatabase.tsx
+ *
+ * Zweck:
+ * - Such- und Verwaltungsoberfläche für CROM-Daten (Clinician Reported Outcome Measures)
+ *   einer bestimmten Patient:in anhand ihrer externen ID (`externalCode`).
+ * - Ermöglicht sowohl die Anzeige als auch die direkte Bearbeitung einzelner Module.
+ *
+ * Funktionsweise:
+ * 1. Eingabe einer externen Patienten-ID in das Suchfeld.
+ * 2. Abruf der Patientendaten vom Backend:
+ *    GET /api/patients/by-external-code/{externalCode}
+ * 3. Darstellung der Module in einer aufklappbaren Kartenansicht.
+ * 4. Wechsel zwischen Anzeige- und Bearbeitungsmodus pro Modul:
+ *    - Anzeige: <FormattedModuleData /> für schön formatierte Felddarstellung.
+ *    - Bearbeitung: <EditableField /> für editierbare Inputs.
+ * 5. Speichern von Änderungen:
+ *    - PUT-Request an das passende Modul-Endpoint (Mapping in `endpointMap` definiert).
+ *    - Vor dem Speichern wird ein SweetAlert2-Dialog zur Bestätigung angezeigt.
+ *    - Nach erfolgreichem Speichern wird die Suche erneut ausgeführt, um die Daten zu aktualisieren.
+ *
+ * Wichtige States:
+ * - `externalCode`: Suchwert für Patient:innen.
+ * - `patientData`: Aktuelle Patientendaten mit Modulen.
+ * - `openModules`: Menge geöffneter Module (UI-State für Accordion).
+ * - `editModules`: Menge der Module, die sich im Bearbeitungsmodus befinden.
+ * - `editedData`: Zwischenspeicher der geänderten Felder pro Modul.
+ * - `error`: Fehlermeldung, wenn Patient:in nicht gefunden wird.
+ *
+ * Komponenten:
+ * - <FormattedModuleData />: Darstellung der Modul-Daten in lesbarer Form.
+ * - <EditableField />: Editierbares Eingabefeld für einzelne Werte.
+ * - SweetAlert2: Bestätigungs- und Fehlerdialoge.
+ * - Material UI Icons: Edit-, Expand-/Collapse-Icons.
+ *
+ * Abhängigkeiten:
+ * - axios (API-Aufrufe)
+ * - SweetAlert2 (Dialoge)
+ * - Material UI Icons (UI-Elemente)
+ * - i18next (Übersetzungen)
+ *
+ * Nutzung:
+ * ```tsx
+ * import CromDatabase from './pages/CromDatabase';
+ * <Route path="/database/crom" element={<CromDatabase />} />
+ * ```
+ */
+
 import { useState } from 'react';
 import axios from 'axios';
 import './DatabasePage.css';
@@ -20,7 +68,7 @@ const CromDatabase = () => {
 
   const handleSearch = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/patients/by-external-code/${externalCode}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/patients/by-external-code/${externalCode}`);
       setPatientData(res.data);
       setError('');
       setOpenModules(new Set());
@@ -97,7 +145,7 @@ const CromDatabase = () => {
       };
 
       const mappedName = endpointMap[moduleName] || moduleName;
-      const endpoint = `http://localhost:8000/api/${mappedName}/${dataToSave.id}`;
+      const endpoint = `${import.meta.env.VITE_API_BASE_URL}/api/${mappedName}/${dataToSave.id}`;
       await axios.put(endpoint, cleanedData);
 
       const newSet = new Set(editModules);

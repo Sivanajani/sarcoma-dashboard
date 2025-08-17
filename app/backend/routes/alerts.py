@@ -40,7 +40,7 @@ def create_alert(
     new_alert = Alert(
         **alert.dict(),
         user_id=user_id,
-        email=email  # email direkt aus dem Token!
+        email=email  
     )
     print("Eingegebene Alert-Daten:")
     print(json.dumps(alert.dict(), indent=2, default=str))

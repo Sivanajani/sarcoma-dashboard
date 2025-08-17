@@ -1,3 +1,47 @@
+/**
+ * PatientDetailView.tsx
+ *
+ * Zweck:
+ * - Haupt-Detailansicht für eine:n Patient:in.
+ * - Stellt entweder CROM- oder PROM-Details dar, je nachdem, welche Datenquellen verfügbar sind.
+ * - Ermöglicht den Wechsel zwischen beiden Ansichten (Tabs), falls beide Datenquellen vorhanden sind.
+ *
+ * Routing:
+ * - Erwartet URL-Parameter `patientId` (in der Regel externe ID, z. B. "P8").
+ * - Route-Beispiel: `/patients/:patientId/details`
+ *
+ * Ablauf & Datenfluss:
+ * 1. Beim Laden (`useEffect`) wird die Patienteninformation abgerufen:
+ *    - Zuerst über `/api/patient-lookup/{patientId}` (liefert Info, ob PROMs und/oder CROMs existieren).
+ *    - Falls kein Eintrag → Versuch `/api/proms/patient-info/{patientId}` (nur PROM-Daten).
+ * 2. Das Ergebnis (`patientInfo`) enthält:
+ *    - interne numerische ID
+ *    - externe ID (`patient_id`)
+ *    - Flags `has_proms` und `has_croms`
+ * 3. Initiale Ansicht:
+ *    - Falls nur PROM-Daten vorliegen → `view = 'PROM'`
+ *    - Andernfalls Standard auf `'CROM'`
+ *
+ * UI-Aufbau:
+ * - **Zurück-Button**: Navigiert zur vorherigen Seite.
+ * - **Titelzeile**: Zeigt den übersetzten Titel inkl. Patienten-ID.
+ * - **Tab-Umschaltung**:
+ *    - Nur sichtbar, wenn Patient:in sowohl PROM- als auch CROM-Daten hat.
+ *    - Tabs nutzen Material-UI `Tabs` & `Tab`.
+ * - **Detailansicht**:
+ *    - `CromsDetailView` bei CROM-Ansicht.
+ *    - `PromDetailView` bei PROM-Ansicht.
+ *
+ * Lade-/Fehler-Handling:
+ * - Solange Daten noch geladen werden oder `patientInfo` null ist → Lade-Text.
+ * - Fehler werden aktuell nur in der Konsole ausgegeben.
+ *
+ * Beispiel:
+ * ```
+ * /patients/P8/details
+ * ```
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

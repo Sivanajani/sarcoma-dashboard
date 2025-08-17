@@ -1,3 +1,54 @@
+/**
+ * RawModuleDataTable.tsx
+ *
+ * Zweck:
+ * - Anzeige und Bearbeitung von Rohdaten eines einzelnen CROM- oder PROM-Moduls.
+ * - Darstellung aller Felder (Schlüssel/Wert) in einer Tabelle.
+ * - Bearbeitungsmodus mit Inline-Editing und Speichern via API.
+ *
+ * Props:
+ * - `moduleData`: Die Daten des Moduls als Key-Value-Objekt.
+ * - `moduleName`: Technischer Name des Moduls (z. B. "diagnosis", "surgery").
+ *
+ * Kernfunktionen:
+ * 1. **Anzeigen der Module-Daten**
+ *    - Tabellenform, jede Zeile = Feldname + Feldwert.
+ *    - Übersetzte Labels über i18next (`t()`), fallback auf Feldnamen.
+ *    - Arrays → als Liste, Booleans → als „Ja/Nein“, null/leer → „Keine Daten“.
+ *
+ * 2. **Bearbeitungsmodus**
+ *    - Aktivieren per Stift-Icon (`EditIcon`).
+ *    - Felder werden zu `EditableField`-Komponenten.
+ *    - Änderungen werden in `editData` gespeichert, Vergleich mit `originalData` für `hasChanges`.
+ *
+ * 3. **Speichern**
+ *    - Vor dem Speichern Bestätigungsdialog (SweetAlert2).
+ *    - PUT-Request an API-Endpunkt (`/api/{endpointSegment}/{id}`).
+ *      - `endpointMap` übersetzt `moduleName` zu API-URL-Pfaden.
+ *    - Erfolgs- oder Fehlermeldung via SweetAlert2.
+ *    - Bei Erfolg → `originalData` aktualisieren + Bearbeitungsmodus verlassen.
+ *
+ * 4. **Abbrechen**
+ *    - Falls Änderungen vorliegen → Bestätigungsdialog, ob Änderungen gespeichert oder verworfen werden sollen.
+ *    - Falls keine Änderungen → Einfach zurück in Anzeige-Modus.
+ *
+ * State-Variablen:
+ * - `editData`: Aktueller Arbeitsstand der Daten (wird live bei Bearbeitung geändert).
+ * - `originalData`: Originalzustand beim Laden (für Vergleich und Reset).
+ * - `isEditing`: Steuert, ob Bearbeitungsmodus aktiv ist.
+ *
+ * Besonderheiten:
+ * - Flexible Feldanzeige (String, Array, Boolean, null).
+ * - Automatisches Mapping von `moduleName` zu Backend-Endpunkt.
+ * - Nutzung von SweetAlert2 für Benutzerbestätigung und Rückmeldungen.
+ * - Vollständig i18n-fähig (Mehrsprachigkeit).
+ *
+ * Typische Nutzung:
+ * - Wird innerhalb einer Modul-Detailansicht (z. B. `CromsDetailView` oder `PromDetailView`) verwendet,
+ *   um die Rohdaten eines Moduls zu prüfen oder zu bearbeiten.
+ */
+
+
 import React, { useState } from 'react';
 import './RawModuleDataTable.css';
 import axios from 'axios';
@@ -8,8 +59,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/CheckCircle';
 import IconButton from '@mui/material/IconButton';
-
-
 
 
 interface RawModuleDataTableProps {

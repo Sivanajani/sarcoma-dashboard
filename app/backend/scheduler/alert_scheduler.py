@@ -6,7 +6,7 @@ def start_alert_scheduler():
     scheduler = BackgroundScheduler()
 
     # Führe alle 10 Minuten den Prozess aus
-    scheduler.add_job(lambda: asyncio.run(process_alerts()), 'interval', minutes=1)
+    scheduler.add_job(lambda: asyncio.run(process_alerts()), 'interval', minutes=10)
 
     scheduler.start()
     print("Alert Scheduler gestartet")

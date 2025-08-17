@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 # Optional: Wenn du yarn/pnpm nutzt, entsprechend ersetzen
 
 # 2) Abhängigkeiten installieren mit Cache-Mount (schneller bei Rebuilds)
-#    benötigt BuildKit (Docker Desktop: standardmäßig an)
+#    benötigt BuildKit (Docker Desktop: standardmässig an)
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --prefer-offline --no-audit --progress=false
 

@@ -1,3 +1,35 @@
+/**
+ * main.tsx – App-Einstieg + Keycloak-Bootstrap
+ *
+ * Zweck:
+ * - Initialisiert Keycloak **vor** dem Rendern der React-App.
+ * - Erzwingt Login (`onLoad: 'login-required'`) und bindet die Auth-Session via `AuthProvider` ein.
+ * - Richtet ein periodisches Token-Refresh (PKCE, 60s Vorlauf) ein.
+ *
+ * Ablauf:
+ * 1) `keycloak.init({...})`
+ *    - onLoad: 'login-required' → Weiterleitung zum Login, falls nicht authentifiziert
+ *    - checkLoginIframe: false → reduziert IFrame-Checks (nützlich in Docker/localhost)
+ *    - pkceMethod: 'S256' → aktiviert PKCE für OIDC (empfohlen)
+ *
+ * 2) Bei Erfolg (`authenticated === true`)
+ *    - Startet Intervall: `keycloak.updateToken(60)` alle 60s, um das Access Token rechtzeitig zu erneuern.
+ *    - Rendert die React-App (StrictMode) und umhüllt sie mit `AuthProvider`.
+ *
+ * 3) Fehlerfälle
+ *    - Init-Fehler → Log in der Konsole.
+ *    - Refresh-Fehler → erzwungenes Re-Login (`keycloak.login()`).
+ *
+ * Sicherheit/Operational Notes:
+ * - Das Loggen des Access Tokens in der Konsole ist **nur für Entwicklung** sinnvoll.
+ *   In Produktion entfernen/unterbinden.
+ * - Das Refresh-Intervall sollte bei Unmount/Hot-Reloads aufgeräumt werden (siehe Hinweise unten).
+ *
+ * Abhängigkeiten:
+ * - `keycloak` (keycloak-js), `AuthProvider` (React Context), i18n-Setup (`./i18n`), React 18 Root API.
+ */
+
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
@@ -13,7 +45,6 @@ keycloak.init({
 }).then((authenticated) => {
   if (authenticated) {
     console.log('Keycloak authentication successful');
-    console.log('Access Token:', keycloak.token);
     
     setInterval(() => {
       keycloak.updateToken(60).then((refreshed) => {

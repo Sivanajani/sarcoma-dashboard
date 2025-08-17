@@ -1,3 +1,45 @@
+/**
+ * ModuleDetailView.tsx
+ *
+ * Zweck:
+ * - Zeigt die Detailansicht eines einzelnen Moduls (CROM oder PROM) für eine:n spezifische:n Patient:in.
+ * - Stellt sowohl die berechneten Qualitätsdimensionen (Vollständigkeit, Korrektheit, Konsistenz, Aktualität)
+ *   als auch die Rohdaten des Moduls dar.
+ *
+ * Routing:
+ * - Erwartet URL-Parameter `externalCode` (z. B. "P8") und `module` (z. B. "diagnosis").
+ *   → Diese kommen aus der Route `/patients/:externalCode/:module/details`.
+ *
+ * Datenfluss:
+ * 1. Beim Laden werden über `useEffect` die Moduldaten aus dem Backend geholt:
+ *    - Endpoint: `/api/patients/by-external-code/{externalCode}/{module}/details`
+ *    - Rückgabe enthält:
+ *       - `completeness`, `correctness`, `consistency`, `actuality` (falls verfügbar)
+ *       - `module_data` (Rohdaten des Moduls)
+ * 2. Fehler beim Laden werden in `error` gespeichert und rot angezeigt.
+ * 3. Solange keine Daten vorliegen, wird ein Lade-Text angezeigt (`t("moduleDetail.loading")`).
+ *
+ * Rendering:
+ * - Titelzeile: Modulname (übersetzt) und Patient:innen-Code.
+ * - **Qualitätskarten**:
+ *   - Iteration über die vordefinierte Liste `qualityDimensions`.
+ *   - Falls zu einer Dimension Daten existieren (`data[dimension]`), wird eine Karte angezeigt.
+ *   - Inhalt der Karte wird mit `ModuleDetailContent` gerendert.
+ * - **Rohdaten-Tabelle**:
+ *   - Darstellung aller Originalfelder des Moduls mit `RawModuleDataTable`.
+ *
+ * Übersetzungen:
+ * - Modulnamen, Labels und Lade-/Fehlertexte über `react-i18next`.
+ * - Falls kein Übersetzungsschlüssel vorhanden, wird der Modulname direkt angezeigt.
+ *
+ * Beispiel:
+ * ```
+ * /patients/P8/diagnosis/details
+ * ```
+ * → Zeigt Diagnose-Moduldaten und Qualitätsbewertungen für Patient:in P8.
+ */
+
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

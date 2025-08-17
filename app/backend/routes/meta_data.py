@@ -1,5 +1,3 @@
-# backend/routes/meta_debug.py
-
 from fastapi import APIRouter
 from sqlalchemy import inspect
 from db.engine import engine_meta

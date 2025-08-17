@@ -1,3 +1,35 @@
+/**
+ * Sidebar.tsx
+ *
+ * Zweck:
+ * - Rendert die linke Navigationsleiste des Dashboards mit Umschaltmöglichkeit zwischen
+ *   eingeklappter (collapsed) und voller Ansicht.
+ * - Bietet Hauptnavigation zu Dashboard, Formularverwaltung und Alert-Seite.
+ *
+ * Hauptfunktionen:
+ * - **Kollapsfunktion**:
+ *   - Button zum Ein- und Ausklappen (Chevron-Icons).
+ *   - Im eingeklappten Zustand werden nur Icons mit Tooltip angezeigt.
+ * - **Navigation**:
+ *   - Menüeinträge mit Icon + Label (Labels nur sichtbar, wenn nicht eingeklappt).
+ *   - Aktiver Link wird anhand der aktuellen Route (`useLocation`) hervorgehoben.
+ *   - Tooltip für Icons im eingeklappten Zustand zur Nutzerführung.
+ * - **Mehrsprachigkeit**:
+ *   - Labels und Titel werden über `react-i18next` geladen.
+ *
+ * Nutzung:
+ * ```tsx
+ * <Sidebar />
+ * ```
+ *
+ * Abhängigkeiten:
+ * - `react-router-dom`: Navigation (`Link`, `useLocation`)
+ * - `@mui/icons-material`: Icons für Navigation und Umschalt-Button
+ * - `@mui/material/Tooltip`: Tooltips im eingeklappten Modus
+ * - `react-i18next`: Übersetzungen für Titel und Labels
+ */
+
+
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';

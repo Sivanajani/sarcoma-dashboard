@@ -7,7 +7,7 @@ from utils.prom_completeness.personal_completeness import calculate_personal_dat
 
 router = APIRouter()
 
-# Get EQ5D completeness for all patients
+
 @router.get("/api/proms/eq5d/completeness")
 def get_eq5d_completeness():
     try:
@@ -21,7 +21,7 @@ def get_eq5d_completeness():
     except Exception as e:
         return {"error": str(e)}
 
-# Get EQ5D completeness for a specific patient by pid
+
 @router.get("/api/proms/eq5d/completeness/{pid}")
 def get_eq5d_completeness_by_pid(pid: str):
     try:
@@ -40,7 +40,7 @@ def get_eq5d_completeness_by_pid(pid: str):
     except Exception as e:
         return {"error": str(e)}
 
-# Get biopsy completeness for all patients
+
 @router.get("/api/proms/biopsy/completeness")
 def get_biopsy_completeness():
     try:
@@ -54,7 +54,7 @@ def get_biopsy_completeness():
     except Exception as e:
         return {"error": str(e)}
 
-# Get biopsy completeness for a specific patient by pid
+
 @router.get("/api/proms/biopsy/completeness/{pid}")
 def get_biopsy_completeness_by_pid(pid: str):
     try:
@@ -73,7 +73,7 @@ def get_biopsy_completeness_by_pid(pid: str):
     except Exception as e:
         return {"error": str(e)}
     
-# Get personal data completeness for all patients
+
 @router.get("/api/proms/personal/completeness")
 def get_personal_completeness():
     try:
@@ -87,7 +87,7 @@ def get_personal_completeness():
     except Exception as e:
         return {"error": str(e)}
 
-# Get personal data completeness for a specific patient by pid
+
 @router.get("/api/proms/personal/completeness/{pid}")
 def get_personal_completeness_by_pid(pid: str):
     try:

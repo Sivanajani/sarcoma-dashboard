@@ -1,3 +1,41 @@
+/**
+ * BiopsyChartRadar.tsx
+ *
+ * Zweck:
+ * - Visualisierung von Biopsie-Daten (PROM-Modul) als Radar-, Linien- oder Balkendiagramm.
+ * - Ermöglicht interaktive Feldwahl, Zeitraumfilterung und Export der Visualisierung.
+ *
+ * Features:
+ * - Diagrammtypen: Radar, Linie, Balken (umschaltbar via ToggleButtonGroup)
+ * - Auswahl einzelner Felder (Checkboxen) aus den BiopsyEntry-Daten:
+ *   - biopsy_team_raum, biopsy_organisation, biopsy_eqvas, biopsy_schmerz
+ * - Zeitraumfilterung über Start- und Enddatum
+ * - Dynamische Farbzuweisung pro Feld (Standardfarben, vom User im Exportdialog anpassbar)
+ * - Export als PNG mit Titel- und Farbauswahl (SweetAlert2 + html-to-image)
+ * - Mehrsprachige Beschriftungen über i18next (fieldLabels, UI-Elemente)
+ * - Responsive Darstellung (ResponsiveContainer von recharts)
+ * - Angepasster Tooltip mit übersetzten Feldnamen
+ *
+ * Props:
+ * - entries: BiopsyEntry[]
+ *   → Array mit Biopsie-Datensätzen (enthält Datum + Bewertungsfelder)
+ *
+ * Abhängigkeiten:
+ * - recharts (LineChart, BarChart, RadarChart, ResponsiveContainer, etc.)
+ * - @mui/material (FormControls, Buttons, Typography)
+ * - html-to-image (toPng) für den Export
+ * - sweetalert2 für Exportdialog
+ * - i18next für Übersetzungen
+ *
+ * Datenfluss:
+ * 1. entries → gefiltert nach Datum (startDate, endDate)
+ * 2. Ausgewählte Felder → generieren Chartdaten
+ * 3. Charttyp → steuert, ob Radar-, Linien- oder Balkendiagramm gerendert wird
+ *
+ * Typische Verwendung:
+ * <BiopsyChartRadar entries={biopsyEntries} />
+ */
+
 import React, { useState, useRef } from "react";
 import {
   LineChart, Line,

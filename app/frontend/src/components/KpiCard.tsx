@@ -1,3 +1,38 @@
+/**
+ * KpiCard.tsx
+ *
+ * Zweck:
+ * - Anzeige einer einzelnen KPI (Key Performance Indicator) im Dashboard.
+ * - Enthält Icon, Label, Wert, optional Untertitel und Tooltip.
+ *
+ * Features:
+ * - Optionaler Tooltip (MUI Tooltip) für zusätzliche Info.
+ * - Anpassbare Hintergrundfarbe des Icon-Bereichs.
+ * - Optional klickbar (mit Maus oder Tastatur via Enter/Leertaste).
+ * - Barrierefreiheit: `aria-label` mit KPI-Beschreibung, `role="button"`, `tabIndex` nur wenn klickbar.
+ *
+ * Props:
+ * - icon: ReactNode → Symbol oder Bild zur KPI.
+ * - label: string → Bezeichnung der KPI.
+ * - value: string | number → Hauptwert.
+ * - subtitle?: string → Zusätzliche Info/Einheit.
+ * - tooltip?: string → Text für Tooltip.
+ * - color?: string → Hintergrundfarbe des Icons (Default: #4da6ff).
+ * - onClick?: () => void → Klick-Handler.
+ *
+ * Typische Verwendung:
+ * <KpiCard
+ *   icon={<MyIcon />}
+ *   label="Vollständigkeit"
+ *   value="95%"
+ *   subtitle="im letzten Monat"
+ *   tooltip="Prozentsatz vollständig ausgefüllter Felder"
+ *   color="#28a745"
+ *   onClick={() => console.log('KPI angeklickt')}
+ * />
+ */
+
+
 import type { ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import './KpiCard.css';

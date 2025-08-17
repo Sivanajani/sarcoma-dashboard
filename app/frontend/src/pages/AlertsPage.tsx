@@ -1,3 +1,57 @@
+
+/**
+ * AlertsPage.tsx
+ *
+ * Zweck:
+ * - Hauptseite für die Verwaltung von Benachrichtigungen (Alerts) im Dashboard.
+ * - Zeigt alle Alerts der eingeloggten Benutzer:in an und ermöglicht deren
+ *   Aktivierung/Deaktivierung, Bearbeitung (teilweise) und Löschung.
+ *
+ * Funktionsweise:
+ * - Beim Laden der Seite (`useEffect`) werden alle Alerts des aktuellen Benutzers
+ *   über `/alerts/me` vom Backend geladen (Autorisierung via Bearer Token).
+ * - Die Alerts werden in einer Tabelle dargestellt.
+ * - Jede Zeile enthält:
+ *   • Patienten-ID
+ *   • Quelle (PROMs, CROMs, kombiniert)
+ *   • Modul (z. B. Diagnosis, Surgery, Pathology)
+ *   • Regelbeschreibung (dynamisch generiert)
+ *   • Auslösefrequenz
+ *   • Aktiv-Status (umschaltbar per Switch)
+ *   • Letzter Auslösezeitpunkt
+ *   • Aktionen (Löschen-Button)
+ *
+ * - Löschaktionen werden per SweetAlert2 bestätigt.
+ * - Updates am Active-Status werden „optimistic“ durchgeführt:
+ *   • Sofort im State angepasst
+ *   • Bei Fehlern wieder zurückgerollt
+ *
+ * Wichtige Mappings:
+ * - `moduleKeyMap`: ordnet interne Modul-Keys den i18n-Keys zu.
+ * - `metricKeyMap`: ordnet Metrik-Keys den i18n-Keys zu.
+ * - `conditionKeyMap`: übersetzt Vergleichsoperatoren in i18n-Texte.
+ *
+ * Komponenten:
+ * - <AlertForm />: Formular zum Erstellen neuer Alerts.
+ * - <Switch />: Aktiv-/Deaktiv-Schalter.
+ * - <IconButton /> mit <DeleteIcon />: Alert löschen.
+ *
+ * Abhängigkeiten:
+ * - axios (API-Aufrufe)
+ * - AuthProvider (Token-Verwaltung)
+ * - SweetAlert2 (Bestätigungs-Dialoge + Toasts)
+ * - date-fns (Datumsformatierung)
+ * - MUI-Komponenten (UI)
+ * - i18next (Übersetzungen)
+ *
+ * Nutzung:
+ * ```tsx
+ * import AlertsPage from './pages/AlertsPage';
+ * <Route path="/alerts" element={<AlertsPage />} />
+ * ```
+ */
+
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
@@ -86,7 +140,7 @@ const AlertsPage = () => {
   const fetchAlerts = async () => {
     try {
       if (!auth.token) return;
-      const res = await axios.get<Alert[]>("http://localhost:8000/alerts/me", {
+      const res = await axios.get<Alert[]>(`${import.meta.env.VITE_API_BASE_URL}/alerts/me`, {
         headers: { Authorization: `Bearer ${auth.token}` }
       });
       setAlerts(res.data);
@@ -103,7 +157,7 @@ const AlertsPage = () => {
     const prev = alerts;
     try {
       setAlerts((curr) => curr.map(a => a.id === id ? { ...a, ...patch } : a));
-      await axios.patch<Alert>(`http://localhost:8000/alerts/${id}`, patch, {
+      await axios.patch<Alert>(`${import.meta.env.VITE_API_BASE_URL}/alerts/${id}`, patch, {
         headers: { Authorization: `Bearer ${auth.token}` }
       });
     } catch (e) {
@@ -133,7 +187,7 @@ const AlertsPage = () => {
   try {
     // Optimistic UI
     setAlerts((curr) => curr.filter(a => a.id !== id));
-    await axios.delete(`http://localhost:8000/alerts/${id}`, {
+    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/alerts/${id}`, {
       headers: { Authorization: `Bearer ${auth.token}` }
     });
     

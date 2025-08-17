@@ -1,7 +1,44 @@
+/**
+ * BiopsyDetail.tsx
+ *
+ * Zweck:
+ * - Anzeige einer Liste von Biopsie-Einträgen im Kartenlayout
+ * - Stellt alle erfassten Biopsie-Informationen in logisch gruppierten Abschnitten dar:
+ *   - Basisinformationen
+ *   - Vorbereitung
+ *   - Erfahrung
+ *   - Nachsorge
+ *   - Bewertung
+ *
+ * Features:
+ * - Formatierte Anzeige des Biopsiedatums (dd.MM.yyyy)
+ * - Gruppierte Darstellung mit klaren Überschriften
+ * - Klare Ja/Nein-Ausgabe für boolesche Felder
+ * - Platzhalter („–“), wenn Werte nicht vorhanden sind
+ * - Responsive Kartenanordnung mit flex-wrap
+ *
+ * Props:
+ * - data: BiopsyEntry[]
+ *   → Array mit Biopsie-Datensätzen (Backend-Response)
+ *
+ * Rückgabe:
+ * - Rendert MUI-Karten mit allen Feldwerten
+ * - Zeigt Text "Keine Biopsie-Daten vorhanden.", wenn kein Datensatz vorhanden ist
+ *
+ * Abhängigkeiten:
+ * - @mui/material (Card, CardContent, Typography, Divider, Box)
+ * - date-fns (format) für Datumsausgabe
+ *
+ * Typische Verwendung:
+ * <BiopsyDetail data={biopsyEntries} />
+ */
+
+
 import React from "react";
 import { Card, Divider, CardContent } from "@mui/material";
 import { format } from "date-fns";
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 
 
 type BiopsyEntry = {
@@ -30,6 +67,7 @@ type Props = {
 };
 
 const BiopsyDetail: React.FC<Props> = ({ data }) => {
+  const { t } = useTranslation();
   if (!data || data.length === 0) return <p>Keine Biopsie-Daten vorhanden.</p>;
   
   return (
@@ -48,35 +86,35 @@ const BiopsyDetail: React.FC<Props> = ({ data }) => {
           }} >
           <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Biopsie vom {format(new Date(entry.biopsy_date), "dd.MM.yyyy")}
+              {t('databasePage.biopsy_date')} {format(new Date(entry.biopsy_date), "dd.MM.yyyy")}
             </Typography>
             <Divider sx={{ mb: 1 }} />
 
             <Typography fontWeight="bold"> Basis</Typography>
-            <Typography>Institution: {entry.biopsy_institution}</Typography>
+            <Typography>{t('databasePage.institution')}: {entry.biopsy_institution}</Typography>
 
             <Typography fontWeight="bold" mt={1}>Vorbereitung</Typography>
-            <Typography>Notwendigkeit: {entry.biopsy_notwendigkeit ? "Ja" : "Nein"}</Typography>
-            <Typography>Angst: {entry.biopsy_angst ? "Ja" : "Nein"}</Typography>
-            <Typography>Erklärung: {entry.biopsy_erklaerung ? "Ja" : "Nein"}</Typography>
-            <Typography>Verstanden: {entry.biopsy_verstehen ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_notwendigkeit')}: {entry.biopsy_notwendigkeit ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.angst')}: {entry.biopsy_angst ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_erklaerung')}: {entry.biopsy_erklaerung ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_verstehen')}: {entry.biopsy_verstehen ? "Ja" : "Nein"}</Typography>
 
             <Typography fontWeight="bold" mt={1}> Erfahrung</Typography>
-            <Typography>Schmerz erwartet: {entry.biopsy_schmerz_wie_erwartet}</Typography>
-            <Typography>Schmerzskala: {entry.biopsy_schmerz ?? "-"}/10</Typography>
-            <Typography>Medikamente: {entry.biopsy_medikamente ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_schmerz_wie_erwartet')}: {entry.biopsy_schmerz_wie_erwartet}</Typography>
+            <Typography>{t('databasePage.biopsy_schmerz')}: {entry.biopsy_schmerz ?? "-"}/10</Typography>
+            <Typography>{t('databasePage.biopsy_medikamente')}: {entry.biopsy_medikamente ? "Ja" : "Nein"}</Typography>
 
             <Typography fontWeight="bold" mt={1}> Nachsorge</Typography>
-            <Typography>Beobachtungszeitraum: {entry.biopsy_beobachtungszeitraum}</Typography>
-            <Typography>Blutende Wunde: {entry.biopsy_blutende_wunde ? "Ja" : "Nein"}</Typography>
-            <Typography>Wundprobleme: {entry.biopsy_probleme_wunde ? "Ja" : "Nein"}</Typography>
-            <Typography>Schmerzkontrolle: {entry.biopsy_schmerzkontrolle ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_beobachtungszeitraum')}: {entry.biopsy_beobachtungszeitraum}</Typography>
+            <Typography>{t('databasePage.biopsy_blutende_wunde')}: {entry.biopsy_blutende_wunde ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_probleme_wunde')}: {entry.biopsy_probleme_wunde ? "Ja" : "Nein"}</Typography>
+            <Typography>{t('databasePage.biopsy_schmerzkontrolle')}: {entry.biopsy_schmerzkontrolle ? "Ja" : "Nein"}</Typography>
 
             <Typography fontWeight="bold" mt={1}> Bewertung</Typography>
-            <Typography>Team & Raum: {entry.biopsy_team_raum ?? "-"}/10</Typography>
-            <Typography>Organisation: {entry.biopsy_organisation ?? "-"}/10</Typography>
-            <Typography>EQ-VAS: {entry.biopsy_eqvas ?? "-"}/100</Typography>
-            <Typography>Kommentar: {entry.biopsy_questions || "–"}</Typography>
+            <Typography>{t('databasePage.biopsy_team_raum')}: {entry.biopsy_team_raum ?? "-"}/10</Typography>
+            <Typography>{t('databasePage.biopsy_organisation')}: {entry.biopsy_organisation ?? "-"}/10</Typography>
+            <Typography>{t('databasePage.biopsy_eqvas')}: {entry.biopsy_eqvas ?? "-"}/100</Typography>
+            <Typography>{t('databasePage.biopsy_questions')}: {entry.biopsy_questions || "–"}</Typography>
           </CardContent>
         </Card>
       ))}

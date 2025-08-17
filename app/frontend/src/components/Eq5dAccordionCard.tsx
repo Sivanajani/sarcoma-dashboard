@@ -1,3 +1,36 @@
+/**
+ * Eq5dAccordionCard.tsx
+ *
+ * Zweck:
+ * - Accordion-Karte zur Anzeige und Inline‑Bearbeitung eines EQ‑5D‑PROM‑Eintrags.
+ * - Zwei Modi:
+ *   - View: Read‑only Darstellung über <FormattedModuleData />
+ *   - Edit: Dynamische Felder mit <EditableField /> und Save (PUT /api/eq5d/:id)
+ *
+ * Props:
+ * - entry: Record<string, any>   // Datensatz (Backend‑Response, inkl. eq5d_row_id/row_id)
+ * - onSaved?: () => void         // Callback nach erfolgreichem Speichern
+ *
+ * Verhalten:
+ * - Klick auf Header klappt das Panel auf/zu.
+ * - Edit‑Button schaltet in den Bearbeitungsmodus und initialisiert eine lokale Kopie `editedData`.
+ * - Vor dem Speichern erscheint ein Bestätigungsdialog (SweetAlert2).
+ *
+ * Abhängigkeiten:
+ * - @mui/material (Box, Collapse, IconButton, Icons)
+ * - EditableField (generische Inline‑Edit Komponente)
+ * - FormattedModuleData (generische Read‑only Ansicht)
+ * - sweetalert2 (Dialoge), axios (HTTP), i18next (Übersetzungen)
+ *
+ * Besonderheiten:
+ * - Nicht editierbare Felder werden gefiltert (IDs, Stammdaten).
+ * - Base‑URL kommt aus Vite‑ENV: import.meta.env.VITE_API_BASE_URL
+ *
+ * Beispiel:
+ * <Eq5dAccordionCard entry={eq5dEntry} onSaved={refresh} />
+ */
+
+
 import React, { useState } from 'react';
 import FormattedModuleData from '../pages/FormattedModuleData';
 import EditableField from './EditableField';

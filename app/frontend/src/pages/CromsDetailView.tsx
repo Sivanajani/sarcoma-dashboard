@@ -1,3 +1,42 @@
+/**
+ * CromsDetailView.tsx
+ *
+ * Zweck:
+ * - Container-Komponente, die alle Qualitätsmetriken (Vollständigkeit, Korrektheit,
+ *   Konsistenz, Aktualität) für die CROM-Module einer bestimmten Patient:in lädt
+ *   und an `CromsDetail` zur Darstellung übergibt.
+ *
+ * Props:
+ * - `patientId: string` → Externe Patienten-ID (z. B. "P8"), die im Backend auf
+ *   die interne ID gemappt wird.
+ *
+ * Funktionsweise:
+ * 1. Beim Mounten:
+ *    - API-Request `/api/patients/by-external-code/{patientId}` zum Ermitteln der internen ID.
+ *    - Parallel werden alle relevanten Qualitätsmetriken geladen:
+ *         `/api/patients/{internalId}/module-metrics`
+ *         `/api/patients/{internalId}/correctness-patient`
+ *         `/api/patients/{internalId}/consistency-patient`
+ *         `/api/patients/{internalId}/actuality-patient`
+ *    - Die Metriken werden anhand des Modulnamens (`name`) zusammengeführt.
+ * 2. Statusverwaltung:
+ *    - `loading`: Zeigt einen Lade-Text während der API-Abfragen.
+ *    - `error`: Zeigt eine Fehlermeldung bei nicht erfolgreichen Requests.
+ * 3. Gibt die angereicherten Module an `CromsDetail` weiter, um die Darstellung
+ *    zu übernehmen.
+ *
+ * Abhängigkeiten:
+ * - `CromsDetail`: Präsentationskomponente für die Anzeige der einzelnen Modul-Karten.
+ * - `useTranslation` (i18next): Mehrsprachige Labels für Lade- und Fehlermeldungen.
+ * - Backend-Endpunkte: Muss sowohl Mapping von externen zu internen IDs als auch
+ *   Modul-Metriken bereitstellen.
+ *
+ * Nutzung:
+ * ```tsx
+ * <CromsDetailView patientId="P8" />
+ * ```
+ */
+
 import React, { useEffect, useState } from 'react';
 import CromsDetail from './CromsDetail';
 import { useTranslation } from 'react-i18next';

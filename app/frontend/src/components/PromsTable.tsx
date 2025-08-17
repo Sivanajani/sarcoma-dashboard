@@ -1,3 +1,40 @@
+/**
+ * PromsTable.tsx
+ *
+ * Zweck:
+ * - Stellt eine Tabelle aller Patient:innen dar, die PROM-Daten (Patient Reported Outcome Measures)
+ *   oder eine Kombination aus CROMs und PROMs besitzen.
+ * - Ermöglicht Suche, visuelle Qualitätsbewertung und direkte Navigation zu Detailansichten.
+ *
+ * Hauptfunktionen:
+ * - **Filterung**:
+ *   - Auswahl nur der Patient:innen mit `source === 'proms'` oder `source === 'croms+proms'`.
+ *   - Suchfeld für `patient_id` (Case-insensitive).
+ * - **Darstellung**:
+ *   - Anzeige der wichtigsten Qualitätsmetriken: Vollständigkeit (`completeness`) und Aktualität (`actuality`).
+ *   - Farb-Codierung (grün, gelb, rot) basierend auf Schwellwerten:
+ *     - ≥ 90% → Grün
+ *     - ≥ 70% → Gelb
+ *     - < 70% → Rot
+ *   - Flag-Icons:
+ *     - Rotes Symbol → "Red Flag"
+ *     - Gelbes Symbol → "Yellow Flag"
+ * - **Interaktion**:
+ *   - Klick auf Patient:innen-ID öffnet die entsprechende Detailseite (`/proms/:id`).
+ *   - Suchfeld mit MUI-Design für intuitive Filterung.
+ *
+ * Nutzung:
+ * ```tsx
+ * <PromsTable />
+ * ```
+ *
+ * Abhängigkeiten:
+ * - `usePatientStore` für Zugriff auf globale Patientendaten.
+ * - `react-i18next` für Mehrsprachigkeit.
+ * - Material-UI für UI-Komponenten (TextField, Icons, Tooltip).
+ */
+
+
 import React, { useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +58,7 @@ const PromsTable: React.FC = () => {
   const { patients } = usePatientStore();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Nur PROM-Patient:innen filtern
+  
   const promPatients = patients.filter((p) => p.source === 'proms' || p.source === 'croms+proms');
 
   const filteredPatients = promPatients.filter((p) =>

@@ -6,7 +6,7 @@ from models import CROMDiagnosis
 def calculate_diagnosis_uniqueness(db: Session) -> dict:
     """
     Prüft auf doppelte Einträge in `croms_diagnoses` basierend auf
-    patient_id + tumor_diagnosis (ignoriere Groß-/Kleinschreibung und Whitespace).
+    patient_id + tumor_diagnosis (ignoriere Gross-/Kleinschreibung und Whitespace).
     """
 
     total_entries = db.query(CROMDiagnosis).count()
@@ -50,7 +50,7 @@ def calculate_diagnosis_uniqueness(db: Session) -> dict:
 def calculate_diagnosis_uniqueness_per_patient(db: Session) -> dict:
     """
     Gibt je Patient:in alle Duplikate der Kombination patient_id + tumor_diagnosis
-    (Groß-/Kleinschreibung und Whitespace ignorierend).
+    (Gross-/Kleinschreibung und Whitespace ignorierend).
     """
 
     duplicate_entries = (

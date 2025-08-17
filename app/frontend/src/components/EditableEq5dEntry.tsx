@@ -1,3 +1,30 @@
+/**
+ * EditableEq5dEntry.tsx
+ *
+ * Zweck:
+ * - Bearbeitung eines einzelnen EQ‑5D‑PROM‑Eintrags.
+ * - Rendert Felder dynamisch aus dem Entry‑Objekt, speichert via PUT /api/eq5d/:id.
+ *
+ * Features:
+ * - Inline‑Editing pro Feld über <EditableField />
+ * - Überspringt nicht editierbare Identifikatoren (pid, eq5d_row_id, row_id)
+ * - Bestätigungsdialog vor dem Speichern (SweetAlert2)
+ * - Erfolgs-/Fehlerfeedback nach API‑Call
+ *
+ * Props:
+ * - entry: Record<string, any>    // Datensatz (Backend‑Response)
+ * - onSaved?: () => void          // Callback nach erfolgreichem Save
+ *
+ * Abhängigkeiten:
+ * - sweetalert2 (Modale Dialoge)
+ * - axios (HTTP PUT)
+ * - i18next (Übersetzungen)
+ * - EditableField (Inline‑Input)
+ *
+ * Nutzung:
+ * <EditableEq5dEntry entry={eq5dEntry} onSaved={refreshData} />
+ */
+
 import React, { useState } from 'react';
 import EditableField from './EditableField';
 import Swal from 'sweetalert2';

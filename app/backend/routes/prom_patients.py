@@ -1,5 +1,3 @@
-# Datei: routes/prom_patients.py
-
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
 from db.engine import engine_prom, engine_pg  

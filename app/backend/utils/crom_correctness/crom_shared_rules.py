@@ -104,7 +104,7 @@ def is_prefixed_allowed_value(value: str, allowed_prefixes: list[str]) -> bool:
 
 def has_allowed_suffix(value: str, allowed_suffixes: list[str]) -> bool:
     """
-    Prüft, ob der Eintrag mit einem der erlaubten Suffixe endet (Groß-/Kleinschreibung egal, inkl. Normalisierung).
+    Prüft, ob der Eintrag mit einem der erlaubten Suffixe endet (Gross-/Kleinschreibung egal, inkl. Normalisierung).
     """
     if not isinstance(value, str):
         return False

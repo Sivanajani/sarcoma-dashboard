@@ -1,3 +1,29 @@
+/**
+ * Header.tsx
+ *
+ * Zweck:
+ * - Globaler App‑Header mit Logo (Home‑Link), Sprachumschalter (i18n) und Benutzerprofil (Keycloak).
+ *
+ * Features:
+ * - Sprache DE/EN/FR umschalten; aktive Sprache wird mit ✔ angezeigt.
+ * - Gewählte Sprache wird in localStorage persistiert und beim Mount geladen.
+ * - Benutzername + sichtbare Rollen aus dem Keycloak‑Token; Logout via Keycloak.
+ *
+ * Datenquellen / Abhängigkeiten:
+ * - i18next (useTranslation)
+ * - Keycloak‑Instanz (tokenParsed, logout)
+ * - @mui/material (Menu, MenuItem, IconButton, ListItemIcon/Text)
+ * - React Router (Link) für Logo‑Navigation
+ *
+ * Barrierefreiheit:
+ * - IconButtons mit aria‑Labeln
+ * - Deko‑Icons (Pfeil) aria-hidden
+ *
+ * Typische Verwendung:
+ * <Header />
+ */
+
+
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import TranslateIcon from '@mui/icons-material/Translate';

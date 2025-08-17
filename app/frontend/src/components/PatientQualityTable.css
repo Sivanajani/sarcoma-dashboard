@@ -41,15 +41,15 @@
 }
 
 .value.green {
-  color: #28a745; /* Bootstrap grün */
+  color: #28a745; 
 }
 
 .value.yellow {
-  color: #ffc107; /* Bootstrap gelb */
+  color: #ffc107; 
 }
 
 .value.red {
-  color: #dc3545; /* Bootstrap rot */
+  color: #dc3545; 
 }
 
 .patient-link {

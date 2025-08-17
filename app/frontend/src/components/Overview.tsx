@@ -1,3 +1,28 @@
+/**
+ * Overview.tsx
+ *
+ * Zweck:
+ * - Übersichtsteil des Dashboards, der zentrale KPIs (Kennzahlen) zur Patientendatenlage anzeigt.
+ * - Nutzt KpiCard-Komponenten, um wichtige Metriken wie Red Flags, Gesamtanzahl, CROMs- und PROMs-Anzahl darzustellen.
+ *
+ * Features:
+ * - Mehrsprachige Labels und Tooltips via i18next (`useTranslation`).
+ * - Datenbindung:
+ *   - `usePatientCount` Hook liefert aktuelle Patientenzahlen (gesamt, CROMs, PROMs).
+ *   - `usePatientStore` liefert die Gesamtzahl der Red Flags und den Ladezustand.
+ * - Jede KPI ist klickbar und löst Tab-Wechsel & Scroll zur Tabelle aus.
+ *
+ * Props:
+ * - setSelectedTab: (tab) => void → setzt aktiven Tab in der Patientenübersicht.
+ * - scrollToTable: () => void → scrollt zur Patienten-Tabelle im Dashboard.
+ *
+ * Typische Verwendung:
+ * <Overview
+ *   setSelectedTab={(tab) => setTab(tab)}
+ *   scrollToTable={() => tableRef.current?.scrollIntoView()}
+ * />
+ */
+
 import KpiCard from './KpiCard';
 import GroupIcon from '@mui/icons-material/Group';
 import { useTranslation } from 'react-i18next';

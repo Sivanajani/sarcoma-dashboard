@@ -1,3 +1,40 @@
+/**
+ * RedFlagsTable.tsx
+ *
+ * Zweck:
+ * - Zeigt alle Patient:innen an, die im Dashboard eine "Red Flag" (kritische Qualitätsprobleme) haben.
+ * - Ermöglicht gezielte Suche und bietet visuelle Qualitätsbewertungen für mehrere Dimensionen.
+ *
+ * Hauptfunktionen:
+ * - **Filterung**:
+ *   - Auswahl aller Patient:innen mit `flag === 'red'`.
+ *   - Suchfeld für `patient_id` (Case-insensitive).
+ * - **Darstellung**:
+ *   - Qualitätsmetriken: Vollständigkeit (`completeness`), Korrektheit (`correctness`),
+ *     Konsistenz (`consistency`) und Aktualität (`actuality`).
+ *   - Farb-Codierung (grün, gelb, rot) basierend auf Schwellwerten:
+ *     - ≥ 90% → Grün
+ *     - ≥ 70% → Gelb
+ *     - < 70% → Rot
+ *   - Quellenlabel (`CROM`, `PROM`, `CROM + PROM`) mit Farbcodierung zur schnellen Zuordnung.
+ *   - Rotes Warnsymbol für alle Einträge (Tooltip mit Beschreibung).
+ * - **Interaktion**:
+ *   - Klick auf Patient:innen-ID öffnet die Detailansicht (`/patients/:id`).
+ *   - Quellenlabel dient rein zur Information.
+ *   - Suchfeld mit MUI-Design für intuitive Filterung.
+ *
+ * Nutzung:
+ * ```tsx
+ * <RedFlagsTable />
+ * ```
+ *
+ * Abhängigkeiten:
+ * - `usePatientStore` für Zugriff auf globale Patientendaten.
+ * - `react-i18next` für Mehrsprachigkeit.
+ * - Material-UI für UI-Komponenten (TextField, Icons, Tooltip).
+ */
+
+
 import React, { useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';

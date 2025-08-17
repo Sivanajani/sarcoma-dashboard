@@ -12,7 +12,7 @@ def check_biopsy_correctness(data: Dict[str, Any]) -> Dict[str, Any]:
             field_results[field] = True
         else:
             field_results[field] = False
-            reasons[field] = f"Wert {value} liegt außerhalb des Bereichs ({min_val}-{max_val})"
+            reasons[field] = f"Wert {value} liegt ausserhalb des Bereichs ({min_val}-{max_val})"
 
     def check_boolean(field: str):
         value = data.get(field)

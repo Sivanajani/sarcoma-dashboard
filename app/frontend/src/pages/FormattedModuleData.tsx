@@ -1,3 +1,44 @@
+/**
+ * FormattedModuleData.tsx
+ *
+ * Zweck:
+ * - Universelle Darstellung von Modul-Daten (CROMs oder PROMs) in einem
+ *   strukturierten, lesbaren Format.
+ * - Unterstützt verschachtelte Objekte, Arrays, Booleans und leere Werte.
+ *
+ * Hauptfunktionen:
+ * - `renderValue`: Rekursive Darstellung von Werten:
+ *    - Arrays → als Liste (`<ul>`).
+ *    - Objekte → als eingerückte Schlüssel-Wert-Paare.
+ *    - Boolean → Übersetzung von `true`/`false` in Ja/Nein (`t('yes')`/`t('no')`).
+ *    - Null/leere Strings → Platzhaltertext `t('noDataDash')`.
+ * - Übersetzungen:
+ *    - Schlüsselnamen werden, wenn möglich, mit i18next-Übersetzungen aus
+ *      `modules.<moduleName>.<key>` oder `databasePage.<key>` angezeigt.
+ * - Bestimmte Felder (`vorname`, `nachname`, `biopsy_vorname`, `biopsy_nachname`, `biopsy_email`)
+ *   werden explizit ausgefiltert.
+ *
+ * Props:
+ * - `data`: Beliebiges Key-Value-Objekt mit den Modul-Daten.
+ * - `moduleName` (optional): Name des Moduls, um spezifische Übersetzungsschlüssel zu bilden.
+ *
+ * Styling:
+ * - Nutzt MUI `Box`-Komponenten für Abstände und Einrückungen.
+ *
+ * Beispiel:
+ * ```tsx
+ * <FormattedModuleData
+ *   data={patientData.modules.diagnosis}
+ *   moduleName="diagnosis"
+ * />
+ * ```
+ *
+ * Abhängigkeiten:
+ * - `react-i18next` für Übersetzungen.
+ * - `@mui/material` für Layout/Styling.
+ */
+
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material'; 

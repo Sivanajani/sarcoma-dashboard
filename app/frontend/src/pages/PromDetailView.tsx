@@ -1,3 +1,56 @@
+/**
+ * PromDetailView.tsx
+ *
+ * Zweck:
+ * - Detaillierte Ansicht der PROM-Daten (Patient Reported Outcome Measures) eines/einer einzelnen Patient:in.
+ * - Lädt und zeigt Daten aus zwei PROM-Modulen:
+ *   1. EQ5D (Lebensqualitätsfragebogen)
+ *   2. Biopsy (Patientenfeedback zur Biopsie-Erfahrung)
+ * - Visualisierung mit Charts + detaillierte Einträge als Accordion-Karten mit Bearbeitungsmöglichkeit.
+ *
+ * Ablauf:
+ * 1. **Bestimmung der Patient:innen-ID**
+ *    - Entweder über Prop `patientId` oder über die `useParams()`-URL-Parameter.
+ *
+ * 2. **Datenabruf bei Komponentenmuntierung (`useEffect`)**
+ *    - `/api/proms/eq5d/by-external-code/{id}`
+ *    - `/api/proms/biopsy/by-external-code/{id}`
+ *    - Ergebnisse werden in `eq5dData` und `biopsyData` gespeichert.
+ *
+ * 3. **Darstellung EQ5D-Daten**
+ *    - Überschrift + Paper-Container.
+ *    - Falls Daten vorhanden:
+ *        - Oben: Interaktives Liniendiagramm (`Eq5dChart`).
+ *        - Darunter: Mehrere `Eq5dAccordionCard`-Komponenten (eine pro Erhebungszeitpunkt) mit Bearbeitungsfunktion.
+ *    - Falls keine Daten: Anzeige eines Platzhalter-Texts (`promDetail.eq5dEmpty`).
+ *
+ * 4. **Darstellung Biopsie-Daten**
+ *    - Überschrift.
+ *    - Falls Daten vorhanden:
+ *        - Zuerst: Radar-Diagramm (`BiopsyRadarChart`).
+ *        - Dann: `BiopsyAccordionCard`-Komponenten pro Eintrag, sortiert nach Datum (neueste zuerst).
+ *          Die erste Karte ist standardmässig geöffnet (`defaultOpen`).
+ *    - Falls keine Daten: Anzeige eines Platzhalter-Panels (`promDetail.biopsyEmpty`).
+ *
+ * 5. **Nach Speichern aktualisieren**
+ *    - Sowohl `Eq5dAccordionCard` als auch `BiopsyAccordionCard` erhalten eine `onSaved`-Callback-Funktion,
+ *      die nach einer erfolgreichen Bearbeitung die neuesten Daten vom Backend neu lädt.
+ *
+ * State-Variablen:
+ * - `eq5dData`: Array aller EQ5D-Einträge des Patienten.
+ * - `biopsyData`: Array aller Biopsie-Einträge.
+ *
+ * Besonderheiten:
+ * - Nutzung von `t()` aus i18next für Mehrsprachigkeit.
+ * - Material-UI (`Paper`, `Box`, `Typography`) für Layout und Design.
+ * - Getrennte Darstellung von Visualisierung und Detailkarten.
+ *
+ * Typische Nutzung:
+ * - Wird aufgerufen, wenn im Dashboard ein:e Patient:in ausgewählt wird,
+ *   um PROM-Daten im Detail zu prüfen und ggf. zu bearbeiten.
+ */
+
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, Box, Paper } from '@mui/material';

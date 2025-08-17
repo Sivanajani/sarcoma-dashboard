@@ -1,3 +1,38 @@
+/**
+ * Eq5dChart.tsx
+ *
+ * Zweck:
+ * - Interaktive Visualisierung der EQ‑5D‑PROM‑Daten.
+ * - Unterstützt drei Diagrammtypen: Linie, Balken, Radar.
+ * - Feldauswahl (Mobilität, Selbstversorgung, etc.), Datumsfilter (Start/Ende),
+ *   Export als PNG inkl. benutzerdefinierten Farben & Titel.
+ *
+ * Datenfluss:
+ * - Props `data: Eq5dEntry[]` → optional per Datum gefiltert → in Chart‑Daten transformiert.
+ * - `selectedFields` bestimmt, welche Dimensionen angezeigt werden.
+ * - `chartType` steuert Render‑Pfad (Line/Bar/Radar).
+ * - Exportdialog (SweetAlert2) setzt temporär Farben/Titel → `html-to-image` → PNG‑Download.
+ *
+ * i18n:
+ * - Feldlabels & UI‑Texte kommen aus i18next (z. B. eq5dChart.fields.*).
+ * - `fieldLabels` via useMemo, damit Labels bei Sprachwechsel korrekt neu berechnet werden.
+ *
+ * Wichtige UI/UX Details:
+ * - Responsives Layout (ResponsiveContainer).
+ * - Datum in Tooltips/Legende als "dd.MM.yyyy".
+ * - Fallbacks: zeigt „noData“-Hinweis, wenn Filter alles ausblendet.
+ *
+ * Abhängigkeiten:
+ * - recharts (LineChart, BarChart, RadarChart, …)
+ * - @mui/material (FormControls, Buttons)
+ * - sweetalert2, html-to-image
+ * - date-fns (format/parse/isValid) für Datum
+ *
+ * Beispiel:
+ * <Eq5dChart data={eq5dEntries} />
+ */
+
+
 import React, { useState, useRef, useMemo } from 'react';
 import {
   LineChart, Line,

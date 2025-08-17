@@ -1,8 +1,42 @@
+/**
+ * DuplicateNotifier.tsx
+ *
+ * Zweck:
+ * - Prüft beim ersten App-Start alle definierten Backend-Endpunkte auf Duplikate
+ *   und zeigt pro betroffene:r Patient:in einen SweetAlert-Hinweis.
+ *
+ * Wie es funktioniert:
+ * - Endpunktliste (CROMs & PROMs) wird nacheinander abgefragt.
+ * - Unterschiedliche Backend-Response-Formate werden mit `normalizeRows` vereinheitlicht.
+ * - Pro Patient:in werden Duplikatsummen je Quelle (croms/proms) und je Modul aggregiert.
+ * - Ergebnisse werden in modalen Dialogen (SweetAlert2) i18n-beschriftet angezeigt.
+ * - Um Mehrfach-Popups zu vermeiden:
+ *   - `didRunRef` stellt sicher, dass der Effekt pro Mount nur einmal läuft.
+ *   - `sessionStorage['duplicates_notified']="1"` verhindert Wiederholungen pro Session.
+ *
+ * i18n-Keys (Beispiele):
+ * - duplicateNotifier.title | duplicateNotifier.message | duplicateNotifier.ok
+ * - patientTable.tabs.croms | patientTable.tabs.proms
+ * - modules.<modulname>  (Fallback ist der Modul-Key selbst)
+ *
+ * Abhängigkeiten:
+ * - react (useEffect, useRef)
+ * - sweetalert2 (Swal.fire)
+ * - react-i18next (useTranslation)
+ *
+ * Hinweise:
+ * - Die Endpunkte sind aktuell mit "http://localhost:8000/..." hart verdrahtet.
+ *   Für Deployments empfiehlt sich `import.meta.env.VITE_API_BASE_URL`.
+ * - Falls dein Backend Auth erfordert, füge einen Authorization-Header hinzu (z. B. via useAuth).
+ */
+
 import { useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 
 type Endpoint = { source: 'croms' | 'proms'; name: string; url: string };
+
+const base = import.meta.env.VITE_API_BASE_URL;
 
 const DuplicateNotifier = () => {
   const { t } = useTranslation();
@@ -10,17 +44,17 @@ const DuplicateNotifier = () => {
 
   const endpoints: Endpoint[] = [
     // CROMs
-    { source: 'croms', name: 'diagnosis',            url: 'http://localhost:8000/api/uniqueness/diagnosis/patient' },
-    { source: 'croms', name: 'surgery',              url: 'http://localhost:8000/api/uniqueness/surgery/patient' },
-    { source: 'croms', name: 'pathology',            url: 'http://localhost:8000/api/uniqueness/surgery/pathologies/patient' },
-    { source: 'croms', name: 'radiology_exam',       url: 'http://localhost:8000/api/uniqueness/surgery/radiologyExams/patient' },
-    { source: 'croms', name: 'radiology_therapy',    url: 'http://localhost:8000/api/uniqueness/radiologyTherapies/patient' },
-    { source: 'croms', name: 'sarcoma_board',        url: 'http://localhost:8000/api/uniqueness/sarcomaBoards/patient' },
-    { source: 'croms', name: 'systemic_therapy',     url: 'http://localhost:8000/api/uniqueness/systemicTherapies/patient' },
-    { source: 'croms', name: 'hyperthermia_therapy', url: 'http://localhost:8000/api/uniqueness/hyperthermiaTherapies/patient' },
+    { source: 'croms', name: 'diagnosis',            url: `${base}/api/uniqueness/diagnosis/patient` },
+    { source: 'croms', name: 'surgery',              url: `${base}/api/uniqueness/surgery/patient` },
+    { source: 'croms', name: 'pathology',            url: `${base}/api/uniqueness/surgery/pathologies/patient` },
+    { source: 'croms', name: 'radiology_exam',       url: `${base}/api/uniqueness/surgery/radiologyExams/patient` },
+    { source: 'croms', name: 'radiology_therapy',    url: `${base}/api/uniqueness/radiologyTherapies/patient` },
+    { source: 'croms', name: 'sarcoma_board',        url: `${base}/api/uniqueness/sarcomaBoards/patient` },
+    { source: 'croms', name: 'systemic_therapy',     url: `${base}/api/uniqueness/systemicTherapies/patient` },
+    { source: 'croms', name: 'hyperthermia_therapy', url: `${base}/api/uniqueness/hyperthermiaTherapies/patient` },
     // PROMs
-    { source: 'proms', name: 'eq5d',                 url: 'http://localhost:8000/api/proms/eq5d/uniqueness' },
-    { source: 'proms', name: 'biopsy',               url: 'http://localhost:8000/api/proms/biopsy/uniqueness' },
+    { source: 'proms', name: 'eq5d',                 url: `${base}/api/proms/eq5d/uniqueness` },
+    { source: 'proms', name: 'biopsy',               url: `${base}/api/proms/biopsy/uniqueness`},
   ];
 
   useEffect(() => {

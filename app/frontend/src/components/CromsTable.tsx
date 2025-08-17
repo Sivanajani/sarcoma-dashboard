@@ -1,3 +1,29 @@
+/**
+ * CromsTable.tsx
+ *
+ * Zweck:
+ * - Anzeige aller Patient:innen mit CROM-Daten (inkl. kombinierter CROM+PROM-Datensätze).
+ * - Nutzt den globalen Zustand (`usePatientStore`) und filtert dort nach `source`.
+ * - Visualisiert Qualitätsmetriken (Vollständigkeit, Korrektheit, Konsistenz, Aktualität) mit Farbcodierung.
+ *
+ * Features:
+ * - Suche nach Patient:innen-ID (case-insensitive).
+ * - Red-/Yellow-Flag-Icons mit Tooltips.
+ * - Navigation zur Detailansicht `/patients/:id`.
+ *
+ * Datenfluss:
+ * - `patients` aus Store → Filter auf `source in {croms, croms+proms}` → Suchfilter → Tabelle rendern.
+ *
+ * Abhängigkeiten:
+ * - @mui/material (TextField, InputAdornment, IconButton, Tooltip)
+ * - react-router-dom (Link)
+ * - i18next (useTranslation)
+ *
+ * Props:
+ * - keine (liest Daten aus Store)
+ */
+
+
 import React, { useState } from 'react';
 import './PatientQualityTable.css';
 import { useTranslation } from 'react-i18next';

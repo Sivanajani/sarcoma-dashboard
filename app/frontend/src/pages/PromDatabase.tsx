@@ -1,3 +1,57 @@
+/**
+ * PromDatabase.tsx
+ *
+ * Zweck:
+ * - Frontend-Adminansicht für den Direktzugriff auf PROM-Daten (Patient Reported Outcome Measures).
+ * - Ermöglicht Suche, Ansicht und Bearbeitung von PROM-Modulen (eq5d & biopsy) pro Patient:in.
+ *
+ * Hauptfunktionen:
+ * 1. **Patientensuche**
+ *    - Eingabe einer Patient:innen-ID (`pid`) in ein Suchfeld.
+ *    - Abfrage der Daten parallel für beide PROM-Module:
+ *        - `/api/eq5d/by-pid/{pid}`
+ *        - `/api/biopsy/by-pid/{pid}`
+ *    - Speicherung der Ergebnisse in `moduleData`.
+ *    - Anzeige einer Fehlermeldung, falls kein Treffer gefunden wird.
+ *
+ * 2. **Modul-Ansicht**
+ *    - Module werden in Karten (`module-card`) dargestellt.
+ *    - Auf-/Zuklappen einzelner Module per Klick auf den Header (`toggleModuleOpen`).
+ *
+ * 3. **Bearbeitungsmodus**
+ *    - Aktivierung über Edit-Icon (`toggleEditMode`).
+ *    - Im Bearbeitungsmodus (`editModules`) werden die Felder mit `EditableField`-Komponenten angezeigt.
+ *    - Änderungen werden lokal in `editedData` gespeichert.
+ *
+ * 4. **Speichern von Änderungen**
+ *    - Klick auf „Speichern“ löst `handleSave()` aus.
+ *    - Führt eine Bestätigungsabfrage via SweetAlert2 durch.
+ *    - Sendet PUT-Request an den API-Endpunkt `/api/{module}/{rowId}` mit den bereinigten Felddaten.
+ *    - Aktualisiert nach erfolgreichem Speichern die Ansicht mit `handleSearch()`.
+ *
+ * 5. **UI-Elemente**
+ *    - **Suchfeld & Button**: Sucht Patient:in per Eingabe oder Enter-Taste.
+ *    - **Aufklappbare Modul-Karten**: Zeigen entweder formatierten Read-Only-View (`FormattedModuleData`)
+ *      oder Editiermaske (`EditableField`).
+ *    - **Icons**:
+ *        - EditIcon → Bearbeitung starten/beenden
+ *        - ExpandMore/LessIcon → Modul auf-/zuklappen
+ *    - **SweetAlert2** für Bestätigung, Erfolg- und Fehlermeldungen.
+ *
+ * State-Variablen:
+ * - `pid` → Aktuelle Patient:innen-ID im Suchfeld.
+ * - `moduleData` → PROM-Daten nach Modulen.
+ * - `error` → Fehlermeldung bei fehlenden Daten.
+ * - `openModules` → Set der aktuell geöffneten Module.
+ * - `editModules` → Set der aktuell im Bearbeitungsmodus befindlichen Module/Einträge.
+ * - `editedData` → Zwischenspeicher für geänderte Felder.
+ *
+ * Anwendungsfall:
+ * - Geeignet für Admins oder Datenmanager:innen, um PROM-Daten direkt aus der Datenbank
+ *   einzusehen und bei Bedarf zu korrigieren.
+ */
+
+
 import { useState } from 'react';
 import axios from 'axios';
 import './DatabasePage.css';
@@ -21,8 +75,8 @@ const PromDatabase = () => {
   const handleSearch = async () => {
     try {
       const [eq5dRes, biopsyRes] = await Promise.all([
-        axios.get(`http://localhost:8000/api/eq5d/by-pid/${pid}`),
-        axios.get(`http://localhost:8000/api/biopsy/by-pid/${pid}`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/eq5d/by-pid/${pid}`),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/biopsy/by-pid/${pid}`)
       ]);
       setModuleData({ eq5d: eq5dRes.data, biopsy: biopsyRes.data });
       setError('');
@@ -88,7 +142,7 @@ const PromDatabase = () => {
   if (!confirmed.isConfirmed) return;
 
   try {
-    const endpoint = `http://localhost:8000/api/${moduleName}/${rowId}`;
+    const endpoint = `${import.meta.env.VITE_API_BASE_URL}/api/${moduleName}/${rowId}`;
     await axios.put(endpoint, cleanedData);
 
     const newSet = new Set(editModules);

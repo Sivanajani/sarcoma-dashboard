@@ -1,3 +1,45 @@
+/**
+ * BiopsyAccordionCard.tsx
+ *
+ * Zweck:
+ * - Accordion-Komponente zur Anzeige und Bearbeitung von Biopsie-Daten eines einzelnen Eintrags
+ * - Wird typischerweise in der PROM-Detailansicht (Biopsy) verwendet
+ *
+ * Features:
+ * - Auf-/Zuklappen per Klick auf Header
+ * - Editiermodus (umschaltbar) für bearbeitbare Felder
+ * - Bearbeitung nur bestimmter Felder (exkl. IDs, Name, E-Mail)
+ * - Übersetzte Feldlabels via i18next
+ * - Speicherung der Änderungen per PUT-Request an das Backend (`/api/biopsy/:id`)
+ * - SweetAlert2 für Bestätigung, Erfolgs- und Fehlermeldungen
+ *
+ * Props:
+ * - entry: Record<string, any>
+ *   → Datensatz (Backend-Response) mit allen Biopsie-Feldern
+ * - onSaved?: () => void
+ *   → Optionaler Callback nach erfolgreichem Speichern
+ * - defaultOpen?: boolean
+ *   → Legt fest, ob Accordion initial geöffnet ist
+ *
+ * Interner State:
+ * - open: Steuert Auf-/Zuklappen
+ * - editMode: Steuert Bearbeitungsmodus
+ * - editedData: Kopie von `entry` für lokale Änderungen
+ *
+ * Abhängigkeiten:
+ * - @mui/material (Box, Collapse, IconButton)
+ * - Icons: ExpandMore, ExpandLess, Edit
+ * - EditableField (Inline-Eingabefeld)
+ * - FormattedModuleData (Read-Only-Ansicht)
+ * - sweetalert2
+ * - axios
+ * - i18next
+ *
+ * Typische Verwendung:
+ * <BiopsyAccordionCard entry={biopsyEntry} onSaved={refreshData} defaultOpen />
+ */
+
+
 import React, { useState } from 'react';
 import { IconButton, Collapse, Box } from '@mui/material';
 import { ExpandMore, ExpandLess, Edit } from '@mui/icons-material';

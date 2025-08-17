@@ -1,3 +1,35 @@
+/**
+ * PatientQualityTable.tsx
+ *
+ * Zweck:
+ * - Zentrale Tabellenansicht zur Darstellung der Datenqualität von Patient:innen im Dashboard.
+ * - Bietet Tabs für verschiedene Ansichten:
+ *   - Red Flags
+ *   - Alle Patient:innen
+ *   - CROMs (Clinician Reported Outcome Measures)
+ *   - PROMs (Patient Reported Outcome Measures)
+ *
+ * Hauptfunktionen:
+ * - Tab-Navigation mit `@mui/material` Tabs & dynamischem Rendering der passenden Tabelle.
+ * - "Aktualisieren"-Button (mit Ladeindikator), um Patientendaten neu vom Backend zu laden.
+ * - Verarbeitet API-Antwort `/api/patient-quality/all`, berechnet daraus:
+ *   - Durchschnittswerte für die Qualitätsmetriken (Vollständigkeit, Korrektheit, Konsistenz, Aktualität)
+ *   - Flags (rot/gelb) pro Patient.
+ * - Aktualisiert den globalen Zustand (`patientStore`) mit neuen Patientendaten und Red-Flag-Zahl.
+ *
+ * Props:
+ * - selectedTab: aktuell ausgewählter Tab ('redflags' | 'all' | 'croms' | 'proms').
+ * - setSelectedTab: Funktion zum Wechseln des Tabs.
+ *
+ * Nutzung:
+ * <PatientQualityTable
+ *   selectedTab={selectedTab}
+ *   setSelectedTab={setSelectedTab}
+ * />
+ */
+
+
+
 import { useState } from 'react';
 import { Tabs, Tab, Box, Paper, Button, CircularProgress } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -25,11 +57,11 @@ const PatientQualityTable = ({ selectedTab, setSelectedTab }: Props) => {
     const data = await res.json();
     const summary = data?.patients ?? {};
 
-    // Hilfsfunktionen
+    
     const normalizePct = (v: unknown) => {
       const n = Number(v);
       if (!Number.isFinite(n)) return undefined;
-      // Wenn Wert zwischen 0–1, auf Prozent skalieren
+    
       return n <= 1 ? Math.round(n * 100) : Math.round(n);
     };
 
@@ -38,8 +70,7 @@ const PatientQualityTable = ({ selectedTab, setSelectedTab }: Props) => {
       return Math.round(arr.reduce((a, b) => a + b, 0) / arr.length);
     };
 
-    const collectMetric = (container: any, key: 'completeness' | 'correctness' | 'consistency' | 'actuality') => {
-      // container = s.croms oder s.proms (Objekt mit Modulen)
+    const collectMetric = (container: any, key: 'completeness' | 'correctness' | 'consistency' | 'actuality') => {      
       if (!container || typeof container !== 'object') return [] as number[];
       const vals: number[] = [];
       for (const mod of Object.values(container)) {
@@ -80,8 +111,7 @@ const PatientQualityTable = ({ selectedTab, setSelectedTab }: Props) => {
 
       return {
         ...p,
-        ...top,          // ← überschreibt completeness/correctness/consistency/actuality
-        // optional: komplette Struktur aus dem Backend mit ablegen, wenn du sie später brauchst
+        ...top,                  
         croms: s.croms,
         proms: s.proms,
         flag,

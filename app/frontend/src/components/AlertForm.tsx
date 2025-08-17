@@ -1,3 +1,36 @@
+/**
+ * AlertForm.tsx
+ *
+ * Zweck:
+ * Formular zum Erstellen und Bearbeiten von Alerts für PROM- und CROM-Daten.
+ *
+ * Features:
+ * - Auswahl der Datenquelle (PROMs oder CROMs)
+ * - Dynamische Auswahl von Patient:innen und Modulen basierend auf der Quelle
+ * - Unterstützt drei Alert-Typen:
+ *   1. "flag" – Schwellenwert- oder Red/Yellow-Flag Alerts
+ *   2. "field_check" – Überprüfung, ob bestimmte Felder leer (null) sind
+ *   3. "field_value_check" – Vergleich eines Feldwertes mit Text, Zahl oder Boolean
+ * - Lädt Modul-Felder und Patient:innen-IDs per API-Call vom Backend
+ * - Erzeugt je nach Auswahl mehrere Alerts (z. B. für mehrere Patient:innen und Felder)
+ * - Verwendet SweetAlert2 für Lade-, Erfolgs- und Fehlermeldungen
+ * - Übersetzbare UI-Texte über i18next
+ *
+ * Props:
+ * - onSuccess?: () => void
+ *   Callback, das nach erfolgreichem Speichern der Alerts aufgerufen wird
+ *
+ * Abhängigkeiten:
+ * - @mui/material – UI-Elemente
+ * - axios – HTTP-Requests zum Backend
+ * - useAuth – Authentifizierung (liefert JWT-Token, User-Infos)
+ * - react-i18next – Mehrsprachigkeit
+ * - sweetalert2 – modale Dialoge
+ *
+ * Typische Verwendung:
+ * <AlertForm onSuccess={() => refreshAlerts()} />
+ */
+
 import { useEffect, useState } from 'react';
 import {
   Box,
@@ -104,7 +137,7 @@ const AlertForm = ({ onSuccess }: Props) => {
       if (!selectedModule) return;
       try {
         const res = await axios.get<string[]>(
-          `http://localhost:8000/api/fields/${source}/${selectedModule}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/fields/${source}/${selectedModule}`,
           { headers: { Authorization: `Bearer ${auth.token}` } }
         );
         setFields(res.data);
@@ -120,7 +153,7 @@ const AlertForm = ({ onSuccess }: Props) => {
     const fetchIds = async () => {
       try {
         const res = await axios.get<{ prom_ids: string[]; crom_ids: string[] }>(
-          'http://localhost:8000/api/patient-ids/all',
+          `${import.meta.env.VITE_API_BASE_URL}/api/patient-ids/all`,
           { headers: { Authorization: `Bearer ${auth.token}` } }
         );
         setPatientIds(source === 'croms' ? res.data.crom_ids : res.data.prom_ids);
@@ -148,9 +181,8 @@ const AlertForm = ({ onSuccess }: Props) => {
     }
   }, [alertType, metric]);
 
-  // kleiner Helper -> immer native Promise zurückgeben
   const postAlert = (payload: any, headers: Record<string, string>) =>
-    Promise.resolve(axios.post('http://localhost:8000/alerts', payload, { headers }).then(r => r.data));
+    Promise.resolve(axios.post(`${import.meta.env.VITE_API_BASE_URL}/alerts`, payload, { headers }).then(r => r.data));
 
   const handleSubmit = async () => {
     if (!auth.token) return;
