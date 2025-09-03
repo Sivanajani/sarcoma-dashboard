@@ -52,7 +52,7 @@
 import React, { useState } from 'react';
 import './RawModuleDataTable.css';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
+import {useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import EditableField from '../components/EditableField';
 import EditIcon from '@mui/icons-material/Edit';
@@ -79,23 +79,24 @@ const RawModuleDataTable: React.FC<RawModuleDataTableProps> = ({ moduleData, mod
   };
 
   const handleCancel = async () => {
-    if (hasChanges) {
-      const result = await Swal.fire({
-        title: t('databasePage.confirmTitle'),
-        text: t('databasePage.confirmText'),
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: t('databasePage.confirmYes'),
-        cancelButtonText: t('databasePage.confirmNo')
-      });
+    if (!hasChanges) {
+      setIsEditing(false);
+      return;
+    }
 
-      if (result.isConfirmed) {
-        handleSave(); 
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        setEditData(originalData);
-        setIsEditing(false);
-      }
-    } else {
+    const result = await Swal.fire({
+      title: t('databasePage.unsavedTitle', { defaultValue: 'Änderungen verwerfen?' }),
+      text: t('databasePage.unsavedText', {
+        defaultValue: 'Bist du sicher, dass du die Änderungen nicht speichern möchtest?',
+      }),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: t('databasePage.unsavedConfirm', { defaultValue: 'Ja, verwerfen' }),
+      cancelButtonText: t('databasePage.unsavedCancel', { defaultValue: 'Nein' }),
+    });
+
+    if (result.isConfirmed) {
+      setEditData(originalData);
       setIsEditing(false);
     }
   };

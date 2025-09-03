@@ -7,6 +7,7 @@ from fastapi.security import OAuth2
 from typing import Optional
 from fastapi.openapi.utils import get_openapi
 
+
 from routes.crom_avg_completeness import router as crom_completeness_router
 from routes.crom_completness_module import router as crom_module_metrics_router
 from routes.crom_tables import router as crom_tables_router

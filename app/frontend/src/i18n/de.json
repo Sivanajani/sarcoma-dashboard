@@ -92,6 +92,7 @@
   "moduleCardTooltip": "Klicke, um Detailansicht zu öffnen"
 },
 "databasePage": {
+  "datenbankzugriff":"Datenbankzugriff",
   "title": "Datenbank: CROM-Module",
   "cromTitle": "CROM - Datenbank",
   "promTitle": "PROM - Datenbank",
@@ -294,7 +295,11 @@
   "insurance_class": "Versicherungsklasse",
   "insurance_number": "Versicherungsnummer",
   "general_practitioner_name": "Hausarzt/-ärztin (Name)",
-  "general_practitioner_email": "Hausarzt/-ärztin (E-Mail)"
+  "general_practitioner_email": "Hausarzt/-ärztin (E-Mail)",
+  "unsavedTitle": "Änderungen verwerfen?",
+  "unsavedText":"Bist du sicher, dass du die Änderungen nicht speichern möchtest?",
+  "unsavedConfirm": "Ja, verwerfen",
+  "unsavedCancel": "Nein"
 },
 "promDetail": {
   "eq5dTitle": "EQ-5D Verlauf",

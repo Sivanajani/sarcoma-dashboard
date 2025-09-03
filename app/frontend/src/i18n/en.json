@@ -92,6 +92,7 @@
     "moduleCardTooltip": "Click to open detail view"
   },
   "databasePage": {
+    "datenbankzugriff":"Database Access",
     "title": "Database: CROM Modules",
     "cromTitle": "CROM - Database",
     "promTitle": "PROM - Database",
@@ -294,7 +295,11 @@
     "insurance_class": "Insurance class",
     "insurance_number": "Insurance number",
     "general_practitioner_name": "General practitioner (name)",
-    "general_practitioner_email": "General practitioner (email)"
+    "general_practitioner_email": "General practitioner (email)",
+    "unsavedTitle": "Discard changes?",
+    "unsavedText": "Are you sure you don’t want to save the changes?",
+    "unsavedConfirm": "Yes, discard",
+    "unsavedCancel": "No"
   },
     "promDetail": {
     "eq5dTitle": "EQ-5D Progress",
